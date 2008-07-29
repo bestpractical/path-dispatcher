@@ -3,20 +3,20 @@ package Path::Dispatcher::Rule;
 use Moose;
 
 has stage => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Str',
     default  => 'on',
     required => 1,
 );
 
 has regex => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Regexp',
     required => 1,
 );
 
 has block => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'CodeRef',
     required => 1,
 );
