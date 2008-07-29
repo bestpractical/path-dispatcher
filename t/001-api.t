@@ -9,7 +9,7 @@ my $calls = 0;
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
     stage => 'on',
-    match => '*',
+    match => 'foo',
     run   => sub { ++$calls },
 );
 

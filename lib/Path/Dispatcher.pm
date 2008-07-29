@@ -3,15 +3,33 @@ package Path::Dispatcher;
 use Moose;
 use MooseX::AttributeHelpers;
 
+use Path::Dispatcher::Rule;
+
+sub rule_class { 'Path::Dispatcher::Rule' }
+
 has rules => (
     metaclass => 'Collection::Array',
     is        => 'rw',
-    isa       => 'ArrayRef',
+    isa       => 'ArrayRef[Path::Dispatcher::Rule]',
     default   => sub { [] },
     provides  => {
-        push => 'add_rule',
+        push => '_add_rule',
     },
 );
+
+sub add_rule {
+    my $self = shift;
+
+    my $rule;
+    if (@_ == 1 && blessed($_[0])) {
+        $rule = shift;
+    }
+    else {
+        $rule = $self->rule_class->new(@_);
+    }
+
+    $self->_add_rule($rule);
+}
 
 sub dispatch {
     my $self = shift;
