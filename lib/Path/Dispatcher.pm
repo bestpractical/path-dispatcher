@@ -80,12 +80,17 @@ sub build_runner {
     my $matches = $args{matches};
 
     return sub {
-        for my $match (@$matches) {
-            $self->run_with_number_vars(
-                sub { $match->{rule}->run($path) },
-                @{ $match->{vars} },
-            );
-        }
+        eval {
+            local $SIG{__DIE__} = 'DEFAULT';
+            for my $match (@$matches) {
+                $self->run_with_number_vars(
+                    sub { $match->{rule}->run($path) },
+                    @{ $match->{vars} },
+                );
+            }
+        };
+
+        die $@ if $@ && $@ !~ /^Patch::Dispatcher abort\n/;
     };
 }
 
