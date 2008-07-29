@@ -22,9 +22,12 @@ sub add_rule {
     my $self = shift;
 
     my $rule;
+
+    # they pass in an already instantiated rule..
     if (@_ == 1 && blessed($_[0])) {
         $rule = shift;
     }
+    # or they pass in args to create a rule
     else {
         $rule = $self->rule_class->new(@_);
     }
@@ -47,6 +50,8 @@ sub dispatch {
             vars => $vars,
         };
     }
+
+    return if !@matches;
 
     return $self->build_runner(
         path    => $path,
@@ -89,6 +94,7 @@ sub run_with_number_vars {
 sub run {
     my $self = shift;
     my $code = $self->dispatch(@_);
+
     return $code->();
 }
 
