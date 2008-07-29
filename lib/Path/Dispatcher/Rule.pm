@@ -21,6 +21,16 @@ has block => (
     required => 1,
 );
 
+has fallthrough => (
+    is      => 'ro',
+    isa     => 'Bool',
+    lazy    => 1,
+    default => sub {
+        my $self = shift;
+        $self->stage eq 'on' ? 0 : 1;
+    },
+);
+
 sub match {
     my $self = shift;
     my $path = shift;

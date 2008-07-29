@@ -57,6 +57,8 @@ sub dispatch {
                 rule => $rule,
                 vars => $vars,
             };
+
+            last if !$rule->fallthrough;
         }
 
         $self->end_stage($stage, \@matches);
