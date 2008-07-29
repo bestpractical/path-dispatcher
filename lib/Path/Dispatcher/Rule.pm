@@ -27,6 +27,7 @@ sub match {
 
     return unless $path =~ $self->regex;
 
+    # return [$1, $2, $3, ...]
     return [ map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#- ]
 }
 
