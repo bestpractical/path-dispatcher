@@ -4,24 +4,22 @@ use warnings;
 use Test::More tests => 4;
 use Path::Dispatcher;
 
-my $calls = 0;
+my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    stage => 'on',
     match => 'foo',
-    block => sub { ++$calls },
+    block => sub { push @calls, [@_] },
 );
 
-is($calls, 0, "no calls to the dispatcher block yet");
+is_deeply([splice @calls], [], "no calls to the rule block yet");
+
 my $thunk = $dispatcher->dispatch('foo');
-is($calls, 0, "no calls to the dispatcher block yet");
+is_deeply([splice @calls], [], "no calls to the rule block yet");
 
 $thunk->();
-is($calls, 1, "made a call to the dispatcher block");
-
-$calls = 0;
+is_deeply([splice @calls], [ [] ], "finally invoked the rule block");
 
 $dispatcher->run('foo');
-is($calls, 1, "run does all three stages");
+is_deeply([splice @calls], [ [] ], "invoked the rule block on 'run'");
 

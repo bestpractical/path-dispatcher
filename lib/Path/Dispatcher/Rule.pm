@@ -43,7 +43,7 @@ sub run {
     my $self = shift;
     my $path = shift;
 
-    $self->block->($path);
+    $self->block->();
 }
 
 __PACKAGE__->meta->make_immutable;
