@@ -8,7 +8,7 @@ my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    match => 'foo',
+    regex => qr/foo/,
     block => sub { push @calls, [@_] },
 );
 

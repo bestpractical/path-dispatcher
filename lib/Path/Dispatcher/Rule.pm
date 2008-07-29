@@ -9,7 +9,7 @@ has stage => (
     required => 1,
 );
 
-has match => (
+has regex => (
     is       => 'rw',
     isa      => 'Regexp',
     required => 1,
@@ -21,22 +21,13 @@ has block => (
     required => 1,
 );
 
-around BUILDARGS => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $args = $self->$orig(@_);
-
-    $args->{match} = qr/$args->{match}/
-        if !ref($args->{match});
-
-    return $args;
-};
-
-sub matches {
+sub match {
     my $self = shift;
     my $path = shift;
 
-    return $path =~ $self->match;
+    return unless $path =~ $self->regex;
+
+    return [ map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#- ]
 }
 
 sub run {
