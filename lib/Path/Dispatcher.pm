@@ -47,7 +47,7 @@ sub dispatch {
         for $self->rules;
 
     for my $stage ($self->stages) {
-        $self->begin_stage($stage);
+        $self->begin_stage($stage, \@matches);
 
         for my $rule (@{ $rules_for_stage{$stage} || [] }) {
             my $vars = $rule->match($path)
@@ -59,7 +59,7 @@ sub dispatch {
             };
         }
 
-        $self->end_stage($stage);
+        $self->end_stage($stage, \@matches);
     }
 
     return if !@matches;
