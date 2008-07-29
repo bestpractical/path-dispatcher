@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 9;
 use Path::Dispatcher;
 
 my @calls;
@@ -38,4 +38,9 @@ is_deeply([splice @calls], [ ['bar', undef] ], "finally invoked the rule block")
 
 $dispatcher->run('bar');
 is_deeply([splice @calls], [ ['bar', undef] ], "invoked the rule block on 'run'");
+
+"foo" =~ /foo/;
+
+$thunk->();
+is_deeply([splice @calls], [ ['bar', undef] ], "invoked the rule block on 'run', makes sure \$1 etc are still correctly set");
 
