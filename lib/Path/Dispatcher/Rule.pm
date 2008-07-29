@@ -15,7 +15,7 @@ has match => (
     required => 1,
 );
 
-has run => (
+has block => (
     is       => 'rw',
     isa      => 'CodeRef',
     required => 1,
@@ -31,6 +31,20 @@ around BUILDARGS => sub {
 
     return $args;
 };
+
+sub matches {
+    my $self = shift;
+    my $path = shift;
+
+    return $path =~ $self->match;
+}
+
+sub run {
+    my $self = shift;
+    my $path = shift;
+
+    $self->block->($path);
+}
 
 __PACKAGE__->meta->make_immutable;
 no Moose;

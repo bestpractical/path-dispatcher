@@ -10,7 +10,7 @@ my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
     stage => 'on',
     match => 'foo',
-    run   => sub { ++$calls },
+    block => sub { ++$calls },
 );
 
 is($calls, 0, "no calls to the dispatcher block yet");
