@@ -36,17 +36,21 @@ sub dispatch {
     my $self = shift;
     my $path = shift;
 
-    my @rules;
+    my @matches;
 
     for my $rule ($self->rules) {
-        if ($rule->matches($path)) {
-            push @rules, $rule;
-        }
+        my $vars = $rule->match($path)
+            or next;
+
+        push @matches, {
+            rule => $rule,
+            vars => $vars,
+        };
     }
 
     return $self->build_runner(
-        path  => $path,
-        rules => \@rules,
+        path    => $path,
+        matches => \@matches,
     );
 }
 
@@ -54,14 +58,32 @@ sub build_runner {
     my $self = shift;
     my %args = @_;
 
-    my $path  = $args{path};
-    my $rules = $args{rules};
+    my $path    = $args{path};
+    my $matches = $args{matches};
 
     return sub {
-        for my $rule (@$rules) {
-            $rule->run($path);
+        for my $match (@$matches) {
+            $self->run_with_number_vars(
+                sub { $match->{rule}->run($path) },
+                @{ $match->{vars} },
+            );
         }
     };
+}
+
+sub run_with_number_vars {
+    my $self = shift;
+    my $code = shift;
+
+    # we don't have direct write access to $1 and friends, so we have to
+    # do this little hack. the only way we can update $1 is by matching
+    # against a regex (5.10 fixes that)..
+    my $re = join '', map { "(\Q$_\E)" } @_;
+    my $str = join '', @_;
+    $str =~ $re
+        or die "Unable to match '$str' against a copy of itself!";
+
+    $code->();
 }
 
 sub run {
