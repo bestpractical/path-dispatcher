@@ -6,6 +6,7 @@ use MooseX::AttributeHelpers;
 use Path::Dispatcher::Rule;
 
 sub rule_class { 'Path::Dispatcher::Rule' }
+sub stages { qw/before on after/ }
 
 has _rules => (
     metaclass => 'Collection::Array',
@@ -40,15 +41,25 @@ sub dispatch {
     my $path = shift;
 
     my @matches;
+    my %rules_for_stage;
 
-    for my $rule ($self->rules) {
-        my $vars = $rule->match($path)
-            or next;
+    push @{ $rules_for_stage{$_->stage} }, $_
+        for $self->rules;
 
-        push @matches, {
-            rule => $rule,
-            vars => $vars,
-        };
+    for my $stage ($self->stages) {
+        $self->begin_stage($stage);
+
+        for my $rule (@{ $rules_for_stage{$stage} || [] }) {
+            my $vars = $rule->match($path)
+                or next;
+
+            push @matches, {
+                rule => $rule,
+                vars => $vars,
+            };
+        }
+
+        $self->end_stage($stage);
     }
 
     return if !@matches;
@@ -97,6 +108,9 @@ sub run {
 
     return $code->();
 }
+
+sub begin_stage {}
+sub end_stage {}
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
