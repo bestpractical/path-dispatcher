@@ -7,13 +7,14 @@ use Path::Dispatcher::Rule;
 
 sub rule_class { 'Path::Dispatcher::Rule' }
 
-has rules => (
+has _rules => (
     metaclass => 'Collection::Array',
     is        => 'rw',
     isa       => 'ArrayRef[Path::Dispatcher::Rule]',
     default   => sub { [] },
     provides  => {
-        push => '_add_rule',
+        push     => '_add_rule',
+        elements => 'rules',
     },
 );
 
@@ -33,8 +34,34 @@ sub add_rule {
 
 sub dispatch {
     my $self = shift;
+    my $path = shift;
 
-    return sub {};
+    my @rules;
+
+    for my $rule ($self->rules) {
+        if ($rule->matches($path)) {
+            push @rules, $rule;
+        }
+    }
+
+    return $self->build_runner(
+        path  => $path,
+        rules => \@rules,
+    );
+}
+
+sub build_runner {
+    my $self = shift;
+    my %args = @_;
+
+    my $path  = $args{path};
+    my $rules = $args{rules};
+
+    return sub {
+        for my $rule (@$rules) {
+            $rule->run($path);
+        }
+    };
 }
 
 sub run {
