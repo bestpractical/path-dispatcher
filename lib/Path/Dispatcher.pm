@@ -54,8 +54,8 @@ sub dispatch {
                 or next;
 
             push @matches, {
-                rule => $rule,
-                vars => $vars,
+                rule   => $rule,
+                result => $vars,
             };
 
             last if !$rule->fallthrough;
@@ -83,10 +83,16 @@ sub build_runner {
         eval {
             local $SIG{__DIE__} = 'DEFAULT';
             for my $match (@$matches) {
-                $self->run_with_number_vars(
-                    sub { $match->{rule}->run($path) },
-                    @{ $match->{vars} },
-                );
+                # if we need to set $1, $2..
+                if (ref($match->{result}) eq 'ARRAY') {
+                    $self->run_with_number_vars(
+                        sub { $match->{rule}->run($path) },
+                        @{ $match->{result} },
+                    );
+                }
+                else {
+                    $match->{rule}->run($path);
+                }
             }
         };
 
