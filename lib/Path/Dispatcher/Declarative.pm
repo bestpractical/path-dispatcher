@@ -47,6 +47,20 @@ sub build_sugar {
                 block => $_[1],
             );
         },
+        before => sub {
+            $dispatcher->add_rule(
+                stage => 'before',
+                regex => $_[0],
+                block => $_[1],
+            );
+        },
+        after => sub {
+            $dispatcher->add_rule(
+                stage => 'after',
+                regex => $_[0],
+                block => $_[1],
+            );
+        },
     };
 }
 
