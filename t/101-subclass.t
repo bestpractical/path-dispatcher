@@ -14,17 +14,14 @@ is_deeply([splice @calls], [
     'framework after foo',
 ]);
 
-TODO: {
-    local $TODO = "no layering yet :(";
-    Path::Dispatcher::Test::App->run('foo');
-    is_deeply([splice @calls], [
-        'app before foo',
-        'framework before foo',
-        'framework on foo',
-        'framework after foo',
-        'app after foo',
-    ]);
-}
+Path::Dispatcher::Test::App->run('foo');
+is_deeply([splice @calls], [
+    'app before foo',
+    'framework before foo',
+    'framework on foo',
+    'framework after foo',
+    'app after foo',
+]);
 
 Path::Dispatcher::Test::App->dispatcher->add_rule(
     regex => qr/foo/,

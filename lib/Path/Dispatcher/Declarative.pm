@@ -31,6 +31,11 @@ sub build_sugar {
 
     my $dispatcher = Path::Dispatcher->new;
 
+    # if this is a subclass, then we want to set up a super dispatcher
+    if ($class ne __PACKAGE__) {
+        $dispatcher->super_dispatcher($class->dispatcher);
+    }
+
     return {
         dispatcher => sub { $dispatcher },
         dispatch   => sub {
