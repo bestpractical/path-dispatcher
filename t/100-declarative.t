@@ -1,21 +1,41 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
-do {
-    package MyApp::Dispatcher;
-    use Path::Dispatcher::Declarative -base;
-};
+my @calls;
 
-ok(MyApp::Dispatcher->isa('Path::Dispatcher::Declarative'), "use Path::Dispatcher::Declarative -base sets up ISA");
-can_ok('MyApp::Dispatcher', qw/dispatcher dispatch run/);
+for my $use_base (0, 1) {
+    my $dispatcher = $use_base ? 'MyApp::Dispatcher' : 'MyApp::DispatcherBase';
 
-do {
-    package MyApp::Dispatcher::NoBase;
-    use Path::Dispatcher::Declarative;
-};
+    # duplicated code is worse than eval!
+    my $code = "
+        package $dispatcher;
+    ";
 
-ok(!MyApp::Dispatcher::NoBase->isa('Path::Dispatcher::Declarative'), "use Path::Dispatcher::Declarative without -base does not set up ISA");
-can_ok('MyApp::Dispatcher::NoBase', qw/dispatcher dispatch run/);
+    $code .= 'use Path::Dispatcher::Declarative';
+    $code .= ' -base' if $use_base;
+    $code .= ';';
+
+    $code .= '
+        on qr/(b)(ar)(.*)/ => sub {
+            push @calls, [$1, $2, $3];
+        };
+    ';
+
+    eval $code;
+
+    if ($use_base) {
+        ok($dispatcher->isa('Path::Dispatcher::Declarative'), "use Path::Dispatcher::Declarative -base sets up ISA");
+    }
+    else {
+        ok(!$dispatcher->isa('Path::Dispatcher::Declarative'), "use Path::Dispatcher::Declarative does NOT set up ISA");
+    }
+
+    can_ok($dispatcher => qw/dispatcher dispatch run/);
+    $dispatcher->run('foobarbaz');
+    is_deeply([splice @calls], [
+        [ 'b', 'ar', 'baz' ],
+    ]);
+}
 

@@ -33,8 +33,20 @@ sub build_sugar {
 
     return {
         dispatcher => sub { $dispatcher },
-        dispatch   => sub { $dispatcher->dispatch(@_) },
-        run        => sub { $dispatcher->run(@_) },
+        dispatch   => sub {
+            shift; # don't need $self
+            $dispatcher->dispatch(@_);
+        },
+        run => sub {
+            shift; # don't need $self
+            $dispatcher->run(@_);
+        },
+        on => sub {
+            $dispatcher->add_rule(
+                regex => $_[0],
+                block => $_[1],
+            );
+        },
     };
 }
 
