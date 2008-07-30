@@ -54,15 +54,13 @@ sub dispatch {
 
     for my $stage ($self->stages) {
         $self->begin_stage($stage, \@matches);
-        my $stage_matches = 0;
 
         for my $rule (@{ $rules_for_stage{$stage} || [] }) {
             my $vars = $rule->match($path)
                 or next;
 
-            ++$stage_matches;
-
             push @matches, {
+                stage  => $stage,
                 rule   => $rule,
                 result => $vars,
             };
@@ -70,11 +68,7 @@ sub dispatch {
             last if !$rule->fallthrough;
         }
 
-        my $defer = $stage_matches == 0
-                 && $self->has_super_dispatcher
-                 && $self->defer_to_super_dispatcher($stage);
-
-        if ($defer) {
+        if ($self->defer_to_super_dispatcher($stage, \@matches)) {
             push @matches, $self->super_dispatcher->dispatch($path);
         }
 
@@ -150,9 +144,21 @@ sub end_stage {}
 sub defer_to_super_dispatcher {
     my $self = shift;
     my $stage = shift;
+    my $matches = shift;
 
-    return 1 if $stage eq 'on';
-    return 0;
+    return 0 if !$self->has_super_dispatcher;
+
+    # we only defer in the "on" stage.. this is sort of yucky, maybe we want
+    # implicit "before/after" every stage
+    return 0 unless $stage eq 'on';
+
+    # do not defer if we have any matches for this stage
+    return 0 if grep { $_->{stage} eq $stage }
+                grep { ref($_) eq 'HASH' }
+                @$matches;
+
+    # okay, let dad have at it!
+    return 1;
 }
 
 __PACKAGE__->meta->make_immutable;
