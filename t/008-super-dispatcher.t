@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 6;
 use Path::Dispatcher;
 
 my @calls;
@@ -10,6 +10,10 @@ my $super_dispatcher = Path::Dispatcher->new;
 my $sub_dispatcher   = Path::Dispatcher->new(
     super_dispatcher => $super_dispatcher,
 );
+
+ok(!$super_dispatcher->has_super_dispatcher, "no super dispatcher by default");
+ok($sub_dispatcher->has_super_dispatcher, "sub dispatcher has a super");
+is($sub_dispatcher->super_dispatcher, $super_dispatcher, "the super dispatcher is correct");
 
 for my $stage (qw/before on after/) {
     $super_dispatcher->add_rule(

@@ -19,6 +19,12 @@ has _rules => (
     },
 );
 
+has super_dispatcher => (
+    is        => 'rw',
+    isa       => 'Path::Dispatcher',
+    predicate => 'has_super_dispatcher',
+);
+
 sub add_rule {
     my $self = shift;
 
@@ -48,10 +54,13 @@ sub dispatch {
 
     for my $stage ($self->stages) {
         $self->begin_stage($stage, \@matches);
+        my $stage_matches = 0;
 
         for my $rule (@{ $rules_for_stage{$stage} || [] }) {
             my $vars = $rule->match($path)
                 or next;
+
+            ++$stage_matches;
 
             push @matches, {
                 rule   => $rule,
@@ -59,6 +68,14 @@ sub dispatch {
             };
 
             last if !$rule->fallthrough;
+        }
+
+        my $defer = $stage_matches == 0
+                 && $self->has_super_dispatcher
+                 && $self->defer_to_super_dispatcher($stage);
+
+        if ($defer) {
+            push @matches, $self->super_dispatcher->dispatch($path);
         }
 
         $self->end_stage($stage, \@matches);
@@ -83,6 +100,11 @@ sub build_runner {
         eval {
             local $SIG{__DIE__} = 'DEFAULT';
             for my $match (@$matches) {
+                if (ref($match) eq 'CODE') {
+                    $match->();
+                    next;
+                }
+
                 # if we need to set $1, $2..
                 if (ref($match->{result}) eq 'ARRAY') {
                     $self->run_with_number_vars(
@@ -124,6 +146,14 @@ sub run {
 
 sub begin_stage {}
 sub end_stage {}
+
+sub defer_to_super_dispatcher {
+    my $self = shift;
+    my $stage = shift;
+
+    return 1 if $stage eq 'on';
+    return 0;
+}
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
