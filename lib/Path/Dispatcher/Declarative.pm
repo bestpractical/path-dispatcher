@@ -5,6 +5,8 @@ use warnings;
 use Sub::Exporter;
 use Path::Dispatcher;
 
+our $CALLER; # Sub::Exporter doesn't make this available
+
 my $exporter = Sub::Exporter::build_exporter({
     into_level => 1,
     groups => {
@@ -23,13 +25,16 @@ sub import {
         push @{ $pkg . '::ISA' }, $self;
     }
 
+    local $CALLER = $pkg;
     $exporter->($self, @args);
 }
 
 sub build_sugar {
     my ($class, $group, $arg) = @_;
 
-    my $dispatcher = Path::Dispatcher->new;
+    my $dispatcher = Path::Dispatcher->new(
+        name => $CALLER,
+    );
 
     # if this is a subclass, then we want to set up a super dispatcher
     if ($class ne __PACKAGE__) {

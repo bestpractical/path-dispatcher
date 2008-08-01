@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More tests => 5;
 use lib 't/lib';
 use Path::Dispatcher::Test::App;
 
@@ -36,4 +36,8 @@ is_deeply([splice @calls], [
     'app on foo',
     'app after foo',
 ]);
+
+for ('Path::Dispatcher::Test::Framework', 'Path::Dispatcher::Test::App') {
+    is($_->dispatcher->name, $_, "correct dispatcher name for $_");
+}
 
