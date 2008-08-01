@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Path::Dispatcher;
 
 my @calls;
@@ -10,6 +10,8 @@ my $super_dispatcher = Path::Dispatcher->new;
 my $sub_dispatcher   = Path::Dispatcher->new(
     super_dispatcher => $super_dispatcher,
 );
+
+isnt($super_dispatcher->name, $sub_dispatcher->name, "two dispatchers have separate names");
 
 ok(!$super_dispatcher->has_super_dispatcher, "no super dispatcher by default");
 ok($sub_dispatcher->has_super_dispatcher, "sub dispatcher has a super");

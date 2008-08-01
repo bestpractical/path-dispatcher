@@ -25,6 +25,17 @@ has super_dispatcher => (
     predicate => 'has_super_dispatcher',
 );
 
+has name => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => do {
+        my $i = 0;
+        sub {
+            join '-', __PACKAGE__, ++$i;
+        },
+    },
+);
+
 sub add_rule {
     my $self = shift;
 
