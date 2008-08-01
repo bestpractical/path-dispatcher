@@ -17,7 +17,7 @@ ok(!$super_dispatcher->has_super_dispatcher, "no super dispatcher by default");
 ok($sub_dispatcher->has_super_dispatcher, "sub dispatcher has a super");
 is($sub_dispatcher->super_dispatcher, $super_dispatcher, "the super dispatcher is correct");
 
-for my $stage (qw/before on after/) {
+for my $stage (qw/before_on on after_on/) {
     $super_dispatcher->add_rule(
         stage => $stage,
         regex => qr/foo/,
@@ -25,7 +25,7 @@ for my $stage (qw/before on after/) {
     );
 }
 
-for my $stage (qw/before after/) {
+for my $stage (qw/before_on after_on/) {
     $sub_dispatcher->add_rule(
         stage => $stage,
         regex => qr/foo/,
@@ -35,18 +35,18 @@ for my $stage (qw/before after/) {
 
 $super_dispatcher->run('foo');
 is_deeply([splice @calls], [
-    'super before',
+    'super before_on',
     'super on',
-    'super after',
+    'super after_on',
 ]);
 
 $sub_dispatcher->run('foo');
 is_deeply([splice @calls], [
-    'sub before',
-    'super before',
+    'sub before_on',
+    'super before_on',
     'super on',
-    'super after',
-    'sub after',
+    'super after_on',
+    'sub after_on',
 ]);
 
 $sub_dispatcher->add_rule(
@@ -57,8 +57,8 @@ $sub_dispatcher->add_rule(
 
 $sub_dispatcher->run('foo');
 is_deeply([splice @calls], [
-    'sub before',
+    'sub before_on',
     'sub on',
-    'sub after',
+    'sub after_on',
 ]);
 

@@ -6,7 +6,6 @@ use MooseX::AttributeHelpers;
 use Path::Dispatcher::Rule;
 
 sub rule_class { 'Path::Dispatcher::Rule' }
-sub stages { qw/before on after/ }
 
 has _rules => (
     metaclass => 'Collection::Array',
@@ -36,6 +35,23 @@ has name => (
     },
 );
 
+has _stages => (
+    metaclass  => 'Collection::Array',
+    is         => 'rw',
+    isa        => 'ArrayRef[Str]',
+    default    => sub { [ 'on' ] },
+    provides   => {
+        push     => 'push_stage',
+        unshift  => 'unshift_stage',
+    },
+);
+
+sub stages {
+    my $self = shift;
+
+    return ('first', @{ $self->_stages }, 'last');
+}
+
 sub add_rule {
     my $self = shift;
 
@@ -64,27 +80,36 @@ sub dispatch {
         for $self->rules;
 
     for my $stage ($self->stages) {
-        $self->begin_stage($stage, \@matches);
+        for my $substage ('before', 'on', 'after') {
+            my $qualified_stage = $substage eq 'on'
+                                ? $stage
+                                : "${substage}_$stage";
 
-        for my $rule (@{ $rules_for_stage{$stage} || [] }) {
-            my $vars = $rule->match($path)
-                or next;
+            $self->begin_stage($qualified_stage, \@matches);
 
-            push @matches, {
-                stage  => $stage,
-                rule   => $rule,
-                result => $vars,
-            };
+            for my $rule (@{ delete $rules_for_stage{$qualified_stage}||[] }) {
+                my $vars = $rule->match($path)
+                    or next;
 
-            last if !$rule->fallthrough;
+                push @matches, {
+                    stage  => $qualified_stage,
+                    rule   => $rule,
+                    result => $vars,
+                };
+
+                last if !$rule->fallthrough;
+            }
+
+            if ($self->defer_to_super_dispatcher($qualified_stage, \@matches)) {
+                push @matches, $self->super_dispatcher->dispatch($path);
+            }
+
+            $self->end_stage($qualified_stage, \@matches);
         }
-
-        if ($self->defer_to_super_dispatcher($stage, \@matches)) {
-            push @matches, $self->super_dispatcher->dispatch($path);
-        }
-
-        $self->end_stage($stage, \@matches);
     }
+
+    warn "Unhandled stages: " . join(', ', keys %rules_for_stage)
+        if keys %rules_for_stage;
 
     return if !@matches;
 

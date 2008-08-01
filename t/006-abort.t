@@ -17,10 +17,10 @@ $dispatcher->add_rule(
 );
 
 $dispatcher->add_rule(
-    stage => 'after',
+    stage => 'last',
     regex => qr/foo/,
     block => sub {
-        push @calls, "after";
+        push @calls, "last";
     },
 );
 
@@ -40,7 +40,7 @@ $dispatcher->add_rule(
     block => sub {
         push @calls, "bar: before";
         my $x = {}->();
-        push @calls, "bar: after";
+        push @calls, "bar: last";
     },
 );
 

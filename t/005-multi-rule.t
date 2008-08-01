@@ -7,7 +7,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-for my $stage (qw/before on after/) {
+for my $stage (qw/first on last/) {
     for my $number (qw/first second/) {
         $dispatcher->add_rule(
             stage => $stage,
@@ -19,10 +19,10 @@ for my $stage (qw/before on after/) {
 
 $dispatcher->run('foo');
 is_deeply(\@calls, [
-    'before: first',
-    'before: second',
+    'first: first',
+    'first: second',
     'on: first',
-    'after: first',
-    'after: second',
+    'last: first',
+    'last: second',
 ]);
 

@@ -59,14 +59,14 @@ sub build_sugar {
         },
         before => sub {
             $dispatcher->add_rule(
-                stage => 'before',
+                stage => 'first',
                 regex => $_[0],
                 block => $_[1],
             );
         },
         after => sub {
             $dispatcher->add_rule(
-                stage => 'after',
+                stage => 'last',
                 regex => $_[0],
                 block => $_[1],
             );
