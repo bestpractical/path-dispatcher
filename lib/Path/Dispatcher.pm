@@ -151,6 +151,8 @@ sub build_runner {
         };
 
         die $@ if $@ && $@ !~ /^Patch::Dispatcher abort\n/;
+
+        return;
     };
 }
 
@@ -174,7 +176,9 @@ sub run {
     my $path = shift;
     my $code = $self->dispatch($path);
 
-    return $code->(@_);
+    $code->(@_);
+
+    return;
 }
 
 sub begin_stage {}
