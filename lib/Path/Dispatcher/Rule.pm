@@ -82,9 +82,8 @@ sub match {
 
 sub run {
     my $self = shift;
-    my $path = shift;
 
-    $self->block->();
+    $self->block->(@_);
 }
 
 __PACKAGE__->meta->make_immutable;

@@ -127,23 +127,25 @@ sub build_runner {
     my $matches = $args{matches};
 
     return sub {
+        my @args = @_;
+
         eval {
             local $SIG{__DIE__} = 'DEFAULT';
             for my $match (@$matches) {
                 if (ref($match) eq 'CODE') {
-                    $match->();
+                    $match->(@args);
                     next;
                 }
 
                 # if we need to set $1, $2..
                 if (ref($match->{result}) eq 'ARRAY') {
                     $self->run_with_number_vars(
-                        sub { $match->{rule}->run($path) },
+                        sub { $match->{rule}->run(@args) },
                         @{ $match->{result} },
                     );
                 }
                 else {
-                    $match->{rule}->run($path);
+                    $match->{rule}->run(@args);
                 }
             }
         };
@@ -169,9 +171,10 @@ sub run_with_number_vars {
 
 sub run {
     my $self = shift;
-    my $code = $self->dispatch(@_);
+    my $path = shift;
+    my $code = $self->dispatch($path);
 
-    return $code->();
+    return $code->(@_);
 }
 
 sub begin_stage {}
