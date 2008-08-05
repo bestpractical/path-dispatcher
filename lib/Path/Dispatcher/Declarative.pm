@@ -24,8 +24,14 @@ sub import {
         no strict 'refs';
         push @{ $pkg . '::ISA' }, $self;
     }
+    else {
+        # we don't want our subclasses exporting our sugar
+        # unless the user specifies -base
+        return if $self ne __PACKAGE__;
+    }
 
     local $CALLER = $pkg;
+
     $exporter->($self, @args);
 }
 
