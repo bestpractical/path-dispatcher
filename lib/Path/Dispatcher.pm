@@ -204,6 +204,14 @@ sub defer_to_super_dispatcher {
     return 1;
 }
 
+sub import {
+    my $self = shift;
+
+    if (@_) {
+        Carp::croak "use Path::Dispatcher (@_) called. Did you mean Path::Dispatcher::Declarative?";
+    }
+}
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
