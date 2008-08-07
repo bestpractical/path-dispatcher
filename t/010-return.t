@@ -14,8 +14,8 @@ $dispatcher->add_rule(
 
 is_deeply([$dispatcher->run('foo', 42)], []);
 
-my $code = $dispatcher->dispatch('foo');
-is_deeply([$code->(24)], []);
+my $dispatch = $dispatcher->dispatch('foo');
+is_deeply([$dispatch->run(24)], []);
 
 for my $stage (qw/first on last/) {
     for my $substage (qw/before on after/) {
@@ -32,6 +32,6 @@ for my $stage (qw/first on last/) {
 
 is_deeply([$dispatcher->run('foo', 42)], []);
 
-$code = $dispatcher->dispatch('foo');
-is_deeply([$code->(24)], []);
+$dispatch = $dispatcher->dispatch('foo');
+is_deeply([$dispatch->run(24)], []);
 

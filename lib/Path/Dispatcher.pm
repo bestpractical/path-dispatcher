@@ -4,8 +4,10 @@ use Moose;
 use MooseX::AttributeHelpers;
 
 use Path::Dispatcher::Rule;
+use Path::Dispatcher::Dispatch;
 
-sub rule_class { 'Path::Dispatcher::Rule' }
+sub rule_class     { 'Path::Dispatcher::Rule' }
+sub dispatch_class { 'Path::Dispatcher::Dispatch' }
 
 has _rules => (
     metaclass => 'Collection::Array',
@@ -76,6 +78,8 @@ sub dispatch {
     my @matches;
     my %rules_for_stage;
 
+    my $dispatch = $self->dispatch_class->new;
+
     push @{ $rules_for_stage{$_->stage} }, $_
         for $self->rules;
 
@@ -91,17 +95,17 @@ sub dispatch {
                 my $vars = $rule->match($path)
                     or next;
 
-                push @matches, {
+                $dispatch->add_match(
                     stage  => $qualified_stage,
                     rule   => $rule,
                     result => $vars,
-                };
-
-                last if !$rule->fallthrough;
+                );
             }
 
             if ($self->defer_to_super_dispatcher($qualified_stage, \@matches)) {
-                push @matches, $self->super_dispatcher->dispatch($path);
+                $dispatch->add_redispatch(
+                    $self->super_dispatcher->dispatch($path)
+                );
             }
 
             $self->end_stage($qualified_stage, \@matches);
@@ -111,72 +115,15 @@ sub dispatch {
     warn "Unhandled stages: " . join(', ', keys %rules_for_stage)
         if keys %rules_for_stage;
 
-    return if !@matches;
-
-    return $self->build_runner(
-        path    => $path,
-        matches => \@matches,
-    );
-}
-
-sub build_runner {
-    my $self = shift;
-    my %args = @_;
-
-    my $path    = $args{path};
-    my $matches = $args{matches};
-
-    return sub {
-        my @args = @_;
-
-        eval {
-            local $SIG{__DIE__} = 'DEFAULT';
-            for my $match (@$matches) {
-                if (ref($match) eq 'CODE') {
-                    $match->(@args);
-                    next;
-                }
-
-                # if we need to set $1, $2..
-                if (ref($match->{result}) eq 'ARRAY') {
-                    $self->run_with_number_vars(
-                        sub { $match->{rule}->run(@args) },
-                        @{ $match->{result} },
-                    );
-                }
-                else {
-                    $match->{rule}->run(@args);
-                }
-            }
-        };
-
-        die $@ if $@ && $@ !~ /^Patch::Dispatcher abort\n/;
-
-        return;
-    };
-}
-
-sub run_with_number_vars {
-    my $self = shift;
-    my $code = shift;
-
-    # we don't have direct write access to $1 and friends, so we have to
-    # do this little hack. the only way we can update $1 is by matching
-    # against a regex (5.10 fixes that)..
-    my $re = join '', map { "(\Q$_\E)" } @_;
-    my $str = join '', @_;
-    $str =~ $re
-        or die "Unable to match '$str' against a copy of itself!";
-
-    $code->();
+    return $dispatch;
 }
 
 sub run {
     my $self = shift;
     my $path = shift;
-    my $code = $self->dispatch($path);
+    my $dispatch = $self->dispatch($path);
 
-    $code->(@_);
+    $dispatch->run(@_);
 
     return;
 }

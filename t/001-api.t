@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 12;
 use Path::Dispatcher;
 
 my @calls;
@@ -14,10 +14,11 @@ $dispatcher->add_rule(
 
 is_deeply([splice @calls], [], "no calls to the rule block yet");
 
-my $thunk = $dispatcher->dispatch('foo');
+my $dispatch = $dispatcher->dispatch('foo');
 is_deeply([splice @calls], [], "no calls to the rule block yet");
 
-$thunk->();
+isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
+$dispatch->run;
 is_deeply([splice @calls], [ [] ], "finally invoked the rule block");
 
 $dispatcher->run('foo');
@@ -30,10 +31,11 @@ $dispatcher->add_rule(
 
 is_deeply([splice @calls], [], "no calls to the rule block yet");
 
-$thunk = $dispatcher->dispatch('bar');
+$dispatch = $dispatcher->dispatch('bar');
 is_deeply([splice @calls], [], "no calls to the rule block yet");
 
-$thunk->();
+isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
+$dispatch->run;
 is_deeply([splice @calls], [ ['bar', undef] ], "finally invoked the rule block");
 
 $dispatcher->run('bar');
@@ -41,6 +43,7 @@ is_deeply([splice @calls], [ ['bar', undef] ], "invoked the rule block on 'run'"
 
 "foo" =~ /foo/;
 
-$thunk->();
+isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
+$dispatch->run;
 is_deeply([splice @calls], [ ['bar', undef] ], "invoked the rule block on 'run', makes sure \$1 etc are still correctly set");
 

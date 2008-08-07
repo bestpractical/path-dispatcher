@@ -18,8 +18,8 @@ is_deeply([splice @calls], [
     [42],
 ]);
 
-my $code = $dispatcher->dispatch('foo');
-$code->(24);
+my $dispatch = $dispatcher->dispatch('foo');
+$dispatch->run(24);
 
 is_deeply([splice @calls], [
     [24],

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Path::Dispatcher;
 
 my @calls;
@@ -12,8 +12,12 @@ $dispatcher->add_rule(
     block => sub { push @calls, [@_] },
 );
 
-my $thunk = $dispatcher->dispatch('bar');
+my $dispatch = $dispatcher->dispatch('bar');
 is_deeply([splice @calls], [], "no calls to the rule block yet");
 
-is($thunk, undef, "no match, no coderef");
+isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
+is($dispatch->matches, 0, "no matches");
+
+$dispatch->run;
+is_deeply([splice @calls], [], "no calls to the rule block");
 

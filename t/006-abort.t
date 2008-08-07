@@ -24,14 +24,14 @@ $dispatcher->add_rule(
     },
 );
 
-my $thunk;
+my $dispatch;
 lives_ok {
-    $thunk = $dispatcher->dispatch('foo');
+    $dispatch = $dispatcher->dispatch('foo');
 };
 is_deeply([splice @calls], [], "no blocks called yet of course");
 
 lives_ok {
-    $thunk->();
+    $dispatch->run;
 };
 is_deeply([splice @calls], ['on'], "correctly aborted the entire dispatch");
 
