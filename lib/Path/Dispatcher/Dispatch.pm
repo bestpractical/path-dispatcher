@@ -49,37 +49,13 @@ sub run {
     eval {
         local $SIG{__DIE__} = 'DEFAULT';
         for my $match ($self->matches) {
-            # if we need to set $1, $2..
-            if ($match->set_number_vars) {
-                $self->run_with_number_vars(
-                    sub { $match->rule->run(@args) },
-                    @{ $match->result },
-                );
-            }
-            else {
-                $match->rule->run(@args);
-            }
+            $match->run(@args);
         }
     };
 
     die $@ if $@ && $@ !~ /^Patch::Dispatcher abort\n/;
 
     return;
-}
-
-sub run_with_number_vars {
-    my $self = shift;
-    my $code = shift;
-
-    # we don't have direct write access to $1 and friends, so we have to
-    # do this little hack. the only way we can update $1 is by matching
-    # against a regex (5.10 fixes that)..
-    my $re = join '', map { "(\Q$_\E)" } @_;
-    my $str = join '', @_;
-    $str =~ $re
-        or die "Unable to match '$str' against a copy of itself!";
-
-    $code->();
 }
 
 __PACKAGE__->meta->make_immutable;
