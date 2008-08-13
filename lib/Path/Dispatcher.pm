@@ -15,7 +15,7 @@ has _rules => (
     isa       => 'ArrayRef[Path::Dispatcher::Rule]',
     default   => sub { [] },
     provides  => {
-        push     => '_add_rule',
+        push     => 'add_rule',
         elements => 'rules',
     },
 );
@@ -52,23 +52,6 @@ sub stages {
     my $self = shift;
 
     return ('first', @{ $self->_stages }, 'last');
-}
-
-sub add_rule {
-    my $self = shift;
-
-    my $rule;
-
-    # they pass in an already instantiated rule..
-    if (@_ == 1 && blessed($_[0])) {
-        $rule = shift;
-    }
-    # or they pass in args to create a rule
-    else {
-        $rule = $self->rule_class->new(@_);
-    }
-
-    $self->_add_rule($rule);
 }
 
 sub dispatch {
