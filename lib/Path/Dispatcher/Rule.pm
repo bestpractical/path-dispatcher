@@ -9,12 +9,6 @@ has stage => (
     required => 1,
 );
 
-has matcher => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    required => 1,
-);
-
 has block => (
     is       => 'ro',
     isa      => 'CodeRef',
@@ -31,39 +25,11 @@ has fallthrough => (
     },
 );
 
-around BUILDARGS => sub {
-    my $orig = shift;
-    my $self = shift;
-    my $args = $self->$orig(@_);
-
-    if (!$args->{matcher} && $args->{regex}) {
-        $args->{matcher} = $self->build_regex_matcher(delete $args->{regex});
-    }
-
-    return $args;
-};
-
-sub build_regex_matcher {
-    my $self = shift;
-    my $re   = shift;
-
-    # compile the regex immediately, instead of each match
-    $re = qr/$re/;
-
-    return sub {
-        return unless $_ =~ $re;
-
-        my $path = $_;
-        return [ map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#- ];
-    }
-}
-
 sub match {
     my $self = shift;
     my $path = shift;
 
-    local $_ = $path;
-    my $result = $self->matcher->();
+    my $result = $self->_match($path);
     return unless $result;
 
     # make sure that the returned values are PLAIN STRINGS
@@ -88,6 +54,11 @@ sub run {
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
+
+# don't require others to load our subclasses explicitly
+require Path::Dispatcher::Rule::CodeRef;
+require Path::Dispatcher::Rule::Regex;
+require Path::Dispatcher::Rule::Tokens;
 
 1;
 
