@@ -6,7 +6,6 @@ use MooseX::AttributeHelpers;
 use Path::Dispatcher::Rule;
 use Path::Dispatcher::Dispatch;
 
-sub rule_class     { 'Path::Dispatcher::Rule' }
 sub dispatch_class { 'Path::Dispatcher::Dispatch' }
 
 has _rules => (
