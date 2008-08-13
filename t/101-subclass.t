@@ -24,10 +24,12 @@ is_deeply([splice @calls], [
 ]);
 
 Path::Dispatcher::Test::App->dispatcher->add_rule(
-    regex => qr/foo/,
-    block => sub {
-        push @calls, 'app on foo';
-    },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/foo/,
+        block => sub {
+            push @calls, 'app on foo';
+        },
+    ),
 );
 
 Path::Dispatcher::Test::App->run('foo');

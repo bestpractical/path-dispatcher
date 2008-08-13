@@ -9,19 +9,23 @@ my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    regex => qr/foo/,
-    block => sub {
-        push @calls, "on";
-        die "Patch::Dispatcher abort\n";
-    },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/foo/,
+        block => sub {
+            push @calls, "on";
+            die "Patch::Dispatcher abort\n";
+        },
+    ),
 );
 
 $dispatcher->add_rule(
-    stage => 'last',
-    regex => qr/foo/,
-    block => sub {
-        push @calls, "last";
-    },
+    Path::Dispatcher::Rule::Regex->new(
+        stage => 'last',
+        regex => qr/foo/,
+        block => sub {
+            push @calls, "last";
+        },
+    ),
 );
 
 my $dispatch;
@@ -36,12 +40,14 @@ lives_ok {
 is_deeply([splice @calls], ['on'], "correctly aborted the entire dispatch");
 
 $dispatcher->add_rule(
-    regex => qr/bar/,
-    block => sub {
-        push @calls, "bar: before";
-        my $x = {}->();
-        push @calls, "bar: last";
-    },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/bar/,
+        block => sub {
+            push @calls, "bar: before";
+            my $x = {}->();
+            push @calls, "bar: last";
+        },
+    ),
 );
 
 throws_ok {

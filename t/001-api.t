@@ -8,8 +8,10 @@ my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    regex => qr/foo/,
-    block => sub { push @calls, [@_] },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/foo/,
+        block => sub { push @calls, [@_] },
+    ),
 );
 
 is_deeply([splice @calls], [], "no calls to the rule block yet");
@@ -25,8 +27,10 @@ $dispatcher->run('foo');
 is_deeply([splice @calls], [ [] ], "invoked the rule block on 'run'");
 
 $dispatcher->add_rule(
-    regex => qr/(bar)/,
-    block => sub { push @calls, [$1, $2] },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/(bar)/,
+        block => sub { push @calls, [$1, $2] },
+    ),
 );
 
 is_deeply([splice @calls], [], "no calls to the rule block yet");

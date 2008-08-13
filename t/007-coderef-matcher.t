@@ -8,8 +8,10 @@ my (@matches, @calls);
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    matcher => sub { push @matches, $_; length > 5 },
-    block   => sub { push @calls, [@_] },
+    Path::Dispatcher::Rule::CodeRef->new(
+        matcher => sub { push @matches, $_; length > 5 },
+        block   => sub { push @calls, [@_] },
+    ),
 );
 
 $dispatcher->run('foobar');

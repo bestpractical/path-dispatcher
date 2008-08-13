@@ -6,7 +6,7 @@ use Path::Dispatcher::Rule;
 
 my @calls;
 
-my $rule = Path::Dispatcher::Rule->new(
+my $rule = Path::Dispatcher::Rule::Regex->new(
     regex => qr/^(..)(..)/,
     block => sub {
         push @calls, {

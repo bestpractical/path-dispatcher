@@ -10,9 +10,11 @@ my $dispatcher = Path::Dispatcher->new;
 for my $stage (qw/first on last/) {
     for my $number (qw/first second/) {
         $dispatcher->add_rule(
-            stage => $stage,
-            regex => qr/foo/,
-            block => sub { push @calls, "$stage: $number" },
+            Path::Dispatcher::Rule::Regex->new(
+                stage => $stage,
+                regex => qr/foo/,
+                block => sub { push @calls, "$stage: $number" },
+            ),
         );
     }
 }

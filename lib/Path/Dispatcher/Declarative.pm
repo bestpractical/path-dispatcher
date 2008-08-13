@@ -59,22 +59,28 @@ sub build_sugar {
         },
         on => sub {
             $dispatcher->add_rule(
-                regex => $_[0],
-                block => $_[1],
+                Path::Dispatcher::Rule::Regex->new(
+                    regex => $_[0],
+                    block => $_[1],
+                ),
             );
         },
         before => sub {
             $dispatcher->add_rule(
-                stage => 'first',
-                regex => $_[0],
-                block => $_[1],
+                Path::Dispatcher::Rule::Regex->new(
+                    stage => 'first',
+                    regex => $_[0],
+                    block => $_[1],
+                ),
             );
         },
         after => sub {
             $dispatcher->add_rule(
-                stage => 'last',
-                regex => $_[0],
-                block => $_[1],
+                Path::Dispatcher::Rule::Regex->new(
+                    stage => 'last',
+                    regex => $_[0],
+                    block => $_[1],
+                ),
             );
         },
     };

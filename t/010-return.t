@@ -8,8 +8,10 @@ use Path::Dispatcher;
 
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
-    regex => qr/foo/,
-    block => sub { return @_ },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/foo/,
+        block => sub { return @_ },
+    ),
 );
 
 is_deeply([$dispatcher->run('foo', 42)], []);
@@ -23,9 +25,11 @@ for my $stage (qw/first on last/) {
                             ? $stage
                             : "${substage}_$stage";
         $dispatcher->add_rule(
-            stage => $qualified_stage,
-            regex => qr/foo/,
-            block => sub { return @_ },
+            Path::Dispatcher::Rule::Regex->new(
+                stage => $qualified_stage,
+                regex => qr/foo/,
+                block => sub { return @_ },
+            ),
         );
     }
 }

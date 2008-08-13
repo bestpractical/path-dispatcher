@@ -14,9 +14,11 @@ for my $stage (qw/first on last/) {
                             : "${substage}_$stage";
 
         $dispatcher->add_rule(
-            stage => $qualified_stage,
-            regex => qr/foo/,
-            block => sub { push @calls, $qualified_stage },
+            Path::Dispatcher::Rule::Regex->new(
+                stage => $qualified_stage,
+                regex => qr/foo/,
+                block => sub { push @calls, $qualified_stage },
+            ),
         );
     }
 }

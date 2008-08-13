@@ -19,17 +19,21 @@ is($sub_dispatcher->super_dispatcher, $super_dispatcher, "the super dispatcher i
 
 for my $stage (qw/before_on on after_on/) {
     $super_dispatcher->add_rule(
-        stage => $stage,
-        regex => qr/foo/,
-        block => sub { push @calls, "super $stage" },
+        Path::Dispatcher::Rule::Regex->new(
+            stage => $stage,
+            regex => qr/foo/,
+            block => sub { push @calls, "super $stage" },
+        ),
     );
 }
 
 for my $stage (qw/before_on after_on/) {
     $sub_dispatcher->add_rule(
-        stage => $stage,
-        regex => qr/foo/,
-        block => sub { push @calls, "sub $stage" },
+        Path::Dispatcher::Rule::Regex->new(
+            stage => $stage,
+            regex => qr/foo/,
+            block => sub { push @calls, "sub $stage" },
+        ),
     );
 }
 
@@ -50,9 +54,11 @@ is_deeply([splice @calls], [
 ]);
 
 $sub_dispatcher->add_rule(
-    stage => 'on',
-    regex => qr/foo/,
-    block => sub { push @calls, "sub on" },
+    Path::Dispatcher::Rule::Regex->new(
+        stage => 'on',
+        regex => qr/foo/,
+        block => sub { push @calls, "sub on" },
+    ),
 );
 
 $sub_dispatcher->run('foo');
