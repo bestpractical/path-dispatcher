@@ -71,11 +71,6 @@ sub dispatch {
 
     STAGE:
     for my $stage ($self->stages) {
-        $self->begin_stage(
-            stage    => $stage,
-            dispatch => $dispatch,
-        );
-
         RULE:
         for my $rule ($stage->rules) {
             my $result = $rule->match($path)
@@ -93,12 +88,6 @@ sub dispatch {
         $dispatch->add_redispatch($self->redispatch($path))
             if $stage->allows_redispatch($dispatch)
             && $self->can_redispatch;
-    }
-    continue {
-        $self->end_stage(
-            stage    => $stage,
-            dispatch => $dispatch,
-        );
     }
 
     return $dispatch;
@@ -122,9 +111,6 @@ sub run {
 
     return;
 }
-
-sub begin_stage {}
-sub end_stage   {}
 
 # We don't export anything, so if they request something, then try to error
 # helpfully
