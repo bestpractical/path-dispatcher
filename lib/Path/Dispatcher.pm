@@ -74,7 +74,7 @@ sub dispatch {
 
     my $dispatch = $self->dispatch_class->new;
 
-    push @{ $rules_for_stage{$_->stage} }, $_
+    push @{ $rules_for_stage{$_->stage_name} }, $_
         for $self->rules;
 
     for my $stage ($self->stages) {

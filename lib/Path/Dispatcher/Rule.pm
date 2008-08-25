@@ -2,9 +2,11 @@
 package Path::Dispatcher::Rule;
 use Moose;
 
+use Path::Dispatcher::Stage;
+
 has stage => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => 'Str|Path::Dispatcher::Stage',
     default  => 'on',
     required => 1,
 );
@@ -24,6 +26,12 @@ has fallthrough => (
         $self->stage eq 'on' ? 0 : 1;
     },
 );
+
+sub stage_name {
+    my $stage = shift->stage;
+    return $stage if !ref($stage);
+    return $stage->qualified_name;
+}
 
 sub match {
     my $self = shift;
