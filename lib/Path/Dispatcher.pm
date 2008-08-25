@@ -77,11 +77,13 @@ sub dispatch {
     push @{ $rules_for_stage{$_->stage_name} }, $_
         for $self->rules;
 
+    STAGE:
     for my $stage ($self->stages) {
         $self->begin_stage($stage, \@matches);
 
         my $stage_name = $stage->qualified_name;
 
+        RULE:
         for my $rule (@{ delete $rules_for_stage{$stage_name} || [] }) {
             my $vars = $rule->match($path)
                 or next;
@@ -91,11 +93,16 @@ sub dispatch {
                 rule   => $rule,
                 result => $vars,
             );
+
+            if ($stage->match_ends_stage) {
+                next STAGE;
+            }
         }
 
         $dispatch->add_redispatch($self->redispatch($path))
             if $self->can_redispatch;
-
+    }
+    continue {
         $self->end_stage($stage, \@matches);
     }
 

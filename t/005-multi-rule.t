@@ -22,9 +22,7 @@ for my $stage (qw/first on last/) {
 $dispatcher->run('foo');
 is_deeply(\@calls, [
     'first: first',
-    'first: second',
     'on: first',
     'last: first',
-    'last: second',
 ]);
 

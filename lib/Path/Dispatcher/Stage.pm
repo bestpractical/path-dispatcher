@@ -21,6 +21,12 @@ sub qualified_name {
     return $name;
 }
 
+# If we're a before/after (qualified) rule, then yeah, we want to continue
+# dispatching. If we're an "on" (unqualified) rule, then no, you only get one.
+sub match_ends_stage {
+    return !shift->is_qualified;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 
