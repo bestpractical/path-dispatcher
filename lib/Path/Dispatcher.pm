@@ -47,10 +47,26 @@ has _stages => (
     },
 );
 
-sub stages {
+sub stage_names {
     my $self = shift;
 
     return ('first', @{ $self->_stages }, 'last');
+}
+
+sub stages {
+    my $self = shift;
+    my @stages;
+
+    for my $stage ($self->stage_names) {
+        for my $substage ('before', 'on', 'after') {
+            my $qualified_stage = $substage eq 'on'
+                                ? $stage
+                                : "${substage}_$stage";
+            push @stages, $qualified_stage;
+        }
+    }
+
+    return @stages;
 }
 
 sub dispatch {
@@ -66,32 +82,26 @@ sub dispatch {
         for $self->rules;
 
     for my $stage ($self->stages) {
-        for my $substage ('before', 'on', 'after') {
-            my $qualified_stage = $substage eq 'on'
-                                ? $stage
-                                : "${substage}_$stage";
+        $self->begin_stage($stage, \@matches);
 
-            $self->begin_stage($qualified_stage, \@matches);
+        for my $rule (@{ delete $rules_for_stage{$stage}||[] }) {
+            my $vars = $rule->match($path)
+                or next;
 
-            for my $rule (@{ delete $rules_for_stage{$qualified_stage}||[] }) {
-                my $vars = $rule->match($path)
-                    or next;
-
-                $dispatch->add_match(
-                    stage  => $qualified_stage,
-                    rule   => $rule,
-                    result => $vars,
-                );
-            }
-
-            if ($self->defer_to_super_dispatcher($qualified_stage, \@matches)) {
-                $dispatch->add_redispatch(
-                    $self->super_dispatcher->dispatch($path)
-                );
-            }
-
-            $self->end_stage($qualified_stage, \@matches);
+            $dispatch->add_match(
+                stage  => $stage,
+                rule   => $rule,
+                result => $vars,
+            );
         }
+
+        if ($self->defer_to_super_dispatcher($stage, \@matches)) {
+            $dispatch->add_redispatch(
+                $self->super_dispatcher->dispatch($path)
+            );
+        }
+
+        $self->end_stage($stage, \@matches);
     }
 
     warn "Unhandled stages: " . join(', ', keys %rules_for_stage)

@@ -19,19 +19,16 @@ is_deeply([$dispatcher->run('foo', 42)], []);
 my $dispatch = $dispatcher->dispatch('foo');
 is_deeply([$dispatch->run(24)], []);
 
-for my $stage (qw/first on last/) {
-    for my $substage (qw/before on after/) {
-        my $qualified_stage = $substage eq 'on'
-                            ? $stage
-                            : "${substage}_$stage";
-        $dispatcher->add_rule(
-            Path::Dispatcher::Rule::Regex->new(
-                stage => $qualified_stage,
-                regex => qr/foo/,
-                block => sub { return @_ },
-            ),
-        );
-    }
+for my $stage (qw/before_first first after_first
+                  before_on    on    after_on
+                  before_last  last  after_last/) {
+    $dispatcher->add_rule(
+        Path::Dispatcher::Rule::Regex->new(
+            stage => $stage,
+            regex => qr/foo/,
+            block => sub { return @_ },
+        ),
+    );
 }
 
 is_deeply([$dispatcher->run('foo', 42)], []);
