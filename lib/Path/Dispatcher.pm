@@ -21,7 +21,8 @@ has name => (
     default => do {
         my $i = 0;
         sub {
-            join '-', __PACKAGE__, ++$i;
+            my $self = shift;
+            join '-', blessed($self), ++$i;
         },
     },
 );
@@ -81,13 +82,13 @@ sub dispatch {
 
         RULE:
         for my $rule ($stage->rules) {
-            my $vars = $rule->match($path)
+            my $result = $rule->match($path)
                 or next;
 
             $dispatch->add_match(
                 stage  => $stage,
                 rule   => $rule,
-                result => $vars,
+                result => $result,
             );
 
             next STAGE if $stage->match_ends_stage;
