@@ -64,23 +64,11 @@ sub dispatch {
     my $dispatch = $self->dispatch_class->new;
 
     for my $stage ($self->stages) {
-        my $stop = $self->dispatch_stage(
+        $self->dispatch_stage(
             stage    => $stage,
             dispatch => $dispatch,
             path     => $path,
         );
-
-        if ($stop) {
-            if ($stage->has_cleanup_stage) {
-                $self->dispatch_stage(
-                    stage    => $stage->cleanup_stage,
-                    dispatch => $dispatch,
-                    path     => $path,
-                );
-            }
-
-            return $dispatch;
-        }
     }
 
     $dispatch->add_redispatches($self->redispatches($path))
@@ -96,14 +84,11 @@ sub dispatch_stage {
     my $stage = $args{stage};
 
     for my $rule ($stage->rules) {
-        my $matched = $self->dispatch_rule(
+        $self->dispatch_rule(
             %args,
             rule => $rule,
         );
-        return 1 if $matched && $stage->match_ends_dispatch;
     }
-
-    return 0;
 }
 
 sub dispatch_rule {

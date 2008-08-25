@@ -55,6 +55,7 @@ sub run {
         local $SIG{__DIE__} = 'DEFAULT';
         for my $match ($self->matches) {
             $match->run(@args);
+            last if $match->ends_dispatch($self);
         }
     };
 

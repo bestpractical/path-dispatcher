@@ -58,6 +58,14 @@ sub run_with_number_vars {
     $code->();
 }
 
+# If we're a before/after (qualified) rule, then yeah, we want to continue
+# dispatching. If we're an "on" (unqualified) rule, then no, you only get one.
+sub ends_dispatch {
+    my $self = shift;
+
+    return $self->stage->is_qualified ? 0 : 1;
+}
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 
