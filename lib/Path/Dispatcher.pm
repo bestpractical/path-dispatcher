@@ -91,7 +91,8 @@ sub dispatch {
         }
 
         $dispatch->add_redispatch($self->redispatch($path))
-            if $self->can_redispatch;
+            if $stage->allows_redispatch($dispatch)
+            && $self->can_redispatch;
     }
     continue {
         $self->end_stage(

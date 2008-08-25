@@ -41,6 +41,19 @@ sub match_ends_stage {
     return !shift->is_qualified;
 }
 
+sub allows_redispatch {
+    my $self     = shift;
+    my $dispatch = shift;
+
+    return 0 if $self->is_qualified;
+
+    for my $match ($dispatch->matches) {
+        return 0 if $match->stage->match_ends_stage;
+    }
+
+    return 1;
+}
+
 no Moose;
 __PACKAGE__->meta->make_immutable;
 

@@ -61,10 +61,7 @@ $sub_dispatcher->stage('on')->add_rule(
 $sub_dispatcher->run('foo');
 is_deeply([splice @calls], [
     'sub before_on',
-    'super before_on',
     'sub on',
-    'super on',
     'sub after_on',
-    'super after_on',
 ]);
 
