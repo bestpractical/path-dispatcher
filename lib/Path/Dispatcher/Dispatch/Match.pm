@@ -2,9 +2,12 @@
 package Path::Dispatcher::Dispatch::Match;
 use Moose;
 
+use Path::Dispatcher::Stage;
+use Path::Dispatcher::Rule;
+
 has stage => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => 'Path::Dispatcher::Stage',
     required => 1,
 );
 

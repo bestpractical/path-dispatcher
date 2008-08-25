@@ -3,9 +3,11 @@ package Path::Dispatcher;
 use Moose;
 use MooseX::AttributeHelpers;
 
+use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
 use Path::Dispatcher::Dispatch;
 
+sub stage_class    { 'Path::Dispatcher::Stage' }
 sub dispatch_class { 'Path::Dispatcher::Dispatch' }
 
 has _rules => (
@@ -36,37 +38,31 @@ has name => (
     },
 );
 
-has _stages => (
+has stages => (
     metaclass  => 'Collection::Array',
     is         => 'rw',
-    isa        => 'ArrayRef[Str]',
-    default    => sub { [ 'on' ] },
-    provides   => {
-        push     => 'push_stage',
-        unshift  => 'unshift_stage',
-    },
+    isa        => 'ArrayRef[Path::Dispatcher::Stage]',
+    auto_deref => 1,
+    builder    => 'default_stages',
 );
 
-sub stage_names {
+sub default_stages {
     my $self = shift;
-
-    return ('first', @{ $self->_stages }, 'last');
-}
-
-sub stages {
-    my $self = shift;
+    my $stage_class = $self->stage_class;
     my @stages;
 
-    for my $stage ($self->stage_names) {
-        for my $substage ('before', 'on', 'after') {
-            my $qualified_stage = $substage eq 'on'
-                                ? $stage
-                                : "${substage}_$stage";
-            push @stages, $qualified_stage;
+    for my $stage_name (qw/first on last/) {
+        for my $qualifier (qw/before on after/) {
+            my $is_qualified = $qualifier ne 'on';
+            my $stage = $stage_class->new(
+                name => $stage_name,
+                ($is_qualified ? (qualifier => $qualifier) : ()),
+            );
+            push @stages, $stage;
         }
     }
 
-    return @stages;
+    return \@stages;
 }
 
 sub dispatch {
@@ -84,7 +80,9 @@ sub dispatch {
     for my $stage ($self->stages) {
         $self->begin_stage($stage, \@matches);
 
-        for my $rule (@{ delete $rules_for_stage{$stage}||[] }) {
+        my $stage_name = $stage->qualified_name;
+
+        for my $rule (@{ delete $rules_for_stage{$stage_name} || [] }) {
             my $vars = $rule->match($path)
                 or next;
 
