@@ -95,11 +95,8 @@ sub dispatch {
             );
         }
 
-        if ($self->defer_to_super_dispatcher($stage, \@matches)) {
-            $dispatch->add_redispatch(
-                $self->super_dispatcher->dispatch($path)
-            );
-        }
+        $dispatch->add_redispatch($self->redispatch($path))
+            if $self->can_redispatch;
 
         $self->end_stage($stage, \@matches);
     }
@@ -108,6 +105,19 @@ sub dispatch {
         if keys %rules_for_stage;
 
     return $dispatch;
+}
+
+sub can_redispatch {
+    my $self = shift;
+
+    return $self->has_super_dispatcher;
+}
+
+sub redispatch {
+    my $self = shift;
+    my $path = shift;
+
+    return $self->super_dispatcher->dispatch($path)
 }
 
 sub run {
@@ -122,26 +132,6 @@ sub run {
 
 sub begin_stage {}
 sub end_stage {}
-
-sub defer_to_super_dispatcher {
-    my $self = shift;
-    my $stage = shift;
-    my $matches = shift;
-
-    return 0 if !$self->has_super_dispatcher;
-
-    # we only defer in the "on" stage.. this is sort of yucky, maybe we want
-    # implicit "before/after" every stage
-    return 0 unless $stage eq 'on';
-
-    # do not defer if we have any matches for this stage
-    return 0 if grep { $_->{stage} eq $stage }
-                grep { ref($_) eq 'HASH' }
-                @$matches;
-
-    # okay, let dad have at it!
-    return 1;
-}
 
 sub import {
     my $self = shift;
