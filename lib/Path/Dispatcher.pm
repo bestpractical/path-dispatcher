@@ -69,7 +69,18 @@ sub dispatch {
             dispatch => $dispatch,
             path     => $path,
         );
-        last if $stop;
+
+        if ($stop) {
+            if ($stage->has_cleanup_stage) {
+                $self->dispatch_stage(
+                    stage    => $stage->cleanup_stage,
+                    dispatch => $dispatch,
+                    path     => $path,
+                );
+            }
+
+            return $dispatch;
+        }
     }
 
     $dispatch->add_redispatch($self->redispatch($path))
