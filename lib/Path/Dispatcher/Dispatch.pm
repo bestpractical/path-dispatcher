@@ -54,8 +54,14 @@ sub run {
     eval {
         local $SIG{__DIE__} = 'DEFAULT';
         for my $match ($self->matches) {
-            $match->run(@args);
-            last if $match->ends_dispatch($self);
+            eval {
+                local $SIG{__DIE__} = 'DEFAULT';
+                $match->run(@args);
+
+                no warnings 'exiting';
+                last if $match->ends_dispatch($self);
+            };
+            die $@ if $@ && $@ !~ /^Patch::Dispatcher next rule\n/;
         }
     };
 
