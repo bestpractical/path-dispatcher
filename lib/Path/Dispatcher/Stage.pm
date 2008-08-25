@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 package Path::Dispatcher::Stage;
 use Moose;
+use MooseX::AttributeHelpers;
 
 use Path::Dispatcher::Rule;
 

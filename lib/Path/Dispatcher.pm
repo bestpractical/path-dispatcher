@@ -90,9 +90,7 @@ sub dispatch {
                 result => $vars,
             );
 
-            if ($stage->match_ends_stage) {
-                next STAGE;
-            }
+            next STAGE if $stage->match_ends_stage;
         }
 
         $dispatch->add_redispatch($self->redispatch($path))
@@ -108,11 +106,7 @@ sub dispatch {
     return $dispatch;
 }
 
-sub can_redispatch {
-    my $self = shift;
-
-    return $self->has_super_dispatcher;
-}
+sub can_redispatch { shift->has_super_dispatcher }
 
 sub redispatch {
     my $self = shift;
@@ -132,7 +126,7 @@ sub run {
 }
 
 sub begin_stage {}
-sub end_stage {}
+sub end_stage   {}
 
 # We don't export anything, so if they request something, then try to error
 # helpfully

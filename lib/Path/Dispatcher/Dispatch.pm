@@ -1,8 +1,10 @@
 #!/usr/bin/env perl
 package Path::Dispatcher::Dispatch;
 use Moose;
+use MooseX::AttributeHelpers;
 
 use Path::Dispatcher::Dispatch::Match;
+
 sub match_class { 'Path::Dispatcher::Dispatch::Match' }
 
 has _matches => (
@@ -13,6 +15,7 @@ has _matches => (
     provides  => {
         push     => '_add_match',
         elements => 'matches',
+        count    => 'has_matches',
     },
 );
 
