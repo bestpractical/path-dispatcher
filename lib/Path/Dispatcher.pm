@@ -138,11 +138,14 @@ sub run {
 sub begin_stage {}
 sub end_stage {}
 
+# We don't export anything, so if they request something, then try to error
+# helpfully
 sub import {
-    my $self = shift;
+    my $self    = shift;
+    my $package = caller;
 
     if (@_) {
-        Carp::croak "use Path::Dispatcher (@_) called. Did you mean Path::Dispatcher::Declarative?";
+        Carp::croak "use Path::Dispatcher (@_) called by $package. Did you mean Path::Dispatcher::Declarative?";
     }
 }
 
