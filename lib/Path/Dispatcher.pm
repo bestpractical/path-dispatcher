@@ -82,13 +82,12 @@ sub dispatch {
                 result => $result,
             );
 
-            next STAGE if $stage->match_ends_stage;
+            return $dispatch if $stage->match_ends_dispatch;
         }
-
-        $dispatch->add_redispatch($self->redispatch($path))
-            if $stage->allows_redispatch($dispatch)
-            && $self->can_redispatch;
     }
+
+    $dispatch->add_redispatch($self->redispatch($path))
+        if $self->can_redispatch;
 
     return $dispatch;
 }
