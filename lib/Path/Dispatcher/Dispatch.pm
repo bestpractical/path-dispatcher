@@ -19,12 +19,14 @@ has _matches => (
     },
 );
 
-sub add_redispatch {
-    my $self     = shift;
-    my $dispatch = shift;
+sub add_redispatches {
+    my $self       = shift;
+    my @dispatches = @_;
 
-    for my $match ($dispatch->matches) {
-        $self->add_match($match);
+    for my $dispatch (@dispatches) {
+        for my $match ($dispatch->matches) {
+            $self->add_match($match);
+        }
     }
 }
 

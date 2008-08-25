@@ -83,7 +83,7 @@ sub dispatch {
         }
     }
 
-    $dispatch->add_redispatch($self->redispatch($path))
+    $dispatch->add_redispatches($self->redispatches($path))
         if $self->can_redispatch;
 
     return $dispatch;
@@ -123,7 +123,7 @@ sub dispatch_rule {
 
 sub can_redispatch { shift->has_super_dispatcher }
 
-sub redispatch {
+sub redispatches {
     my $self = shift;
     my $path = shift;
 
