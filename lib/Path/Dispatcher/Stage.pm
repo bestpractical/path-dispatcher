@@ -16,6 +16,12 @@ has qualifier => (
     predicate => 'is_qualified',
 );
 
+has cleanup_stage => (
+    is        => 'ro',
+    isa       => 'Path::Dispatcher::Stage',
+    predicate => 'has_cleanup_stage',
+);
+
 has _rules => (
     metaclass => 'Collection::Array',
     is        => 'rw',

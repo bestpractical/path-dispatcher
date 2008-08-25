@@ -37,18 +37,12 @@ has stages => (
 sub default_stages {
     my $self = shift;
     my $stage_class = $self->stage_class;
-    my @stages;
 
-    for my $qualifier (qw/before on after/) {
-        my $is_qualified = $qualifier ne 'on';
-        my $stage = $stage_class->new(
-            name => 'on',
-            ($is_qualified ? (qualifier => $qualifier) : ()),
-        );
-        push @stages, $stage;
-    }
+    my $before = $stage_class->new(name => 'on', qualifier => 'before');
+    my $after  = $stage_class->new(name => 'on', qualifier => 'after');
+    my $on     = $stage_class->new(name => 'on', cleanup_stage => $after);
 
-    return \@stages;
+    return [$before, $on, $after];
 }
 
 # ugh, we should probably use IxHash..
