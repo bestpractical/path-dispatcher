@@ -13,7 +13,7 @@ $dispatcher->stage('on')->add_rule(
         regex => qr/foo/,
         block => sub {
             push @calls, "on";
-            die "Patch::Dispatcher abort\n";
+            die "Path::Dispatcher abort\n";
         },
     ),
 );

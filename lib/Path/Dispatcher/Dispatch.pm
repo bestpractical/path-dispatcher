@@ -61,11 +61,11 @@ sub run {
                 no warnings 'exiting';
                 last if $match->ends_dispatch($self);
             };
-            die $@ if $@ && $@ !~ /^Patch::Dispatcher next rule\n/;
+            die $@ if $@ && $@ !~ /^Path::Dispatcher next rule\n/;
         }
     };
 
-    die $@ if $@ && $@ !~ /^Patch::Dispatcher abort\n/;
+    die $@ if $@ && $@ !~ /^Path::Dispatcher abort\n/;
 
     return;
 }
