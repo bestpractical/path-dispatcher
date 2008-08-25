@@ -56,14 +56,10 @@ sub run_with_number_vars {
     # we need to check length because Perl's annoying gotcha of the empty regex
     # actually being an alias for whatever the previously used regex was 
     # (useful last decade when qr// hadn't been invented)
-    if (length($str)) {
-        $str =~ $re
-            or die "Unable to match '$str' against a copy of itself!";
-    }
-    else {
-        # need to clear $1 and friends
-        "x" =~ /^x$/;
-    }
+    # we need to do the match anyway, because we have to clear the number vars
+    ($str, $re) = ("x", "x") if length($str) == 0;
+    $str =~ $re
+        or die "Unable to match '$str' against a copy of itself!";
 
     $code->();
 }
