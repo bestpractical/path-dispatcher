@@ -78,8 +78,6 @@ sub dispatch {
             dispatch => $dispatch,
         );
 
-        my $stage_name = $stage->qualified_name;
-
         RULE:
         for my $rule ($stage->rules) {
             my $result = $rule->match($path)
