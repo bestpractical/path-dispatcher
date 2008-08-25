@@ -7,7 +7,7 @@ use Path::Dispatcher;
 my (@matches, @calls);
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->add_rule(
+$dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::CodeRef->new(
         matcher => sub { push @matches, $_; length > 5 },
         block   => sub { push @calls, [@_] },

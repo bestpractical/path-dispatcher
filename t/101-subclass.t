@@ -23,7 +23,7 @@ is_deeply([splice @calls], [
     'app after foo',
 ]);
 
-Path::Dispatcher::Test::App->dispatcher->add_rule(
+Path::Dispatcher::Test::App->dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub {

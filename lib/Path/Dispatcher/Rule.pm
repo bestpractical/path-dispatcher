@@ -4,34 +4,11 @@ use Moose;
 
 use Path::Dispatcher::Stage;
 
-has stage => (
-    is       => 'ro',
-    isa      => 'Str|Path::Dispatcher::Stage',
-    default  => 'on',
-    required => 1,
-);
-
 has block => (
     is       => 'ro',
     isa      => 'CodeRef',
     required => 1,
 );
-
-has fallthrough => (
-    is      => 'ro',
-    isa     => 'Bool',
-    lazy    => 1,
-    default => sub {
-        my $self = shift;
-        $self->stage eq 'on' ? 0 : 1;
-    },
-);
-
-sub stage_name {
-    my $stage = shift->stage;
-    return $stage if !ref($stage);
-    return $stage->qualified_name;
-}
 
 sub match {
     my $self = shift;

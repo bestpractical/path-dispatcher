@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 package Path::Dispatcher;
 use Moose;
-use MooseX::AttributeHelpers;
 
 use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
@@ -9,17 +8,6 @@ use Path::Dispatcher::Dispatch;
 
 sub stage_class    { 'Path::Dispatcher::Stage' }
 sub dispatch_class { 'Path::Dispatcher::Dispatch' }
-
-has _rules => (
-    metaclass => 'Collection::Array',
-    is        => 'rw',
-    isa       => 'ArrayRef[Path::Dispatcher::Rule]',
-    default   => sub { [] },
-    provides  => {
-        push     => 'add_rule',
-        elements => 'rules',
-    },
-);
 
 has super_dispatcher => (
     is        => 'rw',
@@ -39,7 +27,6 @@ has name => (
 );
 
 has stages => (
-    metaclass  => 'Collection::Array',
     is         => 'rw',
     isa        => 'ArrayRef[Path::Dispatcher::Stage]',
     auto_deref => 1,
@@ -65,15 +52,23 @@ sub default_stages {
     return \@stages;
 }
 
+# ugh, we should probably use IxHash..
+sub stage {
+    my $self = shift;
+    my $name = shift;
+
+    for my $stage ($self->stages) {
+        return $stage if $stage->qualified_name eq $name;
+    }
+
+    return;
+}
+
 sub dispatch {
     my $self = shift;
     my $path = shift;
 
     my $dispatch = $self->dispatch_class->new;
-
-    my %rules_for_stage;
-    push @{ $rules_for_stage{$_->stage_name} }, $_
-        for $self->rules;
 
     STAGE:
     for my $stage ($self->stages) {
@@ -85,7 +80,7 @@ sub dispatch {
         my $stage_name = $stage->qualified_name;
 
         RULE:
-        for my $rule (@{ delete $rules_for_stage{$stage_name} || [] }) {
+        for my $rule ($stage->rules) {
             my $vars = $rule->match($path)
                 or next;
 
@@ -109,9 +104,6 @@ sub dispatch {
             dispatch => $dispatch,
         );
     }
-
-    warn "Unhandled stages: " . join(', ', keys %rules_for_stage)
-        if keys %rules_for_stage;
 
     return $dispatch;
 }

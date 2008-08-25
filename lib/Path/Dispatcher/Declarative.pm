@@ -58,7 +58,7 @@ sub build_sugar {
             $dispatcher->run(@_);
         },
         on => sub {
-            $dispatcher->add_rule(
+            $dispatcher->stage('on')->add_rule(
                 Path::Dispatcher::Rule::Regex->new(
                     regex => $_[0],
                     block => $_[1],
@@ -66,18 +66,16 @@ sub build_sugar {
             );
         },
         before => sub {
-            $dispatcher->add_rule(
+            $dispatcher->stage('first')->add_rule(
                 Path::Dispatcher::Rule::Regex->new(
-                    stage => 'first',
                     regex => $_[0],
                     block => $_[1],
                 ),
             );
         },
         after => sub {
-            $dispatcher->add_rule(
+            $dispatcher->stage('last')->add_rule(
                 Path::Dispatcher::Rule::Regex->new(
-                    stage => 'last',
                     regex => $_[0],
                     block => $_[1],
                 ),

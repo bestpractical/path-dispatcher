@@ -7,7 +7,7 @@ use Path::Dispatcher;
 # we currently have no defined return strategy :/
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->add_rule(
+$dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub { return @_ },
@@ -22,9 +22,8 @@ is_deeply([$dispatch->run(24)], []);
 for my $stage (qw/before_first first after_first
                   before_on    on    after_on
                   before_last  last  after_last/) {
-    $dispatcher->add_rule(
+    $dispatcher->stage($stage)->add_rule(
         Path::Dispatcher::Rule::Regex->new(
-            stage => $stage,
             regex => qr/foo/,
             block => sub { return @_ },
         ),

@@ -8,7 +8,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->add_rule(
+$dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub {
@@ -18,9 +18,8 @@ $dispatcher->add_rule(
     ),
 );
 
-$dispatcher->add_rule(
+$dispatcher->stage('last')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
-        stage => 'last',
         regex => qr/foo/,
         block => sub {
             push @calls, "last";
@@ -39,7 +38,7 @@ lives_ok {
 };
 is_deeply([splice @calls], ['on'], "correctly aborted the entire dispatch");
 
-$dispatcher->add_rule(
+$dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/bar/,
         block => sub {
