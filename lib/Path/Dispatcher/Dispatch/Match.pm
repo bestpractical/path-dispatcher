@@ -52,8 +52,14 @@ sub run_with_number_vars {
     # against a regex (5.10 fixes that)..
     my $re = join '', map { "(\Q$_\E)" } @_;
     my $str = join '', @_;
-    $str =~ $re
-        or die "Unable to match '$str' against a copy of itself!";
+
+    # we need to check length because Perl's annoying gotcha of the empty regex
+    # actually being an alias for whatever the previously used regex was 
+    # (useful last decade when qr// hadn't been invented)
+    if (length($str)) {
+        $str =~ $re
+            or die "Unable to match '$str' against a copy of itself!";
+    }
 
     $code->();
 }
