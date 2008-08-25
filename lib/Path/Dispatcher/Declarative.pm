@@ -81,6 +81,8 @@ sub build_sugar {
                 ),
             );
         },
+        next_rule => sub { die "Path::Dispatcher next rule\n" },
+        last_rule => sub { die "Path::Dispatcher abort\n" },
     };
 }
 
