@@ -69,27 +69,51 @@ sub dispatch {
 
     my $dispatch = $self->dispatch_class->new;
 
-    STAGE:
     for my $stage ($self->stages) {
-        RULE:
-        for my $rule ($stage->rules) {
-            my $result = $rule->match($path)
-                or next;
-
-            $dispatch->add_match(
-                stage  => $stage,
-                rule   => $rule,
-                result => $result,
-            );
-
-            return $dispatch if $stage->match_ends_dispatch;
-        }
+        my $stop = $self->dispatch_stage(
+            stage    => $stage,
+            dispatch => $dispatch,
+            path     => $path,
+        );
+        last if $stop;
     }
 
     $dispatch->add_redispatch($self->redispatch($path))
         if $self->can_redispatch;
 
     return $dispatch;
+}
+
+sub dispatch_stage {
+    my $self = shift;
+    my %args = @_;
+
+    my $stage = $args{stage};
+
+    for my $rule ($stage->rules) {
+        my $matched = $self->dispatch_rule(
+            %args,
+            rule => $rule,
+        );
+        return 1 if $matched && $stage->match_ends_dispatch;
+    }
+
+    return 0;
+}
+
+sub dispatch_rule {
+    my $self = shift;
+    my %args = @_;
+
+    my $result = $args{rule}->match($args{path})
+        or return 0;
+
+    $args{dispatch}->add_match(
+        %args,
+        result => $result,
+    );
+
+    return 1;
 }
 
 sub can_redispatch { shift->has_super_dispatcher }
