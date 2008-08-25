@@ -18,7 +18,7 @@ $dispatcher->stage('on')->add_rule(
     ),
 );
 
-$dispatcher->stage('last')->add_rule(
+$dispatcher->stage('on')->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub {

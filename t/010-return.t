@@ -19,9 +19,7 @@ is_deeply([$dispatcher->run('foo', 42)], []);
 my $dispatch = $dispatcher->dispatch('foo');
 is_deeply([$dispatch->run(24)], []);
 
-for my $stage (qw/before_first first after_first
-                  before_on    on    after_on
-                  before_last  last  after_last/) {
+for my $stage (qw/before_on on after_on/) {
     $dispatcher->stage($stage)->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr/foo/,

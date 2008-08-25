@@ -7,21 +7,15 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-for my $stage (qw/first on last/) {
-    for my $number (qw/first second/) {
-        $dispatcher->stage($stage)->add_rule(
-            Path::Dispatcher::Rule::Regex->new(
-                regex => qr/foo/,
-                block => sub { push @calls, "$stage: $number" },
-            ),
-        );
-    }
+for my $number (qw/first second/) {
+    $dispatcher->stage('on')->add_rule(
+        Path::Dispatcher::Rule::Regex->new(
+            regex => qr/foo/,
+            block => sub { push @calls, $number },
+        ),
+    );
 }
 
 $dispatcher->run('foo');
-is_deeply(\@calls, [
-    'first: first',
-    'on: first',
-    'last: first',
-]);
+is_deeply(\@calls, ['first']);
 

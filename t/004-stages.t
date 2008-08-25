@@ -7,9 +7,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-for my $stage (qw/before_first first after_first
-                  before_on    on    after_on
-                  before_last  last  after_last/) {
+for my $stage (qw/before_on on after_on/) {
     $dispatcher->stage($stage)->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr/foo/,
@@ -19,9 +17,5 @@ for my $stage (qw/before_first first after_first
 }
 
 $dispatcher->run('foo');
-is_deeply(\@calls, [
-    'before_first', 'first', 'after_first',
-    'before_on',    'on',    'after_on',
-    'before_last',  'last',  'after_last',
-]);
+is_deeply(\@calls, ['before_on', 'on', 'after_on']);
 

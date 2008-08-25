@@ -39,15 +39,13 @@ sub default_stages {
     my $stage_class = $self->stage_class;
     my @stages;
 
-    for my $stage_name (qw/first on last/) {
-        for my $qualifier (qw/before on after/) {
-            my $is_qualified = $qualifier ne 'on';
-            my $stage = $stage_class->new(
-                name => $stage_name,
-                ($is_qualified ? (qualifier => $qualifier) : ()),
-            );
-            push @stages, $stage;
-        }
+    for my $qualifier (qw/before on after/) {
+        my $is_qualified = $qualifier ne 'on';
+        my $stage = $stage_class->new(
+            name => 'on',
+            ($is_qualified ? (qualifier => $qualifier) : ()),
+        );
+        push @stages, $stage;
     }
 
     return \@stages;
