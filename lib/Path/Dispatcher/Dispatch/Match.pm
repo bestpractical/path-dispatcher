@@ -60,6 +60,10 @@ sub run_with_number_vars {
         $str =~ $re
             or die "Unable to match '$str' against a copy of itself!";
     }
+    else {
+        # need to clear $1 and friends
+        "x" =~ /^x$/;
+    }
 
     $code->();
 }
