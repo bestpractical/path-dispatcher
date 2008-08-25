@@ -69,17 +69,18 @@ sub dispatch {
     my $self = shift;
     my $path = shift;
 
-    my @matches;
-    my %rules_for_stage;
-
     my $dispatch = $self->dispatch_class->new;
 
+    my %rules_for_stage;
     push @{ $rules_for_stage{$_->stage_name} }, $_
         for $self->rules;
 
     STAGE:
     for my $stage ($self->stages) {
-        $self->begin_stage($stage, \@matches);
+        $self->begin_stage(
+            stage    => $stage,
+            dispatch => $dispatch,
+        );
 
         my $stage_name = $stage->qualified_name;
 
@@ -103,7 +104,10 @@ sub dispatch {
             if $self->can_redispatch;
     }
     continue {
-        $self->end_stage($stage, \@matches);
+        $self->end_stage(
+            stage    => $stage,
+            dispatch => $dispatch,
+        );
     }
 
     warn "Unhandled stages: " . join(', ', keys %rules_for_stage)
