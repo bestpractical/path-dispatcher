@@ -6,6 +6,7 @@ use Sub::Exporter;
 use Path::Dispatcher;
 
 our $CALLER; # Sub::Exporter doesn't make this available
+our $OUTERMOST_DISPATCHER;
 
 my $exporter = Sub::Exporter::build_exporter({
     into_level => 1,
@@ -51,11 +52,18 @@ sub build_sugar {
         dispatcher => sub { $dispatcher },
         dispatch   => sub {
             shift; # don't need $self
-            $dispatcher->dispatch(@_);
+            local $OUTERMOST_DISPATCHER = $dispatcher
+                if !$OUTERMOST_DISPATCHER;
+
+            $OUTERMOST_DISPATCHER->dispatch(@_);
         },
         run => sub {
             shift; # don't need $self
-            $dispatcher->run(@_);
+
+            local $OUTERMOST_DISPATCHER = $dispatcher
+                if !$OUTERMOST_DISPATCHER;
+
+            $OUTERMOST_DISPATCHER->run(@_);
         },
         on => sub {
             $dispatcher->stage('on')->add_rule(
