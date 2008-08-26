@@ -5,6 +5,11 @@ use Moose;
 use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
 
+has path => (
+    is       => 'ro',
+    required => 1,
+);
+
 has stage => (
     is       => 'ro',
     isa      => 'Path::Dispatcher::Stage',
@@ -31,6 +36,8 @@ has set_number_vars => (
 sub run {
     my $self = shift;
     my @args = @_;
+
+    local $_ = $self->path;
 
     if ($self->set_number_vars) {
         $self->run_with_number_vars(

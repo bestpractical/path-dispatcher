@@ -13,14 +13,14 @@ is_deeply([splice @calls], [
         from => 'app',
         one  => 'g',
         two  => undef,
-        it   => undef,
+        it   => 'args',
         args => [1, 2, 3],
     },
     {
         from => 'framework',
         one  => 'g',
         two  => undef,
-        it   => undef,
+        it   => 'args',
         args => [1, 2, 3],
     },
 ]);
