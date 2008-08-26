@@ -2,8 +2,9 @@
 package Path::Dispatcher::Declarative;
 use strict;
 use warnings;
-use Sub::Exporter;
 use Path::Dispatcher;
+
+use Sub::Exporter;
 
 our $CALLER; # Sub::Exporter doesn't make this available
 our $OUTERMOST_DISPATCHER;
@@ -39,8 +40,10 @@ sub import {
 sub build_sugar {
     my ($class, $group, $arg) = @_;
 
+    my $into = $CALLER;
+
     my $dispatcher = Path::Dispatcher->new(
-        name => $CALLER,
+        name => $into,
     );
 
     # if this is a subclass, then we want to set up a super dispatcher
@@ -51,14 +54,19 @@ sub build_sugar {
     return {
         dispatcher => sub { $dispatcher },
         dispatch   => sub {
-            shift; # don't need $self
+            # if caller is $into, then this function is being used as sugar
+            # otherwise, it's probably a method call, so discard the invocant
+            shift if caller ne $into;
+
             local $OUTERMOST_DISPATCHER = $dispatcher
                 if !$OUTERMOST_DISPATCHER;
 
             $OUTERMOST_DISPATCHER->dispatch(@_);
         },
         run => sub {
-            shift; # don't need $self
+            # if caller is $into, then this function is being used as sugar
+            # otherwise, it's probably a method call, so discard the invocant
+            shift if caller ne $into;
 
             local $OUTERMOST_DISPATCHER = $dispatcher
                 if !$OUTERMOST_DISPATCHER;
