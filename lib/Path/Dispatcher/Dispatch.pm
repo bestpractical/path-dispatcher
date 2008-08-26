@@ -52,22 +52,24 @@ sub run {
     my @args = @_;
     my @matches = $self->matches;
 
-    eval {
-        local $SIG{__DIE__} = 'DEFAULT';
-        while (my $match = shift @matches) {
-            eval {
-                $match->run(@args);
+    while (my $match = shift @matches) {
+        eval {
+            local $SIG{__DIE__} = 'DEFAULT';
 
-                if ($match->ends_dispatch($self)) {
-                    no warnings 'exiting';
-                    last;
-                }
-            };
-            die $@ if $@ && $@ !~ /^Path::Dispatcher next rule\n/;
+            $match->run(@args);
+
+            if ($match->ends_dispatch($self)) {
+                die "Path::Dispatcher abort\n";
+            }
+        };
+
+        if ($@) {
+            return if $@ =~ /^Path::Dispatcher abort\n/;
+            next if $@ =~ /^Path::Dispatcher next rule\n/;
+
+            die $@;
         }
-    };
-
-    die $@ if $@ && $@ !~ /^Path::Dispatcher abort\n/;
+    }
 
     return;
 }
