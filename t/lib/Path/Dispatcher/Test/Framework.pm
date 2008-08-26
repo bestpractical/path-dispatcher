@@ -32,5 +32,15 @@ on qr/next rule/ => sub {
     push @main::calls, 'framework after next_rule 2';
 };
 
+on qr/ar(g)s/ => sub {
+    push @main::calls, {
+        from => "framework",
+        args => [@_],
+        it   => $_,
+        one  => $1,
+        two  => $2,
+    };
+};
+
 1;
 
