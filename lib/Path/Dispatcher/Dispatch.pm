@@ -50,16 +50,18 @@ sub add_match {
 sub run {
     my $self = shift;
     my @args = @_;
+    my @matches = $self->matches;
 
     eval {
         local $SIG{__DIE__} = 'DEFAULT';
-        for my $match ($self->matches) {
+        while (my $match = shift @matches) {
             eval {
-                local $SIG{__DIE__} = 'DEFAULT';
                 $match->run(@args);
 
-                no warnings 'exiting';
-                last if $match->ends_dispatch($self);
+                if ($match->ends_dispatch($self)) {
+                    no warnings 'exiting';
+                    last;
+                }
             };
             die $@ if $@ && $@ !~ /^Path::Dispatcher next rule\n/;
         }
