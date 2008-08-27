@@ -58,9 +58,8 @@ sub run {
 
             $match->run(@args);
 
-            if ($match->ends_dispatch($self)) {
-                die "Path::Dispatcher abort\n";
-            }
+            die "Path::Dispatcher abort\n"
+                if $match->ends_dispatch($self);
         };
 
         if ($@) {

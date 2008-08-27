@@ -9,12 +9,6 @@ use Path::Dispatcher::Dispatch;
 sub stage_class    { 'Path::Dispatcher::Stage' }
 sub dispatch_class { 'Path::Dispatcher::Dispatch' }
 
-has super_dispatcher => (
-    is        => 'rw',
-    isa       => 'Path::Dispatcher',
-    predicate => 'has_super_dispatcher',
-);
-
 has name => (
     is      => 'rw',
     isa     => 'Str',
@@ -32,6 +26,12 @@ has stages => (
     isa        => 'ArrayRef[Path::Dispatcher::Stage]',
     auto_deref => 1,
     builder    => 'default_stages',
+);
+
+has super_dispatcher => (
+    is        => 'rw',
+    isa       => 'Path::Dispatcher',
+    predicate => 'has_super_dispatcher',
 );
 
 sub default_stages {
