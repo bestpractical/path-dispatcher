@@ -39,8 +39,8 @@ sub default_stages {
     my $stage_class = $self->stage_class;
 
     my $before = $stage_class->new(name => 'on', qualifier => 'before');
+    my $on     = $stage_class->new(name => 'on');
     my $after  = $stage_class->new(name => 'on', qualifier => 'after');
-    my $on     = $stage_class->new(name => 'on', cleanup_stage => $after);
 
     return [$before, $on, $after];
 }
