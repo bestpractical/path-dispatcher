@@ -149,6 +149,29 @@ __END__
 
 Path::Dispatcher - flexible dispatch
 
+=head1 SYNOPSIS
+
+    use Path::Dispatcher;
+    my $dispatcher = Path::Dispatcher->new;
+
+    $dispatcher->stage("on")->add_rule(
+        Path::Dispacher::Rule::Regex->new(
+            regex => qr{^/(foo)/.*},
+            block => sub { warn $1; }, # foo
+        )
+    );
+
+    $dispatcher->stage("on")->add_rule(
+        Path::Dispacher::Rule::CodeRef->new(
+            matcher => sub { /^\d+$/ && $_ % 2 == 0 },
+            block   => sub { warn "$_ is an even number" },
+        )
+    );
+
+    my $dispatch = $dispatcher->dispatch("/foo/bar");
+    die "404" unless $dispatch->has_matches;
+    $dispatch->run;
+
 =head1 DESCRIPTION
 
 We really like L<Jifty::Dispatcher> and wanted to use it for the command line.
