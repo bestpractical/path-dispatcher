@@ -15,14 +15,22 @@ extends 'Path::Dispatcher::Rule';
 
 my $Str       = find_type_constraint('Str');
 my $RegexpRef = find_type_constraint('RegexpRef');
+my $ArrayRef  = find_type_constraint('ArrayRef');
 
 subtype 'Path::Dispatcher::Token'
      => as 'Defined'
      => where { $Str->check($_) || $RegexpRef->check($_) };
 
+subtype 'Path::Dispatcher::TokenAlternation'
+     => as 'ArrayRef[Path::Dispatcher::Token]';
+
+subtype 'Path::Dispatcher::Tokens'
+     => as 'ArrayRef[Path::Dispatcher::Token|Path::Dispatcher::TokenAlternation]';
+
 has tokens => (
     is         => 'ro',
-    isa        => 'ArrayRef[Path::Dispatcher::Token]',
+    isa        => 'Path::Dispatcher::Tokens',
+    isa        => 'ArrayRef',
     auto_deref => 1,
     required   => 1,
 );
@@ -54,7 +62,12 @@ sub _match_token {
     my $got      = shift;
     my $expected = shift;
 
-    if ($Str->check($expected)) {
+    if ($ArrayRef->check($expected)) {
+        for my $alternative (@$expected) {
+            return 1 if $self->_match_token($got, $alternative);
+        }
+    }
+    elsif ($Str->check($expected)) {
         return $got eq $expected;
     }
     elsif ($RegexpRef->check($expected)) {

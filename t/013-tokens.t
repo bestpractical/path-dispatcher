@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 9;
 use Path::Dispatcher;
 
 my @calls;
@@ -32,4 +32,33 @@ is_deeply([splice @calls], [ ['foo', 'barbaz', undef] ], "ran the second [str, r
 
 $dispatcher->run('foo bar baz');
 is_deeply([splice @calls], [], "no matches");
+
+$dispatcher->stage('on')->add_rule(
+    Path::Dispatcher::Rule::Tokens->new(
+        tokens => [["Bat", "Super"], "Man"],
+        block  => sub { push @calls, [$1, $2, $3] },
+    ),
+);
+
+$dispatcher->run('Super Man');
+is_deeply([splice @calls], [ ['Super', 'Man', undef] ], "ran the [ [Str,Str], Str ] rule");
+
+$dispatcher->run('Bat Man');
+is_deeply([splice @calls], [ ['Bat', 'Man', undef] ], "ran the [ [Str,Str], Str ] rule");
+
+$dispatcher->run('Aqua Man');
+is_deeply([splice @calls], [ ], "no match");
+
+$dispatcher->stage('on')->add_rule(
+    Path::Dispatcher::Rule::Tokens->new(
+        tokens => [[[[qr/Deep/]]], "Man"],
+        block  => sub { push @calls, [$1, $2, $3] },
+    ),
+);
+
+$dispatcher->run('Deep Man');
+is_deeply([splice @calls], [ ['Deep', 'Man', undef] ], "alternations can be arbitrarily deep");
+
+$dispatcher->run('Not Appearing in this Dispatcher Man');
+is_deeply([splice @calls], [ ], "no match");
 
