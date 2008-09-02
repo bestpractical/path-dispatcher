@@ -74,32 +74,54 @@ sub build_sugar {
             $OUTERMOST_DISPATCHER->run(@_);
         },
         on => sub {
-            $dispatcher->stage('on')->add_rule(
-                Path::Dispatcher::Rule::Regex->new(
-                    regex => $_[0],
-                    block => $_[1],
-                ),
-            );
+            _add_rule($dispatcher, 'on', @_);
         },
         before => sub {
-            $dispatcher->stage('before_on')->add_rule(
-                Path::Dispatcher::Rule::Regex->new(
-                    regex => $_[0],
-                    block => $_[1],
-                ),
-            );
+            _add_rule($dispatcher, 'before_on', @_);
         },
         after => sub {
-            $dispatcher->stage('after_on')->add_rule(
-                Path::Dispatcher::Rule::Regex->new(
-                    regex => $_[0],
-                    block => $_[1],
-                ),
-            );
+            _add_rule($dispatcher, 'after_on', @_);
         },
         next_rule => sub { die "Path::Dispatcher next rule\n" },
         last_rule => sub { die "Path::Dispatcher abort\n" },
     };
+}
+
+my %rule_creator = (
+    ARRAY => sub {
+        Path::Dispatcher::Rule::Tokens->new(
+            tokens => $_[0],
+            block  => $_[1],
+        ),
+    },
+    CODE => sub {
+        Path::Dispatcher::Rule::CodeRef->new(
+            matcher => $_[0],
+            block   => $_[1],
+        ),
+    },
+    Regexp => sub {
+        Path::Dispatcher::Rule::Regex->new(
+            regex => $_[0],
+            block => $_[1],
+        ),
+    },
+    '' => sub {
+        Path::Dispatcher::Rule::Tokens->new(
+            tokens => [ $_[0] ],
+            block  => $_[1],
+        ),
+    },
+);
+
+sub _add_rule {
+    my ($dispatcher, $stage, $matcher, $block) = @_;
+
+    my $rule_creator = $rule_creator{ ref $matcher }
+        or die "I don't know how to create a rule for type $matcher";
+    my $rule = $rule_creator->($matcher, $block);
+
+    $dispatcher->stage($stage)->add_rule($rule);
 }
 
 1;
