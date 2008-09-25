@@ -49,6 +49,7 @@ sub _match {
     my @tokens = @orig_tokens;
 
     for my $expected ($self->tokens) {
+        return unless @tokens; # too few words
         my $got = shift @tokens;
         return unless $self->_match_token($got, $expected);
     }
