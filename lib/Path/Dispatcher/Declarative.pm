@@ -114,14 +114,25 @@ my %rule_creator = (
     },
 );
 
-sub _add_rule {
-    my ($dispatcher, $stage, $matcher, $block) = @_;
+sub _create_rule {
+    my ($stage, $matcher, $block) = @_;
 
     my $rule_creator = $rule_creator{ ref $matcher }
         or die "I don't know how to create a rule for type $matcher";
-    my $rule = $rule_creator->($matcher, $block);
+    return $rule_creator->($matcher, $block);
+}
 
-    $dispatcher->add_rule($rule);
+sub _add_rule {
+    my ($dispatcher, $stage, $matcher, $block, @rest) = @_;
+
+    my $rule = _create_rule($stage, $matcher, $block);
+
+    if (!defined(wantarray)) {
+        $dispatcher->add_rule($rule);
+    }
+    else {
+        return $rule, @rest;
+    }
 }
 
 1;
