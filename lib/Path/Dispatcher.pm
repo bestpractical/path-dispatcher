@@ -62,10 +62,10 @@ sub dispatch_rule {
     my $self = shift;
     my %args = @_;
 
-    my $match = $args{rule}->match($args{path})
+    my @matches = $args{rule}->match($args{path})
         or return 0;
 
-    $args{dispatch}->add_match($match);
+    $args{dispatch}->add_matches(@matches);
 
     return 1;
 }

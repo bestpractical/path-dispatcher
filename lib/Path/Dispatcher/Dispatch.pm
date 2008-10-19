@@ -17,14 +17,15 @@ has _matches => (
     },
 );
 
+# alias add_matches -> add_match
+__PACKAGE__->meta->add_method(add_matches => __PACKAGE__->can('add_match'));
+
 sub add_redispatches {
     my $self       = shift;
     my @dispatches = @_;
 
     for my $dispatch (@dispatches) {
-        for my $match ($dispatch->matches) {
-            $self->add_match($match);
-        }
+        $self->add_matches($dispatch->matches);
     }
 }
 
