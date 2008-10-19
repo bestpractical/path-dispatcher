@@ -8,6 +8,7 @@ use Sub::Exporter;
 
 our $CALLER; # Sub::Exporter doesn't make this available
 our $OUTERMOST_DISPATCHER;
+our $UNDER_RULE;
 
 my $exporter = Sub::Exporter::build_exporter({
     into_level => 1,
@@ -83,15 +84,21 @@ sub build_sugar {
             _add_rule($dispatcher, 'after_on', @_);
         },
         under => sub {
-            my $predicate = _create_rule('on', shift);
+            my ($matcher, $rules) = @_;
+
+            my $predicate = _create_rule('on', $matcher);
             $predicate->prefix(1);
-            my @rules = @_;
 
             my $under = Path::Dispatcher::Rule::Under->new(
                 predicate => $predicate,
-                rules     => \@rules,
             );
-            $dispatcher->add_rule($under);
+
+            do {
+                local $UNDER_RULE = $under;
+                $rules->();
+            };
+
+            _add_rule($dispatcher, $under, @_);
         },
         next_rule => sub { die "Path::Dispatcher next rule\n" },
         last_rule => sub { die "Path::Dispatcher abort\n" },
