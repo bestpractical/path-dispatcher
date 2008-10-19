@@ -10,12 +10,23 @@ has block => (
     required => 1,
 );
 
+has prefix => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
+
 sub match {
     my $self = shift;
     my $path = shift;
 
-    my $result = $self->_match($path);
+    my ($result, $leftover) = $self->_match($path);
     return unless $result;
+
+    # if we're not matching only a prefix then require the leftover to be empty
+    return if defined($leftover)
+           && length($leftover)
+           && !$self->prefix;
 
     # make sure that the returned values are PLAIN STRINGS
     # later we will stick them into a regular expression to populate $1 etc
