@@ -18,6 +18,8 @@ has prefix => (
     default => 0,
 );
 
+sub _match { die "_match not implemented in " . (blessed($_[0]) || $_[0]) }
+
 sub match {
     my $self = shift;
     my $path = shift;
