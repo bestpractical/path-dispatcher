@@ -82,6 +82,17 @@ sub build_sugar {
         after => sub {
             _add_rule($dispatcher, 'after_on', @_);
         },
+        under => sub {
+            my $predicate = _create_rule('on', shift);
+            $predicate->prefix(1);
+            my @rules = @_;
+
+            my $under = Path::Dispatcher::Rule::Under->new(
+                predicate => $predicate,
+                rules     => \@rules,
+            );
+            $dispatcher->add_rule($under);
+        },
         next_rule => sub { die "Path::Dispatcher next rule\n" },
         last_rule => sub { die "Path::Dispatcher abort\n" },
     };
