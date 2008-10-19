@@ -17,6 +17,8 @@ my $exporter = Sub::Exporter::build_exporter({
     },
 });
 
+sub token_delimiter { ' ' }
+
 sub import {
     my $self = shift;
     my $pkg  = caller;
@@ -103,6 +105,7 @@ my %rule_creator = (
         my ($self, $tokens, $block) = @_;
         Path::Dispatcher::Rule::Tokens->new(
             tokens => $tokens,
+            delimiter => $self->token_delimiter,
             $block ? (block => $block) : (),
         ),
     },
@@ -124,6 +127,7 @@ my %rule_creator = (
         my ($self, $tokens, $block) = @_;
         Path::Dispatcher::Rule::Tokens->new(
             tokens => [$tokens],
+            delimiter => $self->token_delimiter,
             $block ? (block => $block) : (),
         ),
     },
