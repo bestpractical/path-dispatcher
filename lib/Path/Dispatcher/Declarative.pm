@@ -20,22 +20,15 @@ my $exporter = Sub::Exporter::build_exporter({
 sub import {
     my $self = shift;
     my $pkg  = caller;
-    my @args = grep { !/^-[Bb]ase/ } @_;
 
-    # they must have specified '-base' if there are a different number of args
-    if (@args != @_) {
+    do {
         no strict 'refs';
         push @{ $pkg . '::ISA' }, $self;
-    }
-    else {
-        # we don't want our subclasses exporting our sugar
-        # unless the user specifies -base
-        return if $self ne __PACKAGE__;
-    }
+    };
 
     local $CALLER = $pkg;
 
-    $exporter->($self, @args);
+    $exporter->($self, @_);
 }
 
 sub build_sugar {

@@ -7,7 +7,7 @@ my @calls;
 
 do {
     package Under::Where;
-    use Path::Dispatcher::Declarative -base;
+    use Path::Dispatcher::Declarative;
 
     under 'ticket' => sub {
         on 'create' => sub { push @calls, "ticket create" };

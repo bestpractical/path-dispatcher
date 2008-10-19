@@ -2,7 +2,7 @@
 package Path::Dispatcher::Test::Framework;
 use strict;
 use warnings;
-use Path::Dispatcher::Declarative -base;
+use Path::Dispatcher::Declarative;
 
 before qr/foo/ => sub {
     push @main::calls, 'framework before foo';
