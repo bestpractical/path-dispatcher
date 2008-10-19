@@ -14,7 +14,16 @@ sub _match {
     my $path = shift;
 
     return unless $path =~ $self->regex;
-    return [ map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#- ];
+
+    my @matches = map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#-;
+
+    # if $' is in the program at all, then it slows down every single regex
+    # we only want to include it if we have to
+    if ($self->prefix) {
+        return \@matches, eval q{$'};
+    }
+
+    return \@matches;
 }
 
 __PACKAGE__->meta->make_immutable;
