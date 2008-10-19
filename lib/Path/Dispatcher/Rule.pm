@@ -5,9 +5,9 @@ use Moose;
 use Path::Dispatcher::Stage;
 
 has block => (
-    is       => 'ro',
-    isa      => 'CodeRef',
-    required => 1,
+    is        => 'ro',
+    isa       => 'CodeRef',
+    predicate => 'has_block',
 );
 
 has prefix => (
@@ -44,6 +44,8 @@ sub match {
 
 sub run {
     my $self = shift;
+
+    die "No codeblock to run" if !$self->has_block;
 
     $self->block->(@_);
 }
