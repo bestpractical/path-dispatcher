@@ -25,10 +25,10 @@ sub match {
     my ($result, $leftover) = $self->_match($path);
     return unless $result;
 
-    undef $leftover if defined($leftover) && length($leftover) == 0;
+    $leftover = '' if !defined($leftover);
 
     # if we're not matching only a prefix then require the leftover to be empty
-    return if defined($leftover)
+    return if length($leftover)
            && !$self->prefix;
 
     # make sure that the returned values are PLAIN STRINGS
@@ -46,7 +46,7 @@ sub match {
         path     => $path,
         rule     => $self,
         result   => $result,
-        defined($leftover) ? (leftover => $leftover) : (),
+        leftover => $leftover,
     );
 
     return $match;
