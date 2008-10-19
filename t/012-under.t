@@ -4,8 +4,6 @@ use warnings;
 use Test::More tests => 14;
 use Path::Dispatcher;
 
-my @calls;
-
 my $predicate = Path::Dispatcher::Rule::Tokens->new(
     tokens => ['ticket'],
     prefix => 1,

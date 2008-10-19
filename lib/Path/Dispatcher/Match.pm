@@ -2,7 +2,6 @@
 package Path::Dispatcher::Match;
 use Moose;
 
-use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
 
 has path => (

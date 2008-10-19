@@ -3,7 +3,6 @@ package Path::Dispatcher::Rule;
 use Moose;
 
 use Path::Dispatcher::Match;
-use Path::Dispatcher::Stage;
 
 sub match_class { "Path::Dispatcher::Match" }
 
