@@ -7,7 +7,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub { push @calls, [@_] },
@@ -26,7 +26,7 @@ is_deeply([splice @calls], [ [] ], "finally invoked the rule block");
 $dispatcher->run('foo');
 is_deeply([splice @calls], [ [] ], "invoked the rule block on 'run'");
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/(bar)/,
         block => sub { push @calls, [$1, $2] },

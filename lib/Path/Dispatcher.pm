@@ -4,11 +4,9 @@ use Moose;
 
 our $VERSION = '0.02';
 
-use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
 use Path::Dispatcher::Dispatch;
 
-sub stage_class    { 'Path::Dispatcher::Stage' }
 sub dispatch_class { 'Path::Dispatcher::Dispatch' }
 
 has name => (
@@ -23,11 +21,15 @@ has name => (
     },
 );
 
-has stages => (
-    is         => 'rw',
-    isa        => 'ArrayRef[Path::Dispatcher::Stage]',
-    auto_deref => 1,
-    builder    => 'default_stages',
+has _rules => (
+    metaclass => 'Collection::Array',
+    is        => 'rw',
+    isa       => 'ArrayRef[Path::Dispatcher::Rule]',
+    default   => sub { [] },
+    provides  => {
+        push     => 'add_rule',
+        elements => 'rules',
+    },
 );
 
 has super_dispatcher => (
@@ -36,38 +38,15 @@ has super_dispatcher => (
     predicate => 'has_super_dispatcher',
 );
 
-sub default_stages {
-    my $self = shift;
-    my $stage_class = $self->stage_class;
-
-    my $before = $stage_class->new(name => 'on', qualifier => 'before');
-    my $on     = $stage_class->new(name => 'on');
-    my $after  = $stage_class->new(name => 'on', qualifier => 'after');
-
-    return [$before, $on, $after];
-}
-
-# ugh, we should probably use IxHash..
-sub stage {
-    my $self = shift;
-    my $name = shift;
-
-    for my $stage ($self->stages) {
-        return $stage if $stage->qualified_name eq $name;
-    }
-
-    return;
-}
-
 sub dispatch {
     my $self = shift;
     my $path = shift;
 
     my $dispatch = $self->dispatch_class->new;
 
-    for my $stage ($self->stages) {
-        $self->dispatch_stage(
-            stage    => $stage,
+    for my $rule ($self->rules) {
+        $self->dispatch_rule(
+            rule     => $rule,
             dispatch => $dispatch,
             path     => $path,
         );
@@ -77,20 +56,6 @@ sub dispatch {
         if $self->can_redispatch;
 
     return $dispatch;
-}
-
-sub dispatch_stage {
-    my $self = shift;
-    my %args = @_;
-
-    my $stage = $args{stage};
-
-    for my $rule ($stage->rules) {
-        $self->dispatch_rule(
-            %args,
-            rule => $rule,
-        );
-    }
 }
 
 sub dispatch_rule {
@@ -151,14 +116,14 @@ Path::Dispatcher - flexible dispatch
     use Path::Dispatcher;
     my $dispatcher = Path::Dispatcher->new;
 
-    $dispatcher->stage("on")->add_rule(
+    $dispatcher->add_rule(
         Path::Dispacher::Rule::Regex->new(
             regex => qr{^/(foo)/.*},
             block => sub { warn $1; }, # foo
         )
     );
 
-    $dispatcher->stage("on")->add_rule(
+    $dispatcher->add_rule(
         Path::Dispacher::Rule::CodeRef->new(
             matcher => sub { /^\d+$/ && $_ % 2 == 0 },
             block   => sub { warn "$_ is an even number" },
@@ -180,8 +145,6 @@ More documentation coming later, there's a lot here..
 Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
 =head1 BUGS
-
-C<after> substages are not yet run properly when primary stage is run.
 
 The order matches when a super dispatch is added B<will> change.
 

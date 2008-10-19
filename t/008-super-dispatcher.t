@@ -18,7 +18,7 @@ ok($sub_dispatcher->has_super_dispatcher, "sub dispatcher has a super");
 is($sub_dispatcher->super_dispatcher, $super_dispatcher, "the super dispatcher is correct");
 
 for my $stage (qw/before_on on after_on/) {
-    $super_dispatcher->stage($stage)->add_rule(
+    $super_dispatcher->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr/foo/,
             block => sub { push @calls, "super $stage" },
@@ -27,7 +27,7 @@ for my $stage (qw/before_on on after_on/) {
 }
 
 for my $stage (qw/before_on after_on/) {
-    $sub_dispatcher->stage($stage)->add_rule(
+    $sub_dispatcher->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr/foo/,
             block => sub { push @calls, "sub $stage" },
@@ -51,7 +51,7 @@ is_deeply([splice @calls], [
 #    'super after_on',
 ]);
 
-$sub_dispatcher->stage('on')->add_rule(
+$sub_dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub { push @calls, "sub on" },

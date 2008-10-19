@@ -121,7 +121,7 @@ sub _add_rule {
         or die "I don't know how to create a rule for type $matcher";
     my $rule = $rule_creator->($matcher, $block);
 
-    $dispatcher->stage($stage)->add_rule($rule);
+    $dispatcher->add_rule($rule);
 }
 
 1;

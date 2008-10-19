@@ -7,7 +7,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Tokens->new(
         tokens => ['foo', 'bar'],
         block  => sub { push @calls, [$1, $2, $3] },
@@ -17,7 +17,7 @@ $dispatcher->stage('on')->add_rule(
 $dispatcher->run('foo bar');
 is_deeply([splice @calls], [ ['foo', 'bar', undef] ], "correctly populated number vars from [str, str] token rule");
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Tokens->new(
         tokens => ['foo', qr/bar/],
         block  => sub { push @calls, [$1, $2, $3] },
@@ -33,7 +33,7 @@ is_deeply([splice @calls], [ ['foo', 'barbaz', undef] ], "ran the second [str, r
 $dispatcher->run('foo bar baz');
 is_deeply([splice @calls], [], "no matches");
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Tokens->new(
         tokens => [["Bat", "Super"], "Man"],
         block  => sub { push @calls, [$1, $2, $3] },
@@ -49,7 +49,7 @@ is_deeply([splice @calls], [ ['Bat', 'Man', undef] ], "ran the [ [Str,Str], Str 
 $dispatcher->run('Aqua Man');
 is_deeply([splice @calls], [ ], "no match");
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Tokens->new(
         tokens => [[[[qr/Deep/]]], "Man"],
         block  => sub { push @calls, [$1, $2, $3] },

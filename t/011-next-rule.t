@@ -8,7 +8,7 @@ use Path::Dispatcher;
 my @calls;
 
 my $dispatcher = Path::Dispatcher->new;
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub {
@@ -19,7 +19,7 @@ $dispatcher->stage('on')->add_rule(
     ),
 );
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
         block => sub {
@@ -39,7 +39,7 @@ lives_ok {
 };
 is_deeply([splice @calls], ['on', 'last'], "correctly continued to the next rule");
 
-$dispatcher->stage('on')->add_rule(
+$dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/bar/,
         block => sub {
