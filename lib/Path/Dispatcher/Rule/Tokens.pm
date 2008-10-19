@@ -45,7 +45,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @tokens = split $self->delimiter, $path;
+    my @tokens = grep { length } split $self->delimiter, $path;
     my @matched;
 
     for my $expected ($self->tokens) {
