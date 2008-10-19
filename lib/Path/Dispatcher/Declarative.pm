@@ -91,25 +91,25 @@ my %rule_creator = (
     ARRAY => sub {
         Path::Dispatcher::Rule::Tokens->new(
             tokens => $_[0],
-            block  => $_[1],
+            $_[1] ? (block => $_[1]) : (),
         ),
     },
     CODE => sub {
         Path::Dispatcher::Rule::CodeRef->new(
             matcher => $_[0],
-            block   => $_[1],
+            $_[1] ? (block => $_[1]) : (),
         ),
     },
     Regexp => sub {
         Path::Dispatcher::Rule::Regex->new(
             regex => $_[0],
-            block => $_[1],
+            $_[1] ? (block => $_[1]) : (),
         ),
     },
     '' => sub {
         Path::Dispatcher::Rule::Tokens->new(
             tokens => [ $_[0] ],
-            block  => $_[1],
+            $_[1] ? (block => $_[1]) : (),
         ),
     },
 );
