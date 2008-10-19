@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 package Path::Dispatcher;
 use Moose;
+use MooseX::AttributeHelpers;
 
 our $VERSION = '0.02';
 
@@ -25,6 +26,7 @@ has _rules => (
     metaclass => 'Collection::Array',
     is        => 'rw',
     isa       => 'ArrayRef[Path::Dispatcher::Rule]',
+    init_args => 'rules',
     default   => sub { [] },
     provides  => {
         push     => 'add_rule',
