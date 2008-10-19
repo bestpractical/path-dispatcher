@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Path::Dispatcher::Rule;
 
 my @calls;
@@ -16,7 +16,8 @@ my $rule = Path::Dispatcher::Rule::Regex->new(
     },
 );
 
-is_deeply([$rule->match('foobar')], [['fo', 'ob']]);
+isa_ok($rule->match('foobar'), 'Path::Dispatcher::Dispatch::Match');
+is_deeply($rule->match('foobar')->result, ['fo', 'ob']);
 is_deeply([splice @calls], [], "block not called on match");
 
 $rule->run;

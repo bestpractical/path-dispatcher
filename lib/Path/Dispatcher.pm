@@ -97,13 +97,10 @@ sub dispatch_rule {
     my $self = shift;
     my %args = @_;
 
-    my $result = $args{rule}->match($args{path})
+    my $match = $args{rule}->match($args{path})
         or return 0;
 
-    $args{dispatch}->add_match(
-        %args,
-        result => $result,
-    );
+    $args{dispatch}->add_match($match);
 
     return 1;
 }

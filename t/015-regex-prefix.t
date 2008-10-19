@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Path::Dispatcher;
 
 my @calls;
@@ -15,11 +15,10 @@ my $rule = Path::Dispatcher::Rule::Regex->new(
 ok(!$rule->match('foo'), "prefix means the rule matches a prefix of the path, not the other way around");
 ok($rule->match('foo bar'), "prefix matches the full path");
 ok($rule->match('foo bar baz'), "prefix matches a prefix of the path");
+my $match = $rule->match('foobar:baz');
 
-is_deeply($rule->match('foobar:baz'), ["foo", "bar"], "match returns just the results");
-is_deeply([$rule->_match('foobar:baz')], [
-    ["foo", "bar"],
-    ":baz"
-], "_match returns the results and the rest of the path");
+ok($match, "matched foobar:baz");
 
+is_deeply($match->result, ["foo", "bar"], "match returns just the results");
+is($match->leftover, ':baz', "leftovers");
 

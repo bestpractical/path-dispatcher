@@ -2,7 +2,10 @@
 package Path::Dispatcher::Rule;
 use Moose;
 
+use Path::Dispatcher::Dispatch::Match;
 use Path::Dispatcher::Stage;
+
+sub match_class { "Path::Dispatcher::Dispatch::Match" }
 
 has block => (
     is        => 'ro',
@@ -23,9 +26,10 @@ sub match {
     my ($result, $leftover) = $self->_match($path);
     return unless $result;
 
+    undef $leftover if defined($leftover) && length($leftover) == 0;
+
     # if we're not matching only a prefix then require the leftover to be empty
     return if defined($leftover)
-           && length($leftover)
            && !$self->prefix;
 
     # make sure that the returned values are PLAIN STRINGS
@@ -39,7 +43,14 @@ sub match {
         }
     }
 
-    return $result;
+    my $match = $self->match_class->new(
+        path     => $path,
+        rule     => $self,
+        result   => $result,
+        defined($leftover) ? (leftover => $leftover) : (),
+    );
+
+    return $match;
 }
 
 sub run {

@@ -38,17 +38,17 @@ for my $stage (qw/before_on after_on/) {
 $super_dispatcher->run('foo');
 is_deeply([splice @calls], [
     'super before_on',
-    'super on',
+#    'super on',
 #    'super after_on',
 ]);
 
 $sub_dispatcher->run('foo');
 is_deeply([splice @calls], [
     'sub before_on',
-    'sub after_on',
-    'super before_on',
-    'super on',
-    #'super after_on',
+#    'sub after_on',
+#    'super before_on',
+#    'super on',
+#    'super after_on',
 ]);
 
 $sub_dispatcher->stage('on')->add_rule(
@@ -61,7 +61,7 @@ $sub_dispatcher->stage('on')->add_rule(
 $sub_dispatcher->run('foo');
 is_deeply([splice @calls], [
     'sub before_on',
-    'sub on',
-    #'sub after_on',
+#    'sub on',
+#    'sub after_on',
 ]);
 

@@ -7,13 +7,13 @@ use Path::Dispatcher::Rule;
 
 has path => (
     is       => 'ro',
+    isa      => 'Str',
     required => 1,
 );
 
-has stage => (
-    is       => 'ro',
-    isa      => 'Path::Dispatcher::Stage',
-    required => 1,
+has leftover => (
+    is  => 'ro',
+    isa => 'Str',
 );
 
 has rule => (
@@ -76,7 +76,7 @@ sub run_with_number_vars {
 sub ends_dispatch {
     my $self = shift;
 
-    return $self->stage->is_qualified ? 0 : 1;
+    return 1;
 }
 
 __PACKAGE__->meta->make_immutable;

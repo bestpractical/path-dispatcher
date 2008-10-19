@@ -10,17 +10,17 @@ our @calls;
 Path::Dispatcher::Test::Framework->run('foo');
 is_deeply([splice @calls], [
     'framework before foo',
-    'framework on foo',
-    #'framework after foo',
+#    'framework on foo',
+#    'framework after foo',
 ]);
 
 Path::Dispatcher::Test::App->run('foo');
 is_deeply([splice @calls], [
     'app before foo',
-    'app after foo',
-    'framework before foo',
-    'framework on foo',
-    #'framework after foo',
+#    'app after foo',
+#    'framework before foo',
+#    'framework on foo',
+#    'framework after foo',
 ]);
 
 Path::Dispatcher::Test::App->dispatcher->stage('on')->add_rule(
@@ -35,8 +35,8 @@ Path::Dispatcher::Test::App->dispatcher->stage('on')->add_rule(
 Path::Dispatcher::Test::App->run('foo');
 is_deeply([splice @calls], [
     'app before foo',
-    'app on foo',
-    #'app after foo',
+#    'app on foo',
+#    'app after foo',
 ]);
 
 for ('Path::Dispatcher::Test::Framework', 'Path::Dispatcher::Test::App') {
