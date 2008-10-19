@@ -35,7 +35,7 @@ has tokens => (
     required   => 1,
 );
 
-has splitter => (
+has delimiter => (
     is      => 'ro',
     isa     => 'Str',
     default => ' ',
@@ -45,17 +45,18 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @orig_tokens = split $self->splitter, $path;
-    my @tokens = @orig_tokens;
+    my @tokens = split $self->delimiter, $path;
+    my @matched;
 
     for my $expected ($self->tokens) {
         return unless @tokens; # too few words
         my $got = shift @tokens;
         return unless $self->_match_token($got, $expected);
+        push @matched, $got;
     }
 
-    return if @tokens; # too many words
-    return [@orig_tokens];
+    my $leftover = join $self->delimiter, @tokens;
+    return \@matched, $leftover;
 }
 
 sub _match_token {
