@@ -68,18 +68,18 @@ sub build_sugar {
             $OUTERMOST_DISPATCHER->run(@_);
         },
         on => sub {
-            _add_rule($dispatcher, 'on', @_);
+            $into->_add_rule('on', @_);
         },
         before => sub {
-            _add_rule($dispatcher, 'before_on', @_);
+            $into->_add_rule('before_on', @_);
         },
         after => sub {
-            _add_rule($dispatcher, 'after_on', @_);
+            $into->_add_rule('after_on', @_);
         },
         under => sub {
             my ($matcher, $rules) = @_;
 
-            my $predicate = _create_rule('on', $matcher);
+            my $predicate = $into->_create_rule('on', $matcher);
             $predicate->prefix(1);
 
             my $under = Path::Dispatcher::Rule::Under->new(
@@ -91,7 +91,7 @@ sub build_sugar {
                 $rules->();
             };
 
-            _add_rule($dispatcher, $under, @_);
+            $into->_add_rule($under, @_);
         },
         next_rule => sub { die "Path::Dispatcher next rule\n" },
         last_rule => sub { die "Path::Dispatcher abort\n" },
@@ -100,46 +100,50 @@ sub build_sugar {
 
 my %rule_creator = (
     ARRAY => sub {
+        my ($self, $tokens, $block) = @_;
         Path::Dispatcher::Rule::Tokens->new(
-            tokens => $_[0],
-            $_[1] ? (block => $_[1]) : (),
+            tokens => $tokens,
+            $block ? (block => $block) : (),
         ),
     },
     CODE => sub {
+        my ($self, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
-            matcher => $_[0],
-            $_[1] ? (block => $_[1]) : (),
+            matcher => $matcher,
+            $block ? (block => $block) : (),
         ),
     },
     Regexp => sub {
+        my ($self, $regex, $block) = @_;
         Path::Dispatcher::Rule::Regex->new(
-            regex => $_[0],
-            $_[1] ? (block => $_[1]) : (),
+            regex => $regex,
+            $block ? (block => $block) : (),
         ),
     },
     '' => sub {
+        my ($self, $tokens, $block) = @_;
         Path::Dispatcher::Rule::Tokens->new(
-            tokens => [ $_[0] ],
-            $_[1] ? (block => $_[1]) : (),
+            tokens => [$tokens],
+            $block ? (block => $block) : (),
         ),
     },
 );
 
 sub _create_rule {
-    my ($stage, $matcher, $block) = @_;
+    my ($self, $stage, $matcher, $block) = @_;
 
     my $rule_creator = $rule_creator{ ref $matcher }
         or die "I don't know how to create a rule for type $matcher";
-    return $rule_creator->($matcher, $block);
+    return $rule_creator->($self, $matcher, $block);
 }
 
 sub _add_rule {
-    my $dispatcher = shift;
+    my $self = shift;
     my $rule;
 
     if (!ref($_[0])) {
         my ($stage, $matcher, $block) = splice @_, 0, 3;
-        $rule = _create_rule($stage, $matcher, $block);
+        $rule = $self->_create_rule($stage, $matcher, $block);
     }
     else {
         $rule = shift;
@@ -150,7 +154,7 @@ sub _add_rule {
             $UNDER_RULE->add_rule($rule);
         }
         else {
-            $dispatcher->add_rule($rule);
+            $self->dispatcher->add_rule($rule);
         }
     }
     else {
