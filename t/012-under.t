@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 14;
 use Path::Dispatcher;
 
 my @calls;
@@ -13,12 +13,10 @@ my $predicate = Path::Dispatcher::Rule::Tokens->new(
 
 my $create = Path::Dispatcher::Rule::Tokens->new(
     tokens => ['create'],
-    block  => sub { push @calls, "ticket create" },
 );
 
 my $update = Path::Dispatcher::Rule::Tokens->new(
     tokens => ['update'],
-    block  => sub { push @calls, "ticket update" },
     prefix => 1,
 );
 
@@ -27,15 +25,52 @@ my $under = Path::Dispatcher::Rule::Under->new(
     rules     => [$create, $update],
 );
 
-my ($ticket_create) = $under->match("ticket create");
-ok($ticket_create, "matched 'ticket create'");
+my %tests = (
+    "ticket create" => {},
+    "ticket update" => {},
+    "  ticket   update  " => {
+        name => "whitespace doesn't matter for token-based rules",
+    },
+    "ticket update foo" => {
+        name => "'ticket update' rule is prefix",
+    },
 
-my ($fail) = $under->match("ticket create foo");
-ok(!$fail, "did not match 'ticket create' because it's not a prefix");
+    "ticket create foo" => {
+        fail => 1,
+        catchall => 1,
+        name => "did not match 'ticket create foo' because it's not a suffix",
+    },
+    "comment create" => {
+        fail => 1,
+        name => "did not match 'comment create' because the prefix is ticket",
+    },
+    "ticket delete" => {
+        fail => 1,
+        catchall => 1,
+        name => "did not match 'ticket delete' because delete is not a suffix",
+    },
+);
 
-my ($ticket_update) = $under->match("ticket update");
-ok($ticket_update, "matched 'ticket update'");
+for my $path (keys %tests) {
+    my $data = $tests{$path};
+    my $name = $data->{name} || $path;
 
-my ($ticket_update_foo) = $under->match("ticket update foo");
-ok($ticket_update_foo, "matched 'ticket update foo' because it is a prefix");
+    my $match = $under->match($path);
+    $match = !$match if $data->{fail};
+    ok($match, $name);
+}
 
+my $catchall = Path::Dispatcher::Rule::Regex->new(
+    regex => qr/()/,
+);
+
+$under->add_rule($catchall);
+
+for my $path (keys %tests) {
+    my $data = $tests{$path};
+    my $name = $data->{name} || $path;
+
+    my $match = $under->match($path);
+    $match = !$match if $data->{fail} && !$data->{catchall};
+    ok($match, $name);
+}
