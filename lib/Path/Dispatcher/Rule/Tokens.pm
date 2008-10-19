@@ -28,7 +28,7 @@ subtype 'Path::Dispatcher::Tokens'
      => as 'ArrayRef[Path::Dispatcher::Token|Path::Dispatcher::TokenAlternation]';
 
 has tokens => (
-    is         => 'ro',
+    is         => 'rw',
     isa        => 'Path::Dispatcher::Tokens',
     isa        => 'ArrayRef',
     auto_deref => 1,
@@ -36,7 +36,7 @@ has tokens => (
 );
 
 has delimiter => (
-    is      => 'ro',
+    is      => 'rw',
     isa     => 'Str',
     default => ' ',
 );

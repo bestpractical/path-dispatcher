@@ -5,7 +5,7 @@ use MooseX::AttributeHelpers;
 extends 'Path::Dispatcher::Rule';
 
 has predicate => (
-    is  => 'ro',
+    is  => 'rw',
     isa => 'Path::Dispatcher::Rule',
 );
 

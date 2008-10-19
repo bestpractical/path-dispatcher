@@ -6,28 +6,28 @@ use Path::Dispatcher::Stage;
 use Path::Dispatcher::Rule;
 
 has path => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'Str',
     required => 1,
 );
 
 has leftover => (
-    is  => 'ro',
+    is  => 'rw',
     isa => 'Str',
 );
 
 has rule => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'Path::Dispatcher::Rule',
     required => 1,
 );
 
 has result => (
-    is => 'ro',
+    is => 'rw',
 );
 
 has set_number_vars => (
-    is      => 'ro',
+    is      => 'rw',
     isa     => 'Bool',
     lazy    => 1,
     default => sub { ref(shift->result) eq 'ARRAY' },

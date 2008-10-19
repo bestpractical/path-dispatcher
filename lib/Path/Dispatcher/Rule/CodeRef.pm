@@ -4,7 +4,7 @@ use Moose;
 extends 'Path::Dispatcher::Rule';
 
 has matcher => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'CodeRef',
     required => 1,
 );

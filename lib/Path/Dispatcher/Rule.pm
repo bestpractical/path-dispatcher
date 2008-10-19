@@ -8,13 +8,13 @@ use Path::Dispatcher::Stage;
 sub match_class { "Path::Dispatcher::Match" }
 
 has block => (
-    is        => 'ro',
+    is        => 'rw',
     isa       => 'CodeRef',
     predicate => 'has_block',
 );
 
 has prefix => (
-    is      => 'ro',
+    is      => 'rw',
     isa     => 'Bool',
     default => 0,
 );

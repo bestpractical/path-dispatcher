@@ -4,7 +4,7 @@ use Moose;
 extends 'Path::Dispatcher::Rule';
 
 has regex => (
-    is       => 'ro',
+    is       => 'rw',
     isa      => 'RegexpRef',
     required => 1,
 );
