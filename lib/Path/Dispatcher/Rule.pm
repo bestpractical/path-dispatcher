@@ -55,7 +55,6 @@ no Moose;
 require Path::Dispatcher::Rule::CodeRef;
 require Path::Dispatcher::Rule::Regex;
 require Path::Dispatcher::Rule::Tokens;
-require Path::Dispatcher::Rule::Intersection;
 
 1;
 
