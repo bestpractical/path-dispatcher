@@ -134,15 +134,27 @@ sub _create_rule {
 }
 
 sub _add_rule {
-    my ($dispatcher, $stage, $matcher, $block, @rest) = @_;
+    my $dispatcher = shift;
+    my $rule;
 
-    my $rule = _create_rule($stage, $matcher, $block);
-
-    if (!defined(wantarray)) {
-        $dispatcher->add_rule($rule);
+    if (!ref($_[0])) {
+        my ($stage, $matcher, $block) = splice @_, 0, 3;
+        $rule = _create_rule($stage, $matcher, $block);
     }
     else {
-        return $rule, @rest;
+        $rule = shift;
+    }
+
+    if (!defined(wantarray)) {
+        if ($UNDER_RULE) {
+            $UNDER_RULE->add_rule($rule);
+        }
+        else {
+            $dispatcher->add_rule($rule);
+        }
+    }
+    else {
+        return $rule, @_;
     }
 }
 
