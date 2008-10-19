@@ -26,7 +26,7 @@ sub _match {
     my $path = shift;
 
     for my $rule ($self->rules) {
-        return 0 unless $rule->match($path);
+        return unless $rule->match($path);
     }
 
     return 1;
