@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-package Path::Dispatcher::Dispatch::Match;
+package Path::Dispatcher::Match;
 use Moose;
 
 use Path::Dispatcher::Stage;

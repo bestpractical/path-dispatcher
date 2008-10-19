@@ -2,10 +2,10 @@
 package Path::Dispatcher::Rule;
 use Moose;
 
-use Path::Dispatcher::Dispatch::Match;
+use Path::Dispatcher::Match;
 use Path::Dispatcher::Stage;
 
-sub match_class { "Path::Dispatcher::Dispatch::Match" }
+sub match_class { "Path::Dispatcher::Match" }
 
 has block => (
     is        => 'ro',

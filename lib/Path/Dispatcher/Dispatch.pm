@@ -3,12 +3,12 @@ package Path::Dispatcher::Dispatch;
 use Moose;
 use MooseX::AttributeHelpers;
 
-use Path::Dispatcher::Dispatch::Match;
+use Path::Dispatcher::Match;
 
 has _matches => (
     metaclass => 'Collection::Array',
     is        => 'rw',
-    isa       => 'ArrayRef[Path::Dispatcher::Dispatch::Match]',
+    isa       => 'ArrayRef[Path::Dispatcher::Match]',
     default   => sub { [] },
     provides  => {
         push     => 'add_match',
