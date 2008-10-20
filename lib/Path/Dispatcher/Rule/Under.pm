@@ -1,12 +1,18 @@
 #!/usr/bin/env perl
 package Path::Dispatcher::Rule::Under;
 use Moose;
+use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
 extends 'Path::Dispatcher::Rule';
 
+subtype 'Path::Dispatcher::PrefixRule'
+     => as 'Path::Dispatcher::Rule'
+     => where { $_->prefix }
+     => message { "This rule ($_) does not match just prefixes!" };
+
 has predicate => (
     is  => 'rw',
-    isa => 'Path::Dispatcher::Rule',
+    isa => 'Path::Dispatcher::PrefixRule',
 );
 
 has _rules => (

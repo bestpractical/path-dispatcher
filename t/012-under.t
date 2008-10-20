@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Path::Dispatcher;
 
 my $predicate = Path::Dispatcher::Rule::Tokens->new(
@@ -72,3 +72,16 @@ for my $path (keys %tests) {
     $match = !$match if $data->{fail} && !$data->{catchall};
     ok($match, $name);
 }
+
+# ensure that the predicate MUST be a prefix
+eval {
+    local $SIG{__DIE__};
+
+    Path::Dispatcher::Rule::Under->new(
+        predicate => Path::Dispatcher::Rule::Tokens->new(
+            tokens => ['foo'],
+            prefix => 0,
+        ),
+    );
+};
+like($@, qr/Attribute \(predicate\) does not pass the type constraint because: This rule \(Path::Dispatcher::Rule::Tokens=HASH\(0x\w+\)\) does not match just prefixes!/, "predicate MUST match just a prefix");
