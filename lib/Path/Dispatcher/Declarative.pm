@@ -168,3 +168,80 @@ sub _add_rule {
 
 1;
 
+__END__
+
+=head1 NAME
+
+Path::Dispatcher::Declarative - sugary dispatcher
+
+=head1 SYNOPSIS
+
+    package MyApp::Dispatcher;
+    use Path::Dispatcher::Declarative;
+
+    on score => sub { show_score() };
+    
+    on ['wield', qr/^\w+$/] => sub { wield_weapon($2) };
+
+    under display => sub {
+        on inventory => sub { show_inventory() };
+        on score     => sub { show_score() };
+    };
+
+    package Interpreter;
+    MyApp::Dispatcher->run($input);
+
+=head1 DESCRIPTION
+
+=head1 KEYWORDS
+
+=head2 dispatcher -> Dispatcher
+
+Returns the L<Path::Dispatcher> object for this class; the object that the
+sugar is modifying. This is useful for adding custom rules through the regular
+API, and inspection.
+
+=head2 dispatch path -> Dispatch
+
+Invokes the dispatcher on the given path and returns a
+L<Path::Dispatcher::Dispatch> object. Acts as a keyword within the same
+package; otherwise as a method (since these declarative dispatchers are
+supposed to be used by other packages).
+
+=head2 run path, args
+
+Performs a dispatch then invokes the L<Path::Dispatcher::Dispatch/run> method
+on it.
+
+=head2 on path => sub {}
+
+Adds a rule to the dispatcher for the given path. The path may be:
+
+=over 4
+
+=item a string
+
+This is taken to mean a single token; creates an
+L<Path::Dispatcher::Rule::Token> rule.
+
+=item an array reference
+
+This is creates a L<Path::Dispatcher::Rule::Token> rule.
+
+=item a regular expression
+
+This is creates a L<Path::Dispatcher::Rule::Regex> rule.
+
+=item a code reference
+
+This is creates a L<Path::Dispatcher::Rule::CodeRef> rule.
+
+=back
+
+=head2 under path => sub {}
+
+Creates a L<Path::Dispatcher::Rule::Under> rule. The contents of the coderef
+should be other L</on> and C<under> calls.
+
+=cut
+
