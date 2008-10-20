@@ -1,5 +1,25 @@
 Revision history for Path-Dispatcher
 
-0.01    Wed Aug 27 11:04:18 2008
+0.02 Mon Oct 20 14:10:12 2008
+        Documentation!
+        Prefix matches
+        "under" rules
+        Remove stages until they're actually needed
+
+        Rule:
+            The codeblock is no longer required
+            Empty tokens are ignored
+            The token attribute is now 'delimiter' instead of 'splitter'
+            Allow regexes and alternations in the token rules
+
+        Match:
+            No longer Dispatch::Match
+            Created by the Rule instead of the Dispatcher
+
+        Declarative:
+            You now must subclass Path::Dispatcher::Declarative
+            Allow overriding the token delimiter
+
+0.01 Wed Aug 27 11:04:18 2008
         Initial release
 
