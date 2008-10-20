@@ -60,3 +60,47 @@ no Moose;
 
 1;
 
+__END__
+
+=head1 NAME
+
+Path::Dispatcher::Dispatch - a list of matches
+
+=head1 SYNOPSIS
+
+    my $dispatcher = Path::Dispatcher->new(
+        rules => [
+            Path::Dispatcher::Rule::Tokens->new(
+                tokens => [ 'attack', qr/^\w+$/ ],
+                block  => sub { attack($2) },
+            ),
+        ],
+    );
+
+    my $dispatch = $dispatcher->dispatch("attack goblin");
+
+    $dispatch->matches;     # list of matches (in this case, one)
+    $dispatch->has_matches; # whether there were any matches
+
+    $dispatch->run; # attacks the goblin
+
+=head1 DESCRIPTION
+
+Dispatching creates a C<dispatch> which is little more than a (possibly empty!)
+list of matches.
+
+=head1 ATTRIBUTES
+
+=head2 matches
+
+The list of L<Path::Dispatcher::Match> that correspond to the rules that were
+matched.
+
+=head1 METHODS
+
+=head2 run
+
+Executes matches until a match's C<ends_dispatch> returns true.
+
+=cut
+
