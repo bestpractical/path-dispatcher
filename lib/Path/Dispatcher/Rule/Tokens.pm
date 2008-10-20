@@ -85,3 +85,53 @@ no Moose::Util::TypeConstraints;
 
 1;
 
+__END__
+
+=head1 NAME
+
+Path::Dispatcher::Rule::Tokens - predicate is a list of tokens
+
+=head1 SYNOPSIS
+
+    my $rule = Path::Dispatcher::Rule::Tokens->new(
+        tokens    => [ "comment", "show", qr/^\d+$/ ],
+        delimiter => '/',
+        block     => sub { display_comment($3) },
+    );
+
+    $rule->match("/comment/show/25");
+
+=head1 DESCRIPTION
+
+Rules of this class use a list of tokens to match the path.
+
+=head1 ATTRIBUTES
+
+=head2 tokens
+
+Each token can be a literal string, a regular expression, or a list of either
+(which are taken to mean alternations). For example, the tokens:
+
+    [ 'ticket', [ 'show', 'display' ], [ qr/^\d+$/, qr/^#\w{3}/ ] ]
+
+first matches "ticket". Then, the next token must be "show" or "display". The
+final token must be a number or a pound sign followed by three word characters.
+
+The results are the tokens in the original string, as they were matched. If you
+have three tokens, then C<$1> will be the string's first token, C<$2> its
+second, and C<$3> its third. So matching "ticket display #AAA" would have
+"ticket" in C<$1>, "display" in C<$2>, and "#AAA" in C<$3>.
+
+Capture groups inside a regex token are completely ignored.
+
+=head2 delimiter
+
+A string that is used to tokenize the path. The delimiter must be a string
+because prefix matches use C<join> on unmatched tokens to return the leftover
+path. In the future this may be extended to support having a regex delimiter.
+
+The default is a space, but if you're matching URLs you probably want to change
+this to a slash.
+
+=cut
+
