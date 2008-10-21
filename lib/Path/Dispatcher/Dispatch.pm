@@ -20,15 +20,6 @@ has _matches => (
 # alias add_matches -> add_match
 __PACKAGE__->meta->add_method(add_matches => __PACKAGE__->can('add_match'));
 
-sub add_redispatches {
-    my $self       = shift;
-    my @dispatches = @_;
-
-    for my $dispatch (@dispatches) {
-        $self->add_matches($dispatch->matches);
-    }
-}
-
 sub run {
     my $self = shift;
     my @args = @_;
