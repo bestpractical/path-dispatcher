@@ -119,14 +119,14 @@ Path::Dispatcher - flexible dispatch
     my $dispatcher = Path::Dispatcher->new;
 
     $dispatcher->add_rule(
-        Path::Dispacher::Rule::Regex->new(
+        Path::Dispatcher::Rule::Regex->new(
             regex => qr{^/(foo)/},
             block => sub { warn $1; }, # foo
         )
     );
 
     $dispatcher->add_rule(
-        Path::Dispacher::Rule::Tokens->new(
+        Path::Dispatcher::Rule::Tokens->new(
             tokens    => ['ticket', 'delete', qr/^\d+$/],
             delimiter => '/',
             block     => sub { delete_ticket($3) },
