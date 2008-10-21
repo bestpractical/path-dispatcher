@@ -55,6 +55,8 @@ sub _match {
         push @matched, $got;
     }
 
+    return if @tokens && !$self->prefix;
+
     my $leftover = $self->untokenize(@tokens);
     return \@matched, $leftover;
 }
