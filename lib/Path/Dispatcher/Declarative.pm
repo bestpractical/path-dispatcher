@@ -23,6 +23,11 @@ sub import {
     my $self = shift;
     my $pkg  = caller;
 
+    my @args = grep { !/^-[bB]ase$/ } @_;
+
+    # just loading the class..
+    return if @args == @_;
+
     do {
         no strict 'refs';
         push @{ $pkg . '::ISA' }, $self;
@@ -30,7 +35,7 @@ sub import {
 
     local $CALLER = $pkg;
 
-    $exporter->($self, @_);
+    $exporter->($self, @args);
 }
 
 sub build_sugar {

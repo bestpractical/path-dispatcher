@@ -7,7 +7,7 @@ my @calls;
 
 do {
     package MyApp::Dispatcher;
-    use Path::Dispatcher::Declarative;
+    use Path::Dispatcher::Declarative -base;
 
     on qr/(b)(ar)(.*)/ => sub {
         push @calls, [$1, $2, $3];
