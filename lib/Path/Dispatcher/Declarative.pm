@@ -75,7 +75,7 @@ sub build_sugar {
                 local $OUTERMOST_DISPATCHER = $dispatcher
                     if !$OUTERMOST_DISPATCHER;
                 my $path = ref($to) eq 'CODE' ? $to->() : $to;
-                $OUTERMOST_DISPATCHER->run($path);
+                $OUTERMOST_DISPATCHER->run($path, @_);
             };
             $into->_add_rule('on', $from, $rewrite);
         },
