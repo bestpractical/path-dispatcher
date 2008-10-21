@@ -9,7 +9,7 @@ has dispatcher => (
     required => 1,
 );
 
-sub _match {
+sub match {
     my $self = shift;
     my $path = shift;
 
