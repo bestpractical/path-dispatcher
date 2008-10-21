@@ -34,12 +34,6 @@ has _rules => (
     },
 );
 
-has super_dispatcher => (
-    is        => 'rw',
-    isa       => 'Path::Dispatcher',
-    predicate => 'has_super_dispatcher',
-);
-
 sub dispatch {
     my $self = shift;
     my $path = shift;
@@ -54,9 +48,6 @@ sub dispatch {
         );
     }
 
-    $dispatch->add_redispatches($self->redispatches($path))
-        if $self->can_redispatch;
-
     return $dispatch;
 }
 
@@ -70,15 +61,6 @@ sub dispatch_rule {
     $args{dispatch}->add_matches(@matches);
 
     return 1;
-}
-
-sub can_redispatch { shift->has_super_dispatcher }
-
-sub redispatches {
-    my $self = shift;
-    my $path = shift;
-
-    return $self->super_dispatcher->dispatch($path)
 }
 
 sub run {
@@ -156,15 +138,6 @@ A list of L<Path::Dispatcher::Rule> objects.
 
 A human-readable name; this will be used in the (currently nonexistent)
 debugging hooks.
-
-=head2 super_dispatcher
-
-Another Path::Dispatcher to defer to when no rules match in the current
-dispatcher. This is intended for "subclassing" dispatchers, such as when you
-have a framework dispatcher and an application dispatcher.
-
-WARNING: The super dispatcher feature is currently unstable. I'm still trying
-to figure out the right way to have them.
 
 =head1 METHODS
 
