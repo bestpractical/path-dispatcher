@@ -45,7 +45,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @tokens = grep { length } split $self->delimiter, $path;
+    my @tokens = $self->tokenize($path);
     my @matched;
 
     for my $expected ($self->tokens) {
@@ -55,7 +55,7 @@ sub _match {
         push @matched, $got;
     }
 
-    my $leftover = join $self->delimiter, @tokens;
+    my $leftover = $self->untokenize(@tokens);
     return \@matched, $leftover;
 }
 
@@ -77,6 +77,18 @@ sub _match_token {
     }
 
     return 0;
+}
+
+sub tokenize {
+    my $self = shift;
+    my $path = shift;
+    return grep { length } split $self->delimiter, $path;
+}
+
+sub untokenize {
+    my $self   = shift;
+    my @tokens = @_;
+    return join $self->delimiter, @tokens;
 }
 
 __PACKAGE__->meta->make_immutable;
