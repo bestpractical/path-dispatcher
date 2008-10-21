@@ -69,6 +69,16 @@ sub build_sugar {
 
             $OUTERMOST_DISPATCHER->run(@_);
         },
+        rewrite => sub {
+            my ($from, $to) = @_;
+            my $rewrite = sub {
+                local $OUTERMOST_DISPATCHER = $dispatcher
+                    if !$OUTERMOST_DISPATCHER;
+                my $path = ref($to) eq 'CODE' ? $to->() : $to;
+                $OUTERMOST_DISPATCHER->run($path);
+            };
+            $into->_add_rule('on', $from, $rewrite);
+        },
         on => sub {
             $into->_add_rule('on', @_);
         },
