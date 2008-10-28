@@ -1,5 +1,19 @@
 Revision history for Path-Dispatcher
 
+0.03 Tue Oct 28 17:42:47 2008
+        "rewrite" rules
+        Super dispatchers are GONE! Yay.
+        New Rule::Dispatch which just takes some other dispatcher. nothingmuch++
+
+        Rule::Tokens:
+            Fix for always matching just a prefix whether you wanted to or not
+            Make tokenization and untokenization into methods for overriding
+
+        Declarative:
+            -base is required, otherwise unrelated modules using your dispatcher
+                would get their @ISA set!
+
+
 0.02 Mon Oct 20 14:10:12 2008
         Documentation!
         Prefix matches
