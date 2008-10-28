@@ -128,6 +128,9 @@ rules, and it returns a list of matches. From there you can "run" the rules
 that matched. These phases are distinct so that, if you need to, you can
 inspect which rules were matched without ever running their codeblocks.
 
+Most consumers would want to use L<Path::Dispatcher::Declarative> which gives
+you some sugar inspired by L<Jifty::Dispatcher>.
+
 =head1 ATTRIBUTES
 
 =head2 rules
@@ -165,6 +168,20 @@ Shawn M Moore, C<< <sartak at bestpractical.com> >>
 Please report any bugs or feature requests to
 C<bug-path-dispatcher at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item L<Jifty::Dispatcher>
+
+=item L<Catalyst::Dispatcher>
+
+=item L<Mojolicious::Dispatcher>
+
+=item L<Path::Router>
+
+=back
 
 =head1 COPYRIGHT & LICENSE
 
