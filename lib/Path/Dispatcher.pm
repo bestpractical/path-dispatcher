@@ -3,7 +3,7 @@ package Path::Dispatcher;
 use Moose;
 use MooseX::AttributeHelpers;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 use Path::Dispatcher::Rule;
 use Path::Dispatcher::Dispatch;
