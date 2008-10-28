@@ -59,7 +59,7 @@ sub build_sugar {
 
             $OUTERMOST_DISPATCHER->dispatch(@_);
         },
-        redispatch => sub {
+        run => sub {
             # if caller is $into, then this function is being used as sugar
             # otherwise, it's probably a method call, so discard the invocant
             shift if caller ne $into;
@@ -218,7 +218,7 @@ L<Path::Dispatcher::Dispatch> object. Acts as a keyword within the same
 package; otherwise as a method (since these declarative dispatchers are
 supposed to be used by other packages).
 
-=head2 redispatch path, args
+=head2 run path, args
 
 Performs a dispatch then invokes the L<Path::Dispatcher::Dispatch/run> method
 on it.
