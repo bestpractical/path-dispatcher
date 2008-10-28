@@ -1,5 +1,7 @@
 Revision history for Path-Dispatcher
 
+0.04
+
 0.03 Tue Oct 28 17:42:47 2008
         "rewrite" rules
         Super dispatchers are GONE! Yay.
