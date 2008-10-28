@@ -193,6 +193,8 @@ Path::Dispatcher::Declarative - sugary dispatcher
     
     on ['wield', qr/^\w+$/] => sub { wield_weapon($2) };
 
+    rewrite qr/^inv/ => "display inventory";
+
     under display => sub {
         on inventory => sub { show_inventory() };
         on score     => sub { show_score() };
