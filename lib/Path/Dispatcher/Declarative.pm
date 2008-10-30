@@ -18,6 +18,7 @@ my $exporter = Sub::Exporter::build_exporter({
 });
 
 sub token_delimiter { ' ' }
+sub case_sensitive_tokens { undef }
 
 sub import {
     my $self = shift;
@@ -113,9 +114,12 @@ sub build_sugar {
 my %rule_creator = (
     ARRAY => sub {
         my ($self, $tokens, $block) = @_;
+        my $case_sensitive = $self->case_sensitive_tokens;
+
         Path::Dispatcher::Rule::Tokens->new(
             tokens => $tokens,
             delimiter => $self->token_delimiter,
+            defined $case_sensitive ? (case_sensitive => $case_sensitive) : (),
             $block ? (block => $block) : (),
         ),
     },
