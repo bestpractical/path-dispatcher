@@ -1,6 +1,14 @@
 Revision history for Path-Dispatcher
 
 0.05
+        The Dispatch's run method will now collect return values and return
+            them
+
+        Match:
+            ends_dispatch is now an attribute
+
+        Dispatcher:
+            Allow rules to be specified in the constructor
 
 0.04 Tue Oct 28 17:56:41 2008
         Dist fixes
