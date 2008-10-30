@@ -33,7 +33,7 @@ sub run {
             push @results, scalar $match->run(@args);
 
             die "Path::Dispatcher abort\n"
-                if $match->ends_dispatch($self);
+                if $match->ends_dispatch;
         };
 
         if ($@) {
