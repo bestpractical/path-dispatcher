@@ -24,26 +24,28 @@ sub run {
     my $self = shift;
     my @args = @_;
     my @matches = $self->matches;
+    my @results;
 
     while (my $match = shift @matches) {
         eval {
             local $SIG{__DIE__} = 'DEFAULT';
 
-            $match->run(@args);
+            push @results, scalar $match->run(@args);
 
             die "Path::Dispatcher abort\n"
                 if $match->ends_dispatch($self);
         };
 
         if ($@) {
-            return if $@ =~ /^Path::Dispatcher abort\n/;
+            last if $@ =~ /^Path::Dispatcher abort\n/;
             next if $@ =~ /^Path::Dispatcher next rule\n/;
 
             die $@;
         }
     }
 
-    return;
+    return @results if wantarray;
+    return $results[0];
 }
 
 __PACKAGE__->meta->make_immutable;
