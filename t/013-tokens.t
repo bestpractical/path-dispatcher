@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use Path::Dispatcher;
 
 my @calls;
@@ -61,4 +61,14 @@ is_deeply([splice @calls], [ ['Deep', 'Man', undef] ], "alternations can be arbi
 
 $dispatcher->run('Not Appearing in this Dispatcher Man');
 is_deeply([splice @calls], [ ], "no match");
+
+my $rule = Path::Dispatcher::Rule::Tokens->new(
+    tokens         => ['path', 'dispatcher'],
+    delimiter      => '::',
+    prefix         => 1,
+    case_sensitive => 0,
+);
+
+my $match = $rule->match('Path::Dispatcher::Rule::Tokens');
+is($match->leftover, 'Rule::Tokens');
 
