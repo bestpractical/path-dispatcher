@@ -41,6 +41,12 @@ has delimiter => (
     default => ' ',
 );
 
+has case_sensitive => (
+    is      => 'rw',
+    isa     => 'Bool',
+    default => 1,
+);
+
 sub _match {
     my $self = shift;
     my $path = shift;
@@ -72,6 +78,7 @@ sub _match_token {
         }
     }
     elsif ($Str->check($expected)) {
+        ($got, $expected) = (lc $got, lc $expected) if !$self->case_sensitive;
         return $got eq $expected;
     }
     elsif ($RegexpRef->check($expected)) {
@@ -146,6 +153,11 @@ path. In the future this may be extended to support having a regex delimiter.
 
 The default is a space, but if you're matching URLs you probably want to change
 this to a slash.
+
+=head2 case_sensitive
+
+Decide whether the rule matching is case sensitive. Default is 1, case
+sensitive matching.
 
 =cut
 
