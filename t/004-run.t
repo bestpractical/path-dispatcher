@@ -1,34 +1,39 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More tests => 4;
 use Path::Dispatcher;
 
 my $dispatcher = Path::Dispatcher->new(
     rules => [
-        Path::Dispatcher::Rule::Tokens->new(
-            tokens => ['foo'],
-            block  => sub { "foo matched" },
+        Path::Dispatcher::Rule::Regex->new(
+            regex => qr/^foobar/,
+            block => sub { "foobar matched" },
         ),
     ],
 );
 
-my $result = $dispatcher->run("foo");
-is($result, "foo matched");
+my $result = $dispatcher->run("foobar");
+is($result, "foobar matched");
 
 $dispatcher->add_rule(
-    Path::Dispatcher::Rule::Tokens->new(
-        tokens => ['foo', 'bar'],
-        block  => sub { "foobar matched" },
+    Path::Dispatcher::Rule::Regex->new(
+        regex => qr/^foo/,
+        block => sub { "foo matched" },
     ),
 );
 
-$result = $dispatcher->run("foo bar");
+$result = $dispatcher->run("foobar");
 is($result, "foobar matched");
 
-$result = $dispatcher->run("foo");
-is($result, "foo matched");
+my $dispatch = $dispatcher->dispatch("foobar");
+for my $match ($dispatch->matches) {
+    $match->ends_dispatch(0);
+}
 
-my @results = $dispatcher->run("foo");
-is_deeply(\@results, ["foo matched", "foobar matched"]);
+$result = $dispatch->run("foobar");
+is($result, "foobar matched");
+
+my @results = $dispatch->run("foobar");
+is_deeply(\@results, ["foobar matched", "foo matched"]);
 
