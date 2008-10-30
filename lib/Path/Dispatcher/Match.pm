@@ -39,14 +39,13 @@ sub run {
     local $_ = $self->path;
 
     if ($self->set_number_vars) {
-        $self->run_with_number_vars(
+        return $self->run_with_number_vars(
             sub { $self->rule->run(@args) },
             @{ $self->result },
         );
     }
-    else {
-        $self->rule->run(@args);
-    }
+
+    return $self->rule->run(@args);
 }
 
 sub run_with_number_vars {

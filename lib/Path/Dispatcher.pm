@@ -68,9 +68,7 @@ sub run {
     my $path = shift;
     my $dispatch = $self->dispatch($path);
 
-    $dispatch->run(@_);
-
-    return;
+    return $dispatch->run(@_);
 }
 
 # We don't export anything, so if they request something, then try to error
