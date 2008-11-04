@@ -30,7 +30,6 @@ subtype 'Path::Dispatcher::Tokens'
 has tokens => (
     is         => 'rw',
     isa        => 'Path::Dispatcher::Tokens',
-    isa        => 'ArrayRef',
     auto_deref => 1,
     required   => 1,
 );
