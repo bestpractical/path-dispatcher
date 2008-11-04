@@ -14,6 +14,7 @@ has _matches => (
         push     => 'add_match',
         elements => 'matches',
         count    => 'has_match',
+        first    => 'first_match',
     },
 );
 
