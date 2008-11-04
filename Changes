@@ -1,14 +1,22 @@
 Revision history for Path-Dispatcher
 
 0.05
-        The Dispatch's run method will now collect return values and return
-            them
+        Improve test coverage
 
         Match:
             ends_dispatch is now an attribute
 
+        Rule::Tokens:
+            Support for case insensitive matching
+            Fix for tokens' type constraint
+
         Dispatcher:
-            Allow rules to be specified in the constructor
+            Allow rules to be specified in the constructor (a typo prevented it)
+
+        Dispatch:
+            first_match, has_match methods which do what you'd expect
+            The run method will now collect return values and return them
+
 
 0.04 Tue Oct 28 17:56:41 2008
         Dist fixes

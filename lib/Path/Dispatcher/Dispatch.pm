@@ -97,5 +97,9 @@ matched.
 
 Executes matches until a match's C<ends_dispatch> returns true.
 
+Each match's L<Path::Dispatcher::Match/run> method is evaluated in scalar
+context. The return value of this method is a list of these scalars (or the
+first if called in scalar context).
+
 =cut
 
