@@ -34,12 +34,12 @@ Path::Dispatcher::Rule::Dispatch - redispatch
     my $dispatcher = Path::Dispatcher->new(
         rules => [
             Path::Dispatcher::Rule::Tokens->new(
-                tokens => [  ],
-                block  => sub {  },
+                tokens => [ 'help' ],
+                block  => sub { show_help },
             ),
             Path::Dispatcher::Rule::Tokens->new(
-                tokens => [  ],
-                block  => sub {  },
+                tokens => [ 'quit' ],
+                block  => sub { exit },
             ),
         ],
     );
@@ -48,7 +48,7 @@ Path::Dispatcher::Rule::Dispatch - redispatch
         dispatcher => $dispatcher,
     );
 
-    $rule->run("");
+    $rule->run("help");
 
 =head1 DESCRIPTION
 
