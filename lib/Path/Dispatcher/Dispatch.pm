@@ -13,12 +13,13 @@ has _matches => (
     provides  => {
         push     => 'add_match',
         elements => 'matches',
-        count    => 'has_matches',
+        count    => 'has_match',
     },
 );
 
-# alias add_matches -> add_match
+# aliases
 __PACKAGE__->meta->add_method(add_matches => __PACKAGE__->can('add_match'));
+__PACKAGE__->meta->add_method(has_matches => __PACKAGE__->can('has_match'));
 
 sub run {
     my $self = shift;
