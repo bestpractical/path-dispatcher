@@ -13,19 +13,21 @@ extends 'Path::Dispatcher::Rule';
 #     - strings
 #     - regular expressions
 
-my $Str       = find_type_constraint('Str');
-my $RegexpRef = find_type_constraint('RegexpRef');
-my $ArrayRef  = find_type_constraint('ArrayRef');
+my $Str      = find_type_constraint('Str');
+my $Regex    = find_type_constraint('RegexpRef');
+my $ArrayRef = find_type_constraint('ArrayRef');
 
-subtype 'Path::Dispatcher::Token'
-     => as 'Defined'
-     => where { $Str->check($_) || $RegexpRef->check($_) };
-
-subtype 'Path::Dispatcher::TokenAlternation'
-     => as 'ArrayRef[Path::Dispatcher::Token]';
+my $Alternation;
+$Alternation = subtype as 'Defined'
+     => where {
+         return $Str->check($_) || $Regex->check($_) if ref($_) ne 'ARRAY';
+         $Alternation->check($_) or return for @$_;
+         1
+     };
 
 subtype 'Path::Dispatcher::Tokens'
-     => as 'ArrayRef[Path::Dispatcher::Token|Path::Dispatcher::TokenAlternation]';
+     => as 'ArrayRef'
+     => where { $Alternation->check($_) or return for @$_; 1 };
 
 has tokens => (
     is         => 'rw',
@@ -80,7 +82,7 @@ sub _match_token {
         ($got, $expected) = (lc $got, lc $expected) if !$self->case_sensitive;
         return $got eq $expected;
     }
-    elsif ($RegexpRef->check($expected)) {
+    elsif ($Regex->check($expected)) {
         return $got =~ $expected;
     }
     else {
