@@ -72,7 +72,7 @@ sub run_with_number_vars {
     # we need to do the match anyway, because we have to clear the number vars
     ($str, $re) = ("x", "x") if length($str) == 0;
     $str =~ $re
-        or die "Unable to match '$str' against a copy of itself!";
+        or die "Unable to match '$str' against a copy of itself ($re)!";
 
     $code->();
 }
