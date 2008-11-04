@@ -27,10 +27,6 @@ sub match {
 
     $leftover = '' if !defined($leftover);
 
-    # if we're not matching only a prefix then require the leftover to be empty
-    return if length($leftover)
-           && !$self->prefix;
-
     # make sure that the returned values are PLAIN STRINGS
     # later we will stick them into a regular expression to populate $1 etc
     # which will blow up later!
