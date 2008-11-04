@@ -8,6 +8,7 @@ requires 'MooseX::AttributeHelpers';
 requires 'Sub::Exporter';
 
 build_requires 'Test::More';
+build_requires 'Test::Exception';
 
 WriteAll;
 
