@@ -83,8 +83,9 @@ sub _match_token {
     elsif ($RegexpRef->check($expected)) {
         return $got =~ $expected;
     }
-
-    return 0;
+    else {
+        die "Unexpected token '$expected'"; # the irony is not lost on me :)
+    }
 }
 
 sub tokenize {

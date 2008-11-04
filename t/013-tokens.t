@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Path::Dispatcher;
 
 my @calls;
@@ -16,6 +16,8 @@ $dispatcher->add_rule(
 
 $dispatcher->run('foo bar');
 is_deeply([splice @calls], [ ['foo', 'bar', undef] ], "correctly populated number vars from [str, str] token rule");
+
+ok(!$dispatcher->dispatch('foo bar baz')->has_match, "no match for 'foo bar baz' because the rule isn't a prefix");
 
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::Tokens->new(
