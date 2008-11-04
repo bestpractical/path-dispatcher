@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 my @calls;
 
@@ -11,6 +11,10 @@ do {
 
     on qr/(b)(ar)(.*)/ => sub {
         push @calls, [$1, $2, $3];
+    };
+
+    on ['token', 'matching'] => sub {
+        push @calls, [$1, $2];
     };
 
     rewrite quux => 'bar';
@@ -34,4 +38,12 @@ MyApp::Dispatcher->run('quux-hello');
 is_deeply([splice @calls], [
     [ 'b', 'ar', ':hello' ],
 ]);
+
+MyApp::Dispatcher->run('token matching');
+is_deeply([splice @calls], [
+    [ 'token', 'matching' ],
+]);
+
+MyApp::Dispatcher->run('Token Matching');
+is_deeply([splice @calls], [], "token matching is by default case sensitive");
 
