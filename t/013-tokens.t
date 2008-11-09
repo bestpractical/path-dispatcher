@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More tests => 10;
 use Path::Dispatcher;
 
 my @calls;
