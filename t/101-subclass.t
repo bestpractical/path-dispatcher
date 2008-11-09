@@ -1,45 +1,42 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 5;
-use lib 't/lib';
-use Path::Dispatcher::Test::App;
+use Test::More tests => 2;
 
-our @calls;
+my @calls;
 
-Path::Dispatcher::Test::Framework->run('foo');
+do {
+    package MyFramework::Dispatcher;
+    use Path::Dispatcher::Declarative -base;
+
+    on 'quit' => sub { push @calls, 'framework: quit' };
+
+    package MyApp::Dispatcher;
+    # this hack is here because "use" expects there to be a file for the module
+    BEGIN { MyFramework::Dispatcher->import("-base") }
+
+    on qr/.*/ => sub {
+        push @calls, 'app: first .*';
+        next_rule;
+    };
+
+    redispatch_to('MyFramework::Dispatcher');
+
+    on qr/.*/ => sub {
+        push @calls, 'app: second .*';
+        next_rule;
+    };
+};
+
+MyApp::Dispatcher->run("quit");
 is_deeply([splice @calls], [
-    'framework before foo',
-#    'framework on foo',
-#    'framework after foo',
+    'app: first .*',
+    'framework: quit',
 ]);
 
-Path::Dispatcher::Test::App->run('foo');
+MyApp::Dispatcher->run("other");
 is_deeply([splice @calls], [
-    'app before foo',
-#    'app after foo',
-#    'framework before foo',
-#    'framework on foo',
-#    'framework after foo',
+    'app: first .*',
+    'app: second .*',
 ]);
-
-Path::Dispatcher::Test::App->dispatcher->add_rule(
-    Path::Dispatcher::Rule::Regex->new(
-        regex => qr/foo/,
-        block => sub {
-            push @calls, 'app on foo';
-        },
-    ),
-);
-
-Path::Dispatcher::Test::App->run('foo');
-is_deeply([splice @calls], [
-    'app before foo',
-#    'app on foo',
-#    'app after foo',
-]);
-
-for ('Path::Dispatcher::Test::Framework', 'Path::Dispatcher::Test::App') {
-    is($_->dispatcher->name, $_, "correct dispatcher name for $_");
-}
 
