@@ -106,6 +106,20 @@ sub build_sugar {
 
             $into->_add_rule($under, @_);
         },
+        redispatch_to => sub {
+            my ($dispatcher) = @_;
+
+            # assume it's a declarative dispatcher
+            if (!ref($dispatcher)) {
+                $dispatcher = $dispatcher->dispatcher;
+            }
+
+            my $redispatch = Path::Dispatcher::Rule::Dispatch->new(
+                dispatcher => $dispatcher,
+            );
+
+            $into->_add_rule($redispatch);
+        },
         next_rule => sub { die "Path::Dispatcher next rule\n" },
         last_rule => sub { die "Path::Dispatcher abort\n" },
     };
