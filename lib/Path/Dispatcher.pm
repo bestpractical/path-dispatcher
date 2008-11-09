@@ -157,6 +157,9 @@ Dispatches on the path and then invokes the C<run> method on the
 L<Path::Dispatcher::Dispatch> object, for when you don't need to inspect the
 dispatch.
 
+The args are passed down directly into each rule codeblock. No other args are
+given to the codeblock.
+
 =head1 AUTHOR
 
 Shawn M Moore, C<< <sartak at bestpractical.com> >>
