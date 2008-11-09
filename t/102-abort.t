@@ -2,17 +2,59 @@
 use strict;
 use warnings;
 use Test::More tests => 2;
-use lib 't/lib';
-use Path::Dispatcher::Test::App;
 
-our @calls;
+my @calls;
 
-Path::Dispatcher::Test::App->run('abort');
+do {
+    package MyFramework::Dispatcher;
+    use Path::Dispatcher::Declarative -base;
+    on qr/abort/ => sub {
+        push @calls, 'framework on abort';
+    };
+
+    on qr/next rule/ => sub {
+        push @calls, 'framework before next_rule';
+        next_rule;
+        push @calls, 'framework after next_rule';
+    };
+
+    on qr/next rule/ => sub {
+        push @calls, 'framework before next_rule 2';
+        next_rule;
+        push @calls, 'framework after next_rule 2';
+    };
+
+    package MyApp::Dispatcher;
+    # this hack is here because "use" expects there to be a file for the module
+    BEGIN { MyFramework::Dispatcher->import("-base") }
+
+    before qr/abort/ => sub {
+        push @calls, 'app before abort';
+        last_rule;
+        push @calls, 'app after abort';
+    };
+
+    on qr/next rule/ => sub {
+        push @calls, 'app before next_rule';
+        next_rule;
+        push @calls, 'app after next_rule';
+    };
+
+    on qr/next rule/ => sub {
+        push @calls, 'app before next_rule 2';
+        next_rule;
+        push @calls, 'app after next_rule 2';
+    };
+
+    redispatch_to('MyFramework::Dispatcher');
+};
+
+MyApp::Dispatcher->run('abort');
 is_deeply([splice @calls], [
     'app before abort',
 ]);
 
-Path::Dispatcher::Test::App->run('next rule');
+MyApp::Dispatcher->run('next rule');
 is_deeply([splice @calls], [
     'app before next_rule',
     'app before next_rule 2',
