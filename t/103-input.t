@@ -2,12 +2,42 @@
 use strict;
 use warnings;
 use Test::More tests => 1;
-use lib 't/lib';
-use Path::Dispatcher::Test::App;
 
-our @calls;
+my @calls;
 
-Path::Dispatcher::Test::App->run('args', 1..3);
+do {
+    package MyFramework::Dispatcher;
+    use Path::Dispatcher::Declarative -base;
+
+    on qr/a(rg)s/ => sub {
+        push @calls, {
+            from => "framework",
+            args => [@_],
+            it   => $_,
+            one  => $1,
+            two  => $2,
+        };
+    };
+
+    package MyApp::Dispatcher;
+    # this hack is here because "use" expects there to be a file for the module
+    BEGIN { MyFramework::Dispatcher->import("-base") }
+
+    on qr/ar(g)s/ => sub {
+        push @calls, {
+            from => "app",
+            args => [@_],
+            it   => $_,
+            one  => $1,
+            two  => $2,
+        };
+        next_rule;
+    };
+
+    redispatch_to('MyFramework::Dispatcher');
+};
+
+MyApp::Dispatcher->run('args', 1..3);
 is_deeply([splice @calls], [
     {
         from => 'app',
@@ -18,7 +48,7 @@ is_deeply([splice @calls], [
     },
     {
         from => 'framework',
-        one  => 'g',
+        one  => 'rg',
         two  => undef,
         it   => 'args',
         args => [1, 2, 3],
