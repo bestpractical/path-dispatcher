@@ -34,7 +34,7 @@ do {
         next_rule;
     };
 
-    redispatch_to('MyFramework::Dispatcher');
+    redispatch_to(MyFramework::Dispatcher->dispatcher);
 };
 
 MyApp::Dispatcher->run('args', 1..3);
