@@ -1,5 +1,7 @@
 Revision history for Path-Dispatcher
 
+0.06
+
 0.05 Sat Nov 15 16:36:41 2008
         Improve test coverage
         New rule type "Always" which always matches.
