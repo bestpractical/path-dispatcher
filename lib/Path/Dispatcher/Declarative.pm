@@ -161,7 +161,7 @@ my %rule_creators = (
     },
     empty => sub {
         my ($self, $undef, $block) = @_;
-        Path::Dispatcher::Rule::Always->new(
+        Path::Dispatcher::Rule::Empty->new(
             $block ? (block => $block) : (),
         ),
     },

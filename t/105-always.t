@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 my @calls;
 
@@ -15,5 +15,8 @@ do {
 };
 
 MyApp::Dispatcher->run("foo");
-is_deeply([splice @calls], ["empty: foo"]);
+is_deeply([splice @calls], []);
+
+MyApp::Dispatcher->run("");
+is_deeply([splice @calls], ["empty: "]);
 
