@@ -198,7 +198,12 @@ sub _add_rule {
     if (!defined(wantarray)) {
         if ($UNDER_RULE) {
             $UNDER_RULE->add_rule($rule);
-            $rule->name($UNDER_RULE->name . " (rule $rule_name)");
+
+            my $full_name = $UNDER_RULE->has_name
+                          ? $UNDER_RULE->name . " (rule $rule_name)"
+                          : "anonymous Under (rule $rule_name)";
+
+            $rule->name($full_name);
         }
         else {
             $self->dispatcher->add_rule($rule);
