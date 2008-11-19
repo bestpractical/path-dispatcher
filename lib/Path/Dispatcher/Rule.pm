@@ -29,7 +29,12 @@ sub match {
     my $path = shift;
 
     my ($result, $leftover) = $self->_match($path);
-    return unless $result;
+
+    if (!$result) {
+        $self->trace(leftover => $leftover, match => undef, path => $path)
+            if $ENV{'PATH_DISPATCHER_TRACE'};
+        return;
+    }
 
     $leftover = '' if !defined($leftover);
 
@@ -51,6 +56,8 @@ sub match {
         leftover => $leftover,
     );
 
+    $self->trace(match => $match) if $ENV{'PATH_DISPATCHER_TRACE'};
+
     return $match;
 }
 
@@ -60,6 +67,26 @@ sub run {
     die "No codeblock to run" if !$self->has_block;
 
     $self->block->(@_);
+}
+
+sub trace {
+    my $self = shift;
+    my %args = @_;
+    my $trace = "$self";
+    $trace .= " (" . $self->name . ")" if $self->has_name;
+
+    if (my $match = $args{match}) {
+        $trace .= " matched against (" . $match->path->path . ")";
+        $trace .= " with (" . $match->leftover . ") left over"
+            if length($match->leftover);
+    }
+    else {
+        $trace .= " did not match against (" . $args{path} . ")";
+    }
+
+    $trace .= ".\n";
+
+    warn $trace;
 }
 
 __PACKAGE__->meta->make_immutable;
