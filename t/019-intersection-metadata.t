@@ -14,7 +14,7 @@ my $dispatcher = Path::Dispatcher->new(
                     tokens    => ['=', 'model', 'Ticket'],
                 ),
                 Path::Dispatcher::Rule::Metadata->new(
-                    name    => 'http_method',
+                    field   => 'http_method',
                     matcher => Path::Dispatcher::Rule::Eq->new(string => 'POST'),
                 ),
             ],

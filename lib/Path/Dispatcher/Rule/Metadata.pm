@@ -4,7 +4,7 @@ use Moose;
 use MooseX::AttributeHelpers;
 extends 'Path::Dispatcher::Rule';
 
-has name => (
+has field => (
     is       => 'rw',
     isa      => 'Str',
     required => 1,
@@ -19,7 +19,7 @@ has matcher => (
 sub _match {
     my $self = shift;
     my $path = shift;
-    my $got = $path->get_metadata($self->name);
+    my $got = $path->get_metadata($self->field);
 
     # wow, offensive.. but powerful
     my $faux_path = Path::Dispatcher::Path->new(path => $got);
@@ -31,7 +31,7 @@ sub _match {
 sub readable_attributes {
     my $self = shift;
     return sprintf "{ '%s': %s }",
-        $self->name,
+        $self->field,
         $self->matcher->readable_attributes;
 }
 
