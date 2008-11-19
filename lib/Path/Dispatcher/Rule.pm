@@ -79,8 +79,13 @@ sub trace {
     my $path  = $match ? $match->path->path : $args{path}->path;
 
     # name
-    my $trace = "$self";
-    $trace .= " (" . $self->name . ")" if $self->has_name;
+    my $trace = '';
+    if ($self->has_name) {
+        $trace .= $self->name;
+    }
+    else {
+        $trace .= "$self";
+    }
 
     # attributes such as tokens or regex
     my $attr = $self->readable_attributes;
