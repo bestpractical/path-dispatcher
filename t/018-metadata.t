@@ -9,9 +9,9 @@ my @calls;
 my $dispatcher = Path::Dispatcher->new(
     rules => [
         Path::Dispatcher::Rule::Metadata->new(
-            name  => "http_method",
-            value => "GET",
-            block => sub { push @calls, $_ },
+            name    => "http_method",
+            matcher => Path::Dispatcher::Rule::Eq->new(string => "GET"),
+            block   => sub { push @calls, $_ },
         ),
     ],
 );

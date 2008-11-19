@@ -10,9 +10,9 @@ has name => (
     required => 1,
 );
 
-has value => (
+has matcher => (
     is       => 'rw',
-    isa      => 'Str',
+    isa      => 'Path::Dispatcher::Rule',
     required => 1,
 );
 
@@ -21,7 +21,9 @@ sub _match {
     my $path = shift;
     my $got = $path->get_metadata($self->name);
 
-    return 0 if $self->value ne $got;
+    # wow, offensive.. but powerful
+    my $faux_path = Path::Dispatcher::Path->new(path => $got);
+    return 0 unless $self->matcher->match($faux_path);
 
     return 1, $path->path;
 }
