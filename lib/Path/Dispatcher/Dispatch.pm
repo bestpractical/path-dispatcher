@@ -32,6 +32,9 @@ sub run {
         eval {
             local $SIG{__DIE__} = 'DEFAULT';
 
+            $match->rule->trace(running => 1, match => $match)
+                if $ENV{PATH_DISPATCHER_TRACE};
+
             push @results, scalar $match->run(@args);
 
             die "Path::Dispatcher abort\n"

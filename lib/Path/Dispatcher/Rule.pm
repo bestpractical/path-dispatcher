@@ -72,10 +72,15 @@ sub run {
 sub trace {
     my $self = shift;
     my %args = @_;
+    my $match = $args{match};
+
     my $trace = "$self";
     $trace .= " (" . $self->name . ")" if $self->has_name;
 
-    if (my $match = $args{match}) {
+    if ($args{running}) {
+        $trace .= " running codeblock with path (" . $match->path->path . ")";
+    }
+    elsif ($match) {
         $trace .= " matched against (" . $match->path->path . ")";
         $trace .= " with (" . $match->leftover . ") left over"
             if length($match->leftover);
