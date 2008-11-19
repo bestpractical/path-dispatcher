@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 package Path::Dispatcher::Path;
 use Moose;
+use MooseX::AttributeHelpers;
 
 has path => (
     is        => 'rw',
@@ -9,9 +10,13 @@ has path => (
 );
 
 has metadata => (
+    metaclass => 'Collection::Hash',
     is        => 'rw',
     isa       => 'HashRef',
     predicate => 'has_metadata',
+    provides  => {
+        get => 'get_metadata',
+    },
 );
 
 # allow Path::Dispatcher::Path->new($path)
