@@ -56,13 +56,32 @@ sub _match {
     my @matched;
 
     for my $expected ($self->tokens) {
-        return unless @tokens; # too few words
+        unless (@tokens) {
+            $self->trace(no_tokens => 1, on_token => $expected, path => $path)
+                if $ENV{'PATH_DISPATCHER_TRACE'};
+            return;
+        }
+
         my $got = shift @tokens;
-        return unless $self->_match_token($got, $expected);
+
+        unless ($self->_match_token($got, $expected)) {
+            $self->trace(
+                no_match  => 1,
+                got_token => $got,
+                on_token  => $expected,
+                path      => $path,
+            ) if $ENV{'PATH_DISPATCHER_TRACE'};
+            return;
+        }
+
         push @matched, $got;
     }
 
-    return if @tokens && !$self->prefix;
+    if (@tokens && !$self->prefix) {
+        $self->trace(tokens_left => \@tokens, path => $path)
+            if $ENV{'PATH_DISPATCHER_TRACE'};
+        return;
+    }
 
     my $leftover = $self->untokenize(@tokens);
     return \@matched, $leftover;
@@ -101,6 +120,28 @@ sub untokenize {
     my @tokens = @_;
     return join $self->delimiter, @tokens;
 }
+
+sub readable_attributes {
+}
+
+after trace => sub {
+    my $self = shift;
+    my %args = @_;
+
+    return if $ENV{'PATH_DISPATCHER_TRACE'} < 3;
+
+    if ($args{no_tokens}) {
+        warn "... We ran out of tokens when trying to match ($args{on_token}).\n";
+    }
+    elsif ($args{no_match}) {
+        my ($got, $expected) = @args{'got_token', 'on_token'};
+        warn "... Did not match ($got) against expected ($expected).\n";
+    }
+    elsif ($args{tokens_left}) {
+        my @tokens = @{ $args{tokens_left} };
+        warn "... We ran out of path tokens, expecting (@tokens).\n";
+    }
+};
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
