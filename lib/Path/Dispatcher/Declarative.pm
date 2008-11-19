@@ -99,12 +99,12 @@ sub build_sugar {
                 predicate => $predicate,
             );
 
+            $into->_add_rule($under, @_);
+
             do {
                 local $UNDER_RULE = $under;
                 $rules->();
             };
-
-            $into->_add_rule($under, @_);
         },
         redispatch_to => sub {
             my ($dispatcher) = @_;
