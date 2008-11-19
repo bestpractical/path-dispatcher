@@ -69,6 +69,8 @@ sub run {
     $self->block->(@_);
 }
 
+sub readable_attributes { }
+
 sub trace {
     my $self  = shift;
     my %args  = @_;
@@ -76,9 +78,15 @@ sub trace {
     my $match = $args{match};
     my $path  = $match ? $match->path->path : $args{path}->path;
 
+    # name
     my $trace = "$self";
     $trace .= " (" . $self->name . ")" if $self->has_name;
 
+    # attributes such as tokens or regex
+    my $attr = $self->readable_attributes;
+    $trace .= " $attr" if defined($attr) && length($attr);
+
+    # what just happened
     if ($args{running}) {
         $trace .= " running codeblock with path ($path)";
     }
