@@ -24,7 +24,7 @@ sub _match {
     for my $key ($self->metadata_keys) {
         return 0 if !exists($path_metadata->{$key});
 
-        $self->_match_metadatum($path_metadata, $self->metadata($key))
+        $self->_match_metadatum($path_metadata->{$key}, $self->metadata($key))
             or return 0;
     }
 
