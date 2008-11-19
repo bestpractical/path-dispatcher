@@ -3,7 +3,9 @@ package Path::Dispatcher::Rule::Under;
 use Moose;
 use Moose::Util::TypeConstraints;
 use MooseX::AttributeHelpers;
+
 extends 'Path::Dispatcher::Rule';
+with 'Path::Dispatcher::Role::Rules';
 
 subtype 'Path::Dispatcher::PrefixRule'
      => as 'Path::Dispatcher::Rule'
@@ -13,18 +15,6 @@ subtype 'Path::Dispatcher::PrefixRule'
 has predicate => (
     is  => 'rw',
     isa => 'Path::Dispatcher::PrefixRule',
-);
-
-has _rules => (
-    metaclass => 'Collection::Array',
-    is        => 'rw',
-    isa       => 'ArrayRef[Path::Dispatcher::Rule]',
-    init_arg  => 'rules',
-    default   => sub { [] },
-    provides  => {
-        push     => 'add_rule',
-        elements => 'rules',
-    },
 );
 
 sub match {

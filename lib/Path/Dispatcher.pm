@@ -12,6 +12,8 @@ use Path::Dispatcher::Path;
 use constant dispatch_class => 'Path::Dispatcher::Dispatch';
 use constant path_class     => 'Path::Dispatcher::Path';
 
+with 'Path::Dispatcher::Role::Rules';
+
 has name => (
     is      => 'rw',
     isa     => 'Str',
@@ -21,18 +23,6 @@ has name => (
             my $self = shift;
             join '-', blessed($self), ++$i;
         },
-    },
-);
-
-has _rules => (
-    metaclass => 'Collection::Array',
-    is        => 'rw',
-    isa       => 'ArrayRef[Path::Dispatcher::Rule]',
-    init_arg  => 'rules',
-    default   => sub { [] },
-    provides  => {
-        push     => 'add_rule',
-        elements => 'rules',
     },
 );
 
