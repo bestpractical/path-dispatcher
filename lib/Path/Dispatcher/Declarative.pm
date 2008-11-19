@@ -191,15 +191,22 @@ sub _add_rule {
         $rule = shift;
     }
 
+    # XXX: caller level should be closer to $Test::Builder::Level
+    my (undef, $file, $line) = caller(1);
+    my $rule_name = "$file:$line";
+
     if (!defined(wantarray)) {
         if ($UNDER_RULE) {
             $UNDER_RULE->add_rule($rule);
+            $rule->name($UNDER_RULE->name . " (rule $rule_name)");
         }
         else {
             $self->dispatcher->add_rule($rule);
+            $rule->name($self->dispatcher->name . " (rule $rule_name)");
         }
     }
     else {
+        $rule->name($rule_name);
         return $rule, @_;
     }
 }
