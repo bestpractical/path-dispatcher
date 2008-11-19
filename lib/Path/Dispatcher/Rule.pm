@@ -70,23 +70,25 @@ sub run {
 }
 
 sub trace {
-    my $self = shift;
-    my %args = @_;
+    my $self  = shift;
+    my %args  = @_;
+
     my $match = $args{match};
+    my $path  = $match ? $match->path->path : $args{path}->path;
 
     my $trace = "$self";
     $trace .= " (" . $self->name . ")" if $self->has_name;
 
     if ($args{running}) {
-        $trace .= " running codeblock with path (" . $match->path->path . ")";
+        $trace .= " running codeblock with path ($path)";
     }
     elsif ($match) {
-        $trace .= " matched against (" . $match->path->path . ")";
+        $trace .= " matched against ($path)";
         $trace .= " with (" . $match->leftover . ") left over"
             if length($match->leftover);
     }
     else {
-        $trace .= " did not match against (" . $args{path} . ")";
+        $trace .= " did not match against ($path)";
     }
 
     $trace .= ".\n";
