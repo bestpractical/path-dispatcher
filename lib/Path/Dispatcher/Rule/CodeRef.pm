@@ -11,9 +11,10 @@ has matcher => (
 
 sub _match {
     my $self = shift;
-    local $_ = shift; # path
+    my $path = shift;
 
-    return $self->matcher->($_);
+    local $_ = $path->path;
+    return $self->matcher->($path);
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -54,7 +55,8 @@ necessary!
 A coderef that returns C<undef> if there's no match, otherwise a list of
 strings (the results).
 
-The coderef receives the path as both its one argument and C<$_>.
+The coderef receives the path object as its argument, and the path string as
+C<$_>.
 
 =cut
 

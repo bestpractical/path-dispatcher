@@ -4,7 +4,7 @@ use Moose;
 
 use Path::Dispatcher::Match;
 
-sub match_class { "Path::Dispatcher::Match" }
+use constant match_class => "Path::Dispatcher::Match";
 
 has block => (
     is        => 'rw',

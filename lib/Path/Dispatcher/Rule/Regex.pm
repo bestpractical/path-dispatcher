@@ -13,7 +13,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    return unless $path =~ $self->regex;
+    return unless $path->path =~ $self->regex;
 
     my @matches = map { substr($path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#-;
 

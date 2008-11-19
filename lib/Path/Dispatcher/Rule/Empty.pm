@@ -6,8 +6,8 @@ extends 'Path::Dispatcher::Rule';
 sub _match {
     my $self = shift;
     my $path = shift;
-    return 0 if length $path;
-    return (1, $path);
+    return 0 if length $path->path;
+    return (1, $path->path);
 }
 
 __PACKAGE__->meta->make_immutable;

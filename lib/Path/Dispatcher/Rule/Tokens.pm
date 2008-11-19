@@ -52,7 +52,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @tokens = $self->tokenize($path);
+    my @tokens = $self->tokenize($path->path);
     my @matched;
 
     for my $expected ($self->tokens) {

@@ -35,8 +35,9 @@ sub match {
         or return;
 
     my $suffix = $prefix_match->leftover;
+    my $new_path = $path->meta->clone_instance($path, path => $suffix);
 
-    return grep { defined } map { $_->match($suffix) } $self->rules;
+    return grep { defined } map { $_->match($new_path) } $self->rules;
 }
 
 __PACKAGE__->meta->make_immutable;

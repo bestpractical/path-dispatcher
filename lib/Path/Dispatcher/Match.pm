@@ -2,11 +2,12 @@
 package Path::Dispatcher::Match;
 use Moose;
 
+use Path::Dispatcher::Path;
 use Path::Dispatcher::Rule;
 
 has path => (
     is       => 'rw',
-    isa      => 'Str',
+    isa      => 'Path::Dispatcher::Path',
     required => 1,
 );
 

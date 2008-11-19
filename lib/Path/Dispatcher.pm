@@ -7,8 +7,10 @@ our $VERSION = '0.07';
 
 use Path::Dispatcher::Rule;
 use Path::Dispatcher::Dispatch;
+use Path::Dispatcher::Path;
 
-sub dispatch_class { 'Path::Dispatcher::Dispatch' }
+use constant dispatch_class => 'Path::Dispatcher::Dispatch';
+use constant path_class     => 'Path::Dispatcher::Path';
 
 has name => (
     is      => 'rw',
@@ -37,6 +39,12 @@ has _rules => (
 sub dispatch {
     my $self = shift;
     my $path = shift;
+
+    if (!ref($path)) {
+        $path = $self->path_class->new(
+            path => $path,
+        );
+    }
 
     my $dispatch = $self->dispatch_class->new;
 
