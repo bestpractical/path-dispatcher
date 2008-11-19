@@ -12,10 +12,10 @@ my $rule = Path::Dispatcher::Rule::Regex->new(
     prefix => 1,
 );
 
-ok(!$rule->match('foo'), "prefix means the rule matches a prefix of the path, not the other way around");
-ok($rule->match('foo bar'), "prefix matches the full path");
-ok($rule->match('foo bar baz'), "prefix matches a prefix of the path");
-my $match = $rule->match('foobar:baz');
+ok(!$rule->match(Path::Dispatcher::Path->new('foo')), "prefix means the rule matches a prefix of the path, not the other way around");
+ok($rule->match(Path::Dispatcher::Path->new('foo bar')), "prefix matches the full path");
+ok($rule->match(Path::Dispatcher::Path->new('foo bar baz')), "prefix matches a prefix of the path");
+my $match = $rule->match(Path::Dispatcher::Path->new('foobar:baz'));
 
 ok($match, "matched foobar:baz");
 

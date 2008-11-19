@@ -16,8 +16,8 @@ my $rule = Path::Dispatcher::Rule::Regex->new(
     },
 );
 
-isa_ok($rule->match('foobar'), 'Path::Dispatcher::Match');
-is_deeply($rule->match('foobar')->result, ['fo', 'ob']);
+isa_ok($rule->match(Path::Dispatcher::Path->new('foobar')), 'Path::Dispatcher::Match');
+is_deeply($rule->match(Path::Dispatcher::Path->new('foobar'))->result, ['fo', 'ob']);
 is_deeply([splice @calls], [], "block not called on match");
 
 $rule->run;

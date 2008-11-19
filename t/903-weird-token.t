@@ -18,5 +18,5 @@ my $rule = Path::Dispatcher::Rule::Tokens->new(
 push @{ $rule->{tokens} }, { weird_token => 1 };
 
 throws_ok {
-    $rule->match("mezzanine");
+    $rule->match(Path::Dispatcher::Path->new("mezzanine"));
 } qr/^Unexpected token 'HASH\(\w+\)'/;

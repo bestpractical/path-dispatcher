@@ -69,6 +69,6 @@ my $rule = Path::Dispatcher::Rule::Tokens->new(
     case_sensitive => 0,
 );
 
-my $match = $rule->match('Path::Dispatcher::Rule::Tokens');
+my $match = $rule->match(Path::Dispatcher::Path->new('Path::Dispatcher::Rule::Tokens'));
 is($match->leftover, 'Rule::Tokens');
 

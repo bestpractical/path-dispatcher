@@ -13,7 +13,7 @@ throws_ok {
     $rule->run;
 } qr/^No codeblock to run/;
 
-my $match = $rule->match('bus train');
+my $match = $rule->match(Path::Dispatcher::Path->new('bus train'));
 ok($match, "matched the tokens");
 
 throws_ok {

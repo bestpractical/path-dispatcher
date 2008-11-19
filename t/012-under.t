@@ -53,7 +53,7 @@ for my $path (keys %tests) {
     my $data = $tests{$path};
     my $name = $data->{name} || $path;
 
-    my $match = $under->match($path);
+    my $match = $under->match(Path::Dispatcher::Path->new($path));
     $match = !$match if $data->{fail};
     ok($match, $name);
 }
@@ -68,7 +68,7 @@ for my $path (keys %tests) {
     my $data = $tests{$path};
     my $name = $data->{name} || $path;
 
-    my $match = $under->match($path);
+    my $match = $under->match(Path::Dispatcher::Path->new($path));
     $match = !$match if $data->{fail} && !$data->{catchall};
     ok($match, $name);
 }
