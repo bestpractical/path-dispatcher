@@ -65,6 +65,7 @@ require Path::Dispatcher::Rule::CodeRef;
 require Path::Dispatcher::Rule::Dispatch;
 require Path::Dispatcher::Rule::Empty;
 require Path::Dispatcher::Rule::Intersection;
+require Path::Dispatcher::Rule::Metadata;
 require Path::Dispatcher::Rule::Regex;
 require Path::Dispatcher::Rule::Tokens;
 require Path::Dispatcher::Rule::Under;
