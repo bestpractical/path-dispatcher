@@ -18,6 +18,12 @@ has prefix => (
     default => 0,
 );
 
+has name => (
+    is        => 'rw',
+    isa       => 'Str',
+    predicate => 'has_name',
+);
+
 sub match {
     my $self = shift;
     my $path = shift;
