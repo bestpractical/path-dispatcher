@@ -75,6 +75,11 @@ sub trace {
     my $self  = shift;
     my %args  = @_;
 
+    my $level = $ENV{'PATH_DISPATCHER_TRACE'};
+
+    return if exists($args{level})
+           && $level < $args{level};
+
     my $match = $args{match};
     my $path  = $match ? $match->path->path : $args{path}->path;
 
@@ -88,12 +93,18 @@ sub trace {
     }
 
     # attributes such as tokens or regex
-    my $attr = $self->readable_attributes;
-    $trace .= " $attr" if defined($attr) && length($attr);
+    if ($level >= 2) {
+        my $attr = $self->readable_attributes;
+        $trace .= " $attr" if defined($attr) && length($attr);
+    }
 
     # what just happened
     if ($args{running}) {
         $trace .= " running codeblock with path ($path)";
+        if ($level >= 10) {
+            require B::Deparse;
+            $trace .= ": " . B::Deparse->new->coderef2text($match->rule->block);
+        }
     }
     elsif ($match) {
         $trace .= " matched against ($path)";
