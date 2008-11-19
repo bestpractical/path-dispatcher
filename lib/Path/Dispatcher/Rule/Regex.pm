@@ -26,6 +26,8 @@ sub _match {
     return \@matches;
 }
 
+sub readable_attributes { shift->regex }
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 

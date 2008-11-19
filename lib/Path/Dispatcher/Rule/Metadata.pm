@@ -28,5 +28,15 @@ sub _match {
     return 1, $path->path;
 }
 
+sub readable_attributes {
+    my $self = shift;
+    return sprintf "{ '%s': %s }",
+        $self->name,
+        $self->matcher->readable_attributes;
+}
+
+__PACKAGE__->meta->make_immutable;
+no Moose;
+
 1;
 

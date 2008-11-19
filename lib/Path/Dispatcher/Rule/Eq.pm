@@ -16,6 +16,8 @@ sub _match {
     return $path->path eq $self->string;
 }
 
+sub readable_attributes { q{"} . shift->string . q{"} }
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 

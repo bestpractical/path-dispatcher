@@ -30,6 +30,8 @@ sub match {
     return grep { defined } map { $_->match($new_path) } $self->rules;
 }
 
+sub readable_attributes { shift->predicate->readable_attributes }
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 no Moose::Util::TypeConstraints;
