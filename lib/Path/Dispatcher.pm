@@ -176,6 +176,8 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
 
 =item L<Catalyst::Dispatcher>
 
+=item L<HTTPx::Dispatcher>
+
 =item L<Mojolicious::Dispatcher>
 
 =item L<Path::Router>
