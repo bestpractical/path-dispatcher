@@ -13,7 +13,12 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    return $path->path eq $self->string;
+    return $path->path eq $self->string unless $self->prefix;
+
+    my $truncated = substr($path->path, 0, length($self->string));
+    return 0 unless $truncated eq $self->string;
+
+    return (1, substr($path->path, length($self->string)));
 }
 
 sub readable_attributes { q{"} . shift->string . q{"} }
