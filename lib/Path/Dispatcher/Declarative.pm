@@ -152,10 +152,9 @@ my %rule_creators = (
         ),
     },
     '' => sub {
-        my ($self, $tokens, $block) = @_;
-        Path::Dispatcher::Rule::Tokens->new(
-            tokens => [$tokens],
-            delimiter => $self->token_delimiter,
+        my ($self, $string, $block) = @_;
+        Path::Dispatcher::Rule::Eq->new(
+            string => $string,
             $block ? (block => $block) : (),
         ),
     },
