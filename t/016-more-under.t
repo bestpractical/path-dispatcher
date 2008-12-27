@@ -9,17 +9,17 @@ do {
     package Under::Where;
     use Path::Dispatcher::Declarative -base;
 
-    under 'ticket ' => sub {
+    under 'ticket' => sub {
         on 'create' => sub { push @calls, "ticket create" };
         on 'update' => sub { push @calls, "ticket update" };
     };
 
-    under 'blog ' => sub {
-        under 'post ' => sub {
+    under 'blog' => sub {
+        under 'post' => sub {
             on 'create' => sub { push @calls, "create blog post" };
             on 'delete' => sub { push @calls, "delete blog post" };
         };
-        under 'comment ' => sub {
+        under 'comment' => sub {
             on 'create' => sub { push @calls, "create blog comment" };
             on 'delete' => sub { push @calls, "delete blog comment" };
         };

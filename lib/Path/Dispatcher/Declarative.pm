@@ -153,8 +153,8 @@ my %rule_creators = (
     },
     '' => sub {
         my ($self, $string, $block) = @_;
-        Path::Dispatcher::Rule::Eq->new(
-            string => $string,
+        Path::Dispatcher::Rule::Tokens->new(
+            tokens => [$string],
             $block ? (block => $block) : (),
         ),
     },
@@ -273,11 +273,11 @@ Adds a rule to the dispatcher for the given path. The path may be:
 =item a string
 
 This is taken to mean a single token; creates an
-L<Path::Dispatcher::Rule::Token> rule.
+L<Path::Dispatcher::Rule::Tokens> rule.
 
 =item an array reference
 
-This is creates a L<Path::Dispatcher::Rule::Token> rule.
+This is creates a L<Path::Dispatcher::Rule::Tokens> rule.
 
 =item a regular expression
 
