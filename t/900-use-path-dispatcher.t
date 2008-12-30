@@ -8,5 +8,5 @@ eval "
     use Path::Dispatcher -base;
 ";
 
-like($@, qr/^use Path::Dispatcher \(-base\) called by MyApp::Dispatcher\. Did you mean Path::Dispatcher::Declarative\?/);
+like($@, qr/^'use Path::Dispatcher \(-base\)' called by MyApp::Dispatcher\. Did you mean to use Path::Dispatcher::Declarative\?/);
 
