@@ -63,14 +63,15 @@ sub run_with_number_vars {
     # we don't have direct write access to $1 and friends, so we have to
     # do this little hack. the only way we can update $1 is by matching
     # against a regex (5.10 fixes that)..
-    my $re = join '', map { "(\Q$_\E)" } @_;
-    my $str = join '', @_;
+    my $re  = join '', map { "(\Q$_\E)" } @_;
+    my $str = join '',                    @_;
 
     # we need to check length because Perl's annoying gotcha of the empty regex
     # actually being an alias for whatever the previously used regex was 
     # (useful last decade when qr// hadn't been invented)
     # we need to do the match anyway, because we have to clear the number vars
     ($str, $re) = ("x", "x") if length($str) == 0;
+
     $str =~ $re
         or die "Unable to match '$str' against a copy of itself ($re)!";
 
