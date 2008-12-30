@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Rule::Metadata;
 use Moose;
 use MooseX::AttributeHelpers;

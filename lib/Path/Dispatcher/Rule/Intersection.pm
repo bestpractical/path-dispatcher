@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Rule::Intersection;
 use Moose;
 use MooseX::AttributeHelpers;

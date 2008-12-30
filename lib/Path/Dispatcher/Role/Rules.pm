@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Role::Rules;
 use Moose::Role;
 

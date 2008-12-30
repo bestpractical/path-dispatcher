@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Rule::Dispatch;
 use Moose;
 extends 'Path::Dispatcher::Rule';

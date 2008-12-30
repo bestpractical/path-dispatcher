@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Declarative;
 use strict;
 use warnings;

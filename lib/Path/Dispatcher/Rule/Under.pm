@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Rule::Under;
 use Moose;
 use Moose::Util::TypeConstraints;

@@ -1,4 +1,3 @@
-#!/usr/bin/env perl
 package Path::Dispatcher::Path;
 use Moose;
 use MooseX::AttributeHelpers;
