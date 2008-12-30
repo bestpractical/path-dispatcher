@@ -245,6 +245,8 @@ Path::Dispatcher::Declarative - sugary dispatcher
 
 =head1 DESCRIPTION
 
+L<Jifty::Dispatcher> rocks!
+
 =head1 KEYWORDS
 
 =head2 dispatcher -> Dispatcher
