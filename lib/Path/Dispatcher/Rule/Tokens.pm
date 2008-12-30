@@ -122,6 +122,28 @@ sub untokenize {
 }
 
 sub readable_attributes {
+    my $self = shift;
+
+    my $deserialize;
+    $deserialize = sub {
+        my $ret = '';
+        for (my $i = 0; $i < @_; ++$i) {
+            local $_ = $_[$i];
+
+            if (ref($_) eq 'ARRAY') {
+                $ret .= $deserialize->(@$_);
+            }
+            else {
+                $ret .= $_;
+            }
+
+            $ret .= ',' if $i + 1 < @_;
+        }
+
+        return "[" . $ret . "]";
+    };
+
+    return $deserialize->($self->tokens);
 }
 
 after trace => sub {
