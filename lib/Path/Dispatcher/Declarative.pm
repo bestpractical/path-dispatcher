@@ -137,6 +137,17 @@ my %rule_creators = (
             $block ? (block => $block) : (),
         ),
     },
+    '' => sub {
+        my ($self, $string, $block) = @_;
+        my $case_sensitive = $self->case_sensitive_tokens;
+
+        Path::Dispatcher::Rule::Tokens->new(
+            tokens => [$string],
+            delimiter => $self->token_delimiter,
+            defined $case_sensitive ? (case_sensitive => $case_sensitive) : (),
+            $block ? (block => $block) : (),
+        ),
+    },
     CODE => sub {
         my ($self, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
@@ -148,13 +159,6 @@ my %rule_creators = (
         my ($self, $regex, $block) = @_;
         Path::Dispatcher::Rule::Regex->new(
             regex => $regex,
-            $block ? (block => $block) : (),
-        ),
-    },
-    '' => sub {
-        my ($self, $string, $block) = @_;
-        Path::Dispatcher::Rule::Tokens->new(
-            tokens => [$string],
             $block ? (block => $block) : (),
         ),
     },
