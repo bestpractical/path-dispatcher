@@ -30,6 +30,7 @@ sub dispatch {
     my $self = shift;
     my $path = shift;
 
+    # Automatically box string paths
     if (!ref($path)) {
         $path = $self->path_class->new(
             path => $path,
@@ -53,12 +54,10 @@ sub dispatch_rule {
     my $self = shift;
     my %args = @_;
 
-    my @matches = $args{rule}->match($args{path})
-        or return 0;
-
+    my @matches = $args{rule}->match($args{path});
     $args{dispatch}->add_matches(@matches);
 
-    return 1;
+    return @matches;
 }
 
 sub run {
