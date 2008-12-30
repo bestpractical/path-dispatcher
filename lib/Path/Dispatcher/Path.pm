@@ -32,6 +32,13 @@ around BUILDARGS => sub {
     $self->$orig(@_);
 };
 
+sub clone_path {
+    my $self = shift;
+    my $path = shift;
+
+    return $self->meta->clone_instance($self, path => $path, @_);
+}
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 

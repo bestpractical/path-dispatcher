@@ -21,8 +21,8 @@ sub _match {
     my $got = $path->get_metadata($self->field);
 
     # wow, offensive.. but powerful
-    my $faux_path = Path::Dispatcher::Path->new(path => $got);
-    return 0 unless $self->matcher->match($faux_path);
+    my $metadata_path = $path->clone_path($got);
+    return 0 unless $self->matcher->match($metadata_path);
 
     return 1, $path->path;
 }

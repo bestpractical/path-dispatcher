@@ -23,8 +23,7 @@ sub match {
     my $prefix_match = $self->predicate->match($path)
         or return;
 
-    my $suffix = $prefix_match->leftover;
-    my $new_path = $path->meta->clone_instance($path, path => $suffix);
+    my $new_path = $path->clone_path($prefix_match->leftover);
 
     return grep { defined } map { $_->match($new_path) } $self->rules;
 }
