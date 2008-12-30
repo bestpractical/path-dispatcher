@@ -1,6 +1,24 @@
 Revision history for Path-Dispatcher
 
 0.07
+        Paths are now boxed with the new Path::Dispatcher::Path.
+
+        New rule type "Intersection" which matches only when each of its
+        subrules match.
+
+        New rule type "Metadata" which matches the optional metadata (a hash)
+        of the path.
+
+        New rule type "Eq" which just does basic string equality.
+
+        Rules can now be named. In Path::Dispatcher::Declarative, each rule is
+        named with its dispatcher's name and the file:line where the rule was
+        defined.
+
+        Dispatch tracing output, for debugging. Set environment variable
+        PATH_DISPATCHER_TRACE to a number. The higher the number, the more
+        output will be generated. The current maximum value of 10 will dump
+        code references.
 
 0.06 Sat Nov 15 21:02:29 2008
         New rule type "Empty" which matches only the empty path.
