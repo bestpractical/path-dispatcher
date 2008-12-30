@@ -136,17 +136,6 @@ my %rule_creators = (
             $block ? (block => $block) : (),
         ),
     },
-    '' => sub {
-        my ($self, $string, $block) = @_;
-        my $case_sensitive = $self->case_sensitive_tokens;
-
-        Path::Dispatcher::Rule::Tokens->new(
-            tokens => [$string],
-            delimiter => $self->token_delimiter,
-            defined $case_sensitive ? (case_sensitive => $case_sensitive) : (),
-            $block ? (block => $block) : (),
-        ),
-    },
     CODE => sub {
         my ($self, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
@@ -173,8 +162,17 @@ sub _create_rule {
     my ($self, $stage, $matcher, $block) = @_;
 
     my $rule_creator;
-    $rule_creator   = $rule_creators{empty} if $matcher eq '';
-    $rule_creator ||= $rule_creators{ ref $matcher };
+
+    if ($matcher eq '') {
+        $rule_creator = $rule_creators{empty};
+    }
+    elsif (!ref($matcher)) {
+        $rule_creator = $rule_creators{ARRAY};
+        $matcher = [$matcher];
+    }
+    else {
+        $rule_creator = $rule_creators{ ref $matcher };
+    }
 
     $rule_creator or die "I don't know how to create a rule for type $matcher";
 
