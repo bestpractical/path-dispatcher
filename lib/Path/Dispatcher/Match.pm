@@ -45,7 +45,7 @@ sub run {
     my $self = shift;
     my @args = @_;
 
-    local $_ = $self->path->path;
+    local $_ = $self->path;
 
     if ($self->set_number_vars) {
         return $self->run_with_number_vars(

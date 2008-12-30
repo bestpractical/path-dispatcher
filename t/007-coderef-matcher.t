@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Path::Dispatcher;
 
 my (@matches, @calls);
@@ -18,4 +18,7 @@ $dispatcher->run('foobar');
 
 is_deeply([splice @matches], ['foobar']);
 is_deeply([splice @calls], [ [] ]);
+
+$dispatcher->run('other');
+is($matches[0]->path, 'other');
 

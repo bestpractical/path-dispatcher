@@ -81,7 +81,7 @@ sub trace {
            && $level < $args{level};
 
     my $match = $args{match};
-    my $path  = $match ? $match->path->path : $args{path}->path;
+    my $path  = $match ? $match->path : $args{path};
 
     # name
     my $trace = '';

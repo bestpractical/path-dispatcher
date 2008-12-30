@@ -13,7 +13,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    local $_ = $path->path;
+    local $_ = $path;
     return $self->matcher->($path);
 }
 

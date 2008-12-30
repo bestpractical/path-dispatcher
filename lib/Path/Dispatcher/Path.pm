@@ -3,6 +3,8 @@ package Path::Dispatcher::Path;
 use Moose;
 use MooseX::AttributeHelpers;
 
+use overload q{""} => sub { shift->path };
+
 has path => (
     is        => 'rw',
     isa       => 'Str',
