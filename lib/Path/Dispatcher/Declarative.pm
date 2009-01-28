@@ -126,7 +126,7 @@ sub build_sugar {
 
 my %rule_creators = (
     ARRAY => sub {
-        my ($self, $tokens, $block) = @_;
+        my ($self, $stage, $tokens, $block) = @_;
         my $case_sensitive = $self->case_sensitive_tokens;
 
         Path::Dispatcher::Rule::Tokens->new(
@@ -137,21 +137,21 @@ my %rule_creators = (
         ),
     },
     CODE => sub {
-        my ($self, $matcher, $block) = @_;
+        my ($self, $stage, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
             matcher => $matcher,
             $block ? (block => $block) : (),
         ),
     },
     Regexp => sub {
-        my ($self, $regex, $block) = @_;
+        my ($self, $stage, $regex, $block) = @_;
         Path::Dispatcher::Rule::Regex->new(
             regex => $regex,
             $block ? (block => $block) : (),
         ),
     },
     empty => sub {
-        my ($self, $undef, $block) = @_;
+        my ($self, $stage, $undef, $block) = @_;
         Path::Dispatcher::Rule::Empty->new(
             $block ? (block => $block) : (),
         ),
@@ -176,7 +176,7 @@ sub _create_rule {
 
     $rule_creator or die "I don't know how to create a rule for type $matcher";
 
-    return $rule_creator->($self, $matcher, $block);
+    return $rule_creator->($self, $stage, $matcher, $block);
 }
 
 sub _add_rule {
