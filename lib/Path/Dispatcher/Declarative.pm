@@ -136,6 +136,23 @@ my %rule_creators = (
             $block ? (block => $block) : (),
         ),
     },
+    HASH => sub {
+        my ($self, $stage, $metadata_matchers, $block) = @_;
+
+        if (keys %$metadata_matchers == 1) {
+            my ($field) = keys %$metadata_matchers;
+            my ($value) = values %$metadata_matchers;
+            my $matcher = $self->_create_rule($stage, $value);
+
+            return Path::Dispatcher::Rule::Metadata->new(
+                field   => $field,
+                matcher => $matcher,
+                $block ? (block => $block) : (),
+            );
+        }
+
+        die "Doesn't support multiple metadata rules yet";
+    },
     CODE => sub {
         my ($self, $stage, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
