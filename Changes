@@ -1,13 +1,13 @@
 Revision history for Path-Dispatcher
 
-0.07
+0.07 Wed Jan 28 01:39:37 2009
         Paths are now boxed with the new Path::Dispatcher::Path.
 
         New rule type "Intersection" which matches only when each of its
         subrules match.
 
         New rule type "Metadata" which matches the optional metadata (a hash)
-        of the path.
+        of the path. The sugar for this is: on { foo => "bar" }
 
         New rule type "Eq" which just does basic string equality.
 
