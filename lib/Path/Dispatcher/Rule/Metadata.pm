@@ -1,6 +1,5 @@
 package Path::Dispatcher::Rule::Metadata;
 use Moose;
-use MooseX::AttributeHelpers;
 extends 'Path::Dispatcher::Rule';
 
 has field => (

@@ -1,6 +1,5 @@
 package Path::Dispatcher::Path;
 use Moose;
-use MooseX::AttributeHelpers;
 
 use overload q{""} => sub { shift->path };
 
@@ -11,13 +10,9 @@ has path => (
 );
 
 has metadata => (
-    metaclass => 'Collection::Hash',
     is        => 'rw',
     isa       => 'HashRef',
     predicate => 'has_metadata',
-    provides  => {
-        get => 'get_metadata',
-    },
 );
 
 # allow Path::Dispatcher::Path->new($path)
@@ -37,6 +32,13 @@ sub clone_path {
     my $path = shift;
 
     return $self->meta->clone_instance($self, path => $path, @_);
+}
+
+sub get_metadata {
+    my $self = shift;
+    my $name = shift;
+
+    return $self->metadata->{$name};
 }
 
 __PACKAGE__->meta->make_immutable;

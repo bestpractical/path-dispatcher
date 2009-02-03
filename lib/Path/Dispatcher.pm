@@ -1,6 +1,5 @@
 package Path::Dispatcher;
 use Moose;
-use MooseX::AttributeHelpers;
 
 our $VERSION = '0.08';
 

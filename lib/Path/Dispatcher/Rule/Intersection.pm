@@ -1,6 +1,5 @@
 package Path::Dispatcher::Rule::Intersection;
 use Moose;
-use MooseX::AttributeHelpers;
 extends 'Path::Dispatcher::Rule';
 
 with 'Path::Dispatcher::Role::Rules';

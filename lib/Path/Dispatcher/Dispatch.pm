@@ -1,21 +1,27 @@
 package Path::Dispatcher::Dispatch;
 use Moose;
-use MooseX::AttributeHelpers;
 
 use Path::Dispatcher::Match;
 
 has _matches => (
-    metaclass => 'Collection::Array',
     is        => 'rw',
     isa       => 'ArrayRef[Path::Dispatcher::Match]',
     default   => sub { [] },
-    provides  => {
-        push     => 'add_match',
-        elements => 'matches',
-        count    => 'has_match',
-        first    => 'first_match',
-    },
 );
+
+sub add_match {
+    my $self = shift;
+
+    $_->isa('Path::Dispatcher::Match')
+        or confess "$_ is not a Path::Dispatcher::Match"
+            for @_;
+
+    push @{ $self->{matches} }, @_;
+}
+
+sub matches     { @{ shift->{matches} } }
+sub has_match   { scalar @{ shift->{matches} } }
+sub first_match { shift->{matches}[0] }
 
 # aliases
 __PACKAGE__->meta->add_method(add_matches => __PACKAGE__->can('add_match'));
