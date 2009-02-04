@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule::Regex;
-use Moose;
+use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has regex => (
@@ -28,7 +28,7 @@ sub _match {
 sub readable_attributes { shift->regex }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

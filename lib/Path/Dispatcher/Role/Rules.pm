@@ -1,9 +1,9 @@
 package Path::Dispatcher::Role::Rules;
-use Moose::Role;
+use Any::Moose '::Role';
 
 has _rules => (
     is       => 'rw',
-    isa      => 'ArrayRef[Path::Dispatcher::Rule]',
+    isa      => 'ArrayRef',
     init_arg => 'rules',
     default  => sub { [] },
 );
@@ -19,6 +19,8 @@ sub add_rule {
 }
 
 sub rules { @{ shift->{_rules} } }
+
+no Any::Moose;
 
 1;
 

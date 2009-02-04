@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule::Eq;
-use Moose;
+use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has string => (
@@ -23,7 +23,7 @@ sub _match {
 sub readable_attributes { q{"} . shift->string . q{"} }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

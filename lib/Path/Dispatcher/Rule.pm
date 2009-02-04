@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule;
-use Moose;
+use Any::Moose;
 
 use Path::Dispatcher::Match;
 
@@ -120,7 +120,7 @@ sub trace {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 # don't require others to load our subclasses explicitly
 require Path::Dispatcher::Rule::Always;

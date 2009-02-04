@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule::Metadata;
-use Moose;
+use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has field => (
@@ -34,7 +34,7 @@ sub readable_attributes {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

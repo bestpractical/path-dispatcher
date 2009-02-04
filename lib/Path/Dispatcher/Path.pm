@@ -1,5 +1,5 @@
 package Path::Dispatcher::Path;
-use Moose;
+use Any::Moose;
 
 use overload q{""} => sub { shift->path };
 
@@ -42,7 +42,7 @@ sub get_metadata {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

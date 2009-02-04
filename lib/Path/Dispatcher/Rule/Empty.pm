@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule::Empty;
-use Moose;
+use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 sub _match {
@@ -10,7 +10,7 @@ sub _match {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

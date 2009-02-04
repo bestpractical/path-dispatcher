@@ -1,5 +1,5 @@
 package Path::Dispatcher::Rule::Dispatch;
-use Moose;
+use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has dispatcher => (
@@ -19,7 +19,7 @@ sub match {
 sub readable_attributes { shift->dispatcher->name }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

@@ -1,5 +1,5 @@
 package Path::Dispatcher::Match;
-use Moose;
+use Any::Moose;
 
 use Path::Dispatcher::Path;
 use Path::Dispatcher::Rule;
@@ -79,7 +79,7 @@ sub run_with_number_vars {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

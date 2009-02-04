@@ -1,5 +1,5 @@
 package Path::Dispatcher;
-use Moose;
+use Any::Moose;
 
 our $VERSION = '0.08';
 
@@ -79,7 +79,7 @@ sub import {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 

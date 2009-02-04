@@ -1,11 +1,11 @@
 package Path::Dispatcher::Dispatch;
-use Moose;
+use Any::Moose;
 
 use Path::Dispatcher::Match;
 
 has _matches => (
     is        => 'rw',
-    isa       => 'ArrayRef[Path::Dispatcher::Match]',
+    isa       => 'ArrayRef',
     default   => sub { [] },
 );
 
@@ -59,7 +59,7 @@ sub run {
 }
 
 __PACKAGE__->meta->make_immutable;
-no Moose;
+no Any::Moose;
 
 1;
 
