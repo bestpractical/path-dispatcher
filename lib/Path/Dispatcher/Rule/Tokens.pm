@@ -1,36 +1,10 @@
 package Path::Dispatcher::Rule::Tokens;
 use Moose;
-use Moose::Util::TypeConstraints;
 extends 'Path::Dispatcher::Rule';
-
-# a token may be
-#   - a string
-#   - a regular expression
-
-# this will be extended to add
-#   - an array reference containing (alternations)
-#     - strings
-#     - regular expressions
-
-my $Str      = find_type_constraint('Str');
-my $Regex    = find_type_constraint('RegexpRef');
-my $ArrayRef = find_type_constraint('ArrayRef');
-
-my $Alternation;
-$Alternation = subtype as 'Defined'
-     => where {
-         return $Str->check($_) || $Regex->check($_) if ref($_) ne 'ARRAY';
-         $Alternation->check($_) or return for @$_;
-         1
-     };
-
-subtype 'Path::Dispatcher::Tokens'
-     => as 'ArrayRef'
-     => where { $Alternation->check($_) or return for @$_; 1 };
 
 has tokens => (
     is         => 'rw',
-    isa        => 'Path::Dispatcher::Tokens',
+    isa        => 'ArrayRef',
     auto_deref => 1,
     required   => 1,
 );
@@ -91,16 +65,16 @@ sub _match_token {
     my $got      = shift;
     my $expected = shift;
 
-    if ($ArrayRef->check($expected)) {
+    if (!ref($expected)) {
+        ($got, $expected) = (lc $got, lc $expected) if !$self->case_sensitive;
+        return $got eq $expected;
+    }
+    elsif (ref($expected) eq 'ARRAY') {
         for my $alternative (@$expected) {
             return 1 if $self->_match_token($got, $alternative);
         }
     }
-    elsif ($Str->check($expected)) {
-        ($got, $expected) = (lc $got, lc $expected) if !$self->case_sensitive;
-        return $got eq $expected;
-    }
-    elsif ($Regex->check($expected)) {
+    elsif (ref($expected) eq 'Regexp') {
         return $got =~ $expected;
     }
     else {
@@ -166,7 +140,6 @@ after trace => sub {
 
 __PACKAGE__->meta->make_immutable;
 no Moose;
-no Moose::Util::TypeConstraints;
 
 1;
 
