@@ -84,4 +84,4 @@ eval {
         ),
     );
 };
-like($@, qr/Attribute \(predicate\) does not pass the type constraint because: This rule \(Path::Dispatcher::Rule::Tokens=HASH\(0x\w+\)\) does not match just prefixes!/, "predicate MUST match just a prefix");
+like($@, qr/Attribute \(predicate\) does not pass the type constraint /, "predicate MUST match just a prefix");
