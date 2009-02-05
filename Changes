@@ -3,6 +3,8 @@ Revision history for Path-Dispatcher
 0.08
         Inline uses of MooseX::AttributeHelpers.
 
+        Now use "Any::Moose" (basically Squirrel done right)
+
 0.07 Wed Jan 28 01:39:37 2009
         Paths are now boxed with the new Path::Dispatcher::Path.
 
