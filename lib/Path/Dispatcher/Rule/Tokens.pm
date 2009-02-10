@@ -119,9 +119,11 @@ sub readable_attributes {
     return $deserialize->($self->tokens);
 }
 
-after trace => sub {
+sub trace {
     my $self = shift;
     my %args = @_;
+
+    $self->SUPER::trace(@_);
 
     return if $ENV{'PATH_DISPATCHER_TRACE'} < 3;
 

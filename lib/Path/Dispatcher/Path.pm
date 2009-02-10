@@ -16,15 +16,14 @@ has metadata => (
 );
 
 # allow Path::Dispatcher::Path->new($path)
-around BUILDARGS => sub {
-    my $orig = shift;
+sub BUILDARGS {
     my $self = shift;
 
     if (@_ == 1 && !ref($_[0])) {
         unshift @_, 'path';
     }
 
-    $self->$orig(@_);
+    $self->SUPER::BUILDARGS(@_);
 };
 
 sub clone_path {
