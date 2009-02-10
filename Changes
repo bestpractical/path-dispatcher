@@ -1,6 +1,7 @@
 Revision history for Path-Dispatcher
 
-0.09
+0.09 Mon Feb 9 21:12:18 2009
+        Avoid using method modifiers since it's potentially another dep.
 
 0.08 Thu Feb 5 12:15:38 2009
         Inline uses of MooseX::AttributeHelpers.
