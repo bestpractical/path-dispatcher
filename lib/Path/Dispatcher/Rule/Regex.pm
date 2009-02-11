@@ -12,9 +12,7 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    return unless $path->path =~ $self->regex;
-
-    my @matches = map { substr($path->path, $-[$_], $+[$_] - $-[$_]) } 1 .. $#-;
+    return unless my @matches = $path->path =~ $self->regex;
 
     # if $' is in the program at all, then it slows down every single regex
     # we only want to include it if we have to
