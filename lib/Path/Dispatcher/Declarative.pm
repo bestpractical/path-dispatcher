@@ -244,7 +244,7 @@ Path::Dispatcher::Declarative - sugary dispatcher
 =head1 SYNOPSIS
 
     package MyApp::Dispatcher;
-    use Path::Dispatcher::Declarative;
+    use Path::Dispatcher::Declarative -base;
 
     on score => sub { show_score() };
     
