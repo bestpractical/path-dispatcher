@@ -24,7 +24,7 @@ sub _next_rule () {
 }
 
 sub _last_rule () {
-    die "Path::Dispatcher abort rule\n";
+    die "Path::Dispatcher abort\n";
 }
 
 sub import {
