@@ -333,6 +333,8 @@ This is creates a L<Path::Dispatcher::Rule::CodeRef> rule.
 Creates a L<Path::Dispatcher::Rule::Under> rule. The contents of the coderef
 should be nothing other L</on> and C<under> calls.
 
+=cut
+
 #=head2 then sub { }
 
 #Creates a L<Path::Dispatcher::Rule::Always> rule that will continue on to the
@@ -356,6 +358,4 @@ should be nothing other L</on> and C<under> calls.
 #            print "score:\n";
 #            ...
 #        };
-
-=cut
 
