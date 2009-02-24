@@ -87,7 +87,7 @@ __END__
 
 =head1 NAME
 
-Path::Dispatcher - flexible dispatch
+Path::Dispatcher - flexible and extensible dispatch
 
 =head1 SYNOPSIS
 
