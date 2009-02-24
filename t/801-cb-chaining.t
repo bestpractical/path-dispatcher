@@ -11,15 +11,9 @@ do {
     use Path::Dispatcher::Declarative -base;
 
     under show => sub {
-        $Path::Dispatcher::Declarative::UNDER_RULE->add_rule(
-            Path::Dispatcher::Rule::Always->new(
-                stage => 'on',
-                block  => sub {
-                    push @result, "Displaying";
-                    next_rule;
-                },
-            ),
-        );
+        then {
+            push @result, "Displaying";
+        };
         on inventory => sub {
             push @result, "inventory";
         };
