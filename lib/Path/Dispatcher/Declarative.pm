@@ -19,11 +19,11 @@ my $exporter = Sub::Exporter::build_exporter({
 sub token_delimiter { ' ' }
 sub case_sensitive_tokens { undef }
 
-sub _next_rule() {
+sub _next_rule () {
     die "Path::Dispatcher next rule\n";
 }
 
-sub _last_rule() {
+sub _last_rule () {
     die "Path::Dispatcher abort rule\n";
 }
 
@@ -96,11 +96,11 @@ sub build_sugar {
         after => sub {
             $into->_add_rule('after_on', @_);
         },
-        then => sub (;&) {
+        then => sub (&) {
             my $block = shift;
             my $rule = Path::Dispatcher::Rule::Always->new(
                 stage => 'on',
-                block  => sub {
+                block => sub {
                     $block->(@_);
                     _next_rule;
                 },
