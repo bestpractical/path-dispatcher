@@ -1,6 +1,9 @@
 Revision history for Path-Dispatcher
 
 0.10
+        Added slash-path-delimeter recipe
+        Added chaining recipe
+        (tenative) Added 'then' sugar to ::Declarative
 
 0.09 Mon Feb 9 21:12:18 2009
         Avoid using method modifiers since it's potentially another dep.
