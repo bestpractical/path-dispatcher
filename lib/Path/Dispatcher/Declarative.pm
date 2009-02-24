@@ -333,29 +333,29 @@ This is creates a L<Path::Dispatcher::Rule::CodeRef> rule.
 Creates a L<Path::Dispatcher::Rule::Under> rule. The contents of the coderef
 should be nothing other L</on> and C<under> calls.
 
+=head2 then sub { }
+
+Creates a L<Path::Dispatcher::Rule::Always> rule that will continue on to the
+next rule via C<next_rule>
+
+The only argument is a coderef that processes normally (like L<on>).
+
+NOTE: You *can* avoid running a following rule by using C<abort_rule>.
+
+An example:
+
+    under show => sub {
+        then {
+            print "Displaying ";
+        };
+        on inventory => sub {
+            print "inventory:\n";
+            ...
+        };
+        on score => sub {
+            print "score:\n";
+            ...
+        };
+
 =cut
-
-#=head2 then sub { }
-
-#Creates a L<Path::Dispatcher::Rule::Always> rule that will continue on to the
-#next rule via C<next_rule>
-
-#The only argument is a coderef that processes normally (like L<on>)
-
-#NOTE: You *can* avoid running a following rule by uysing C<abort_rule>
-
-#An example:
-
-#    under show => sub {
-#        then {
-#            print "Displaying ";
-#        };
-#        on inventory => sub {
-#            print "inventory:\n";
-#            ...
-#        };
-#        on score => sub {
-#            print "score:\n";
-#            ...
-#        };
 
