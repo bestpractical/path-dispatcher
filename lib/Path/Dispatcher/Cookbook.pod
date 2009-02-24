@@ -17,21 +17,15 @@ In your Dispatcher object, define the C<token_delimiter> subroutine to return a 
 
 =head2 How can I do rule chaining (like in Catalyst)?
 
-You can use a L<Path::Dispatcher::Rule::Always> rule in combination with C<next_rule> to get chaining behavior:
+You can use a C<then> rule approximate chaining behavior:
 
     package MyDispatcher;
     use Path::Dispatcher::Declarative -base;
 
     under show => sub {
-        $Path::Dispatcher::Declarative::UNDER_RULE->add_rule(
-            Path::Dispatcher::Rule::Always->new(
-                stage => 'on',
-                block  => sub {
-                    print "Displaying ";
-                    next_rule;
-                },
-            ),
-        );
+        then {
+            print "Displaying ";
+        };
         on inventory => sub {
             print "inventory:\n";
             ...
@@ -47,7 +41,5 @@ You can use a L<Path::Dispatcher::Rule::Always> rule in combination with C<next_
     MyDispatcher->run("display inventory"); # "Displaying inventory\n ..."
 
     MyDispatcher->run("display score"); # "Displaying score\n ..."
-
-It's a little bit ugly, but it works
 
 =cut
