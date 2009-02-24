@@ -19,6 +19,14 @@ my $exporter = Sub::Exporter::build_exporter({
 sub token_delimiter { ' ' }
 sub case_sensitive_tokens { undef }
 
+sub _next_rule() {
+    die "Path::Dispatcher next rule\n";
+}
+
+sub _last_rule() {
+    die "Path::Dispatcher abort rule\n";
+}
+
 sub import {
     my $self = shift;
     my $pkg  = caller;
@@ -88,6 +96,17 @@ sub build_sugar {
         after => sub {
             $into->_add_rule('after_on', @_);
         },
+        then => sub (;&) {
+            my $block = shift;
+            my $rule = Path::Dispatcher::Rule::Always->new(
+                stage => 'on',
+                block  => sub {
+                    $block->(@_);
+                    _next_rule;
+                },
+            );
+            $into->_add_rule($rule);
+        },
         under => sub {
             my ($matcher, $rules) = @_;
 
@@ -119,8 +138,8 @@ sub build_sugar {
 
             $into->_add_rule($redispatch);
         },
-        next_rule => sub { die "Path::Dispatcher next rule\n" },
-        last_rule => sub { die "Path::Dispatcher abort\n" },
+        next_rule => \&_next_rule,
+        last_rule => \&_last_rule,
     };
 }
 
@@ -313,6 +332,30 @@ This is creates a L<Path::Dispatcher::Rule::CodeRef> rule.
 
 Creates a L<Path::Dispatcher::Rule::Under> rule. The contents of the coderef
 should be nothing other L</on> and C<under> calls.
+
+#=head2 then sub { }
+
+#Creates a L<Path::Dispatcher::Rule::Always> rule that will continue on to the
+#next rule via C<next_rule>
+
+#The only argument is a coderef that processes normally (like L<on>)
+
+#NOTE: You *can* avoid running a following rule by uysing C<abort_rule>
+
+#An example:
+
+#    under show => sub {
+#        then {
+#            print "Displaying ";
+#        };
+#        on inventory => sub {
+#            print "inventory:\n";
+#            ...
+#        };
+#        on score => sub {
+#            print "score:\n";
+#            ...
+#        };
 
 =cut
 

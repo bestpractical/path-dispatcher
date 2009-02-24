@@ -1,0 +1,53 @@
+=pod
+
+=head1 NAME
+
+Path::Dispatcher::Cookbook - A cookbook for Path::Dispatcher
+
+=head1 RECIPES
+
+=head2 How can I change the path delimiter from a space ' ' to a slash '/'?
+
+In your Dispatcher object, define the C<token_delimiter> subroutine to return a slash '/':
+
+    package MyDispatcher;
+    use Path::Dispatcher::Declarative -base;
+
+    sub token_delimiter { '/' } # Or whatever delimiter you want to use
+
+=head2 How can I do rule chaining (like in Catalyst)?
+
+You can use a L<Path::Dispatcher::Rule::Always> rule in combination with C<next_rule> to get chaining behavior:
+
+    package MyDispatcher;
+    use Path::Dispatcher::Declarative -base;
+
+    under show => sub {
+        $Path::Dispatcher::Declarative::UNDER_RULE->add_rule(
+            Path::Dispatcher::Rule::Always->new(
+                stage => 'on',
+                block  => sub {
+                    print "Displaying ";
+                    next_rule;
+                },
+            ),
+        );
+        on inventory => sub {
+            print "inventory:\n";
+            ...
+        };
+        on score => sub {
+            print "score:\n";
+            ...
+        };
+    };
+
+    package main;
+
+    MyDispatcher->run("display inventory"); # "Displaying inventory\n ..."
+
+    MyDispatcher->run("display score"); # "Displaying score\n ..."
+
+It's a little bit ugly, but it works
+
+=cut
