@@ -24,3 +24,25 @@ no Any::Moose;
 
 1;
 
+__END__
+
+=head1 NAME
+
+Path::Dispatcher::Role::Rules - "has a list of rules"
+
+=head1 DESCRIPTION
+
+Classes that compose this role get the following things:
+
+=head1 ATTRIBUTES
+
+=head2 _rules
+
+=head1 METHODS
+
+=head2 rules
+
+=head2 add_rule
+
+=cut
+
