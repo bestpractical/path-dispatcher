@@ -312,7 +312,7 @@ This is creates a L<Path::Dispatcher::Rule::CodeRef> rule.
 =head2 under path => sub {}
 
 Creates a L<Path::Dispatcher::Rule::Under> rule. The contents of the coderef
-should be other L</on> and C<under> calls.
+should be nothing other L</on> and C<under> calls.
 
 =cut
 
