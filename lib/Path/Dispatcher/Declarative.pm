@@ -107,6 +107,14 @@ sub build_sugar {
             );
             $into->_add_rule($rule);
         },
+        chain => sub (&) {
+            my $block = shift;
+            my $rule = Path::Dispatcher::Rule::Chain->new(
+                stage => 'on',
+                block => $block,
+            );
+            $into->_add_rule($rule);
+        },
         under => sub {
             my ($matcher, $rules) = @_;
 
@@ -340,7 +348,7 @@ next rule via C<next_rule>
 
 The only argument is a coderef that processes normally (like L<on>).
 
-NOTE: You *can* avoid running a following rule by using C<abort_rule>.
+NOTE: You *can* avoid running a following rule by using C<last_rule>.
 
 An example:
 

@@ -124,6 +124,7 @@ no Any::Moose;
 
 # don't require others to load our subclasses explicitly
 require Path::Dispatcher::Rule::Always;
+require Path::Dispatcher::Rule::Chain;
 require Path::Dispatcher::Rule::CodeRef;
 require Path::Dispatcher::Rule::Dispatch;
 require Path::Dispatcher::Rule::Empty;

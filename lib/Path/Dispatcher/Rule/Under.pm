@@ -24,7 +24,17 @@ sub match {
 
     my $new_path = $path->clone_path($prefix_match->leftover);
 
-    return grep { defined } map { $_->match($new_path) } $self->rules;
+    # Pop off @matches until we have a last rule that is not ::Chain
+    #
+    # A better technique than isa might be to use the concept of 'endpoint', 'midpoint', or 'anypoint' rules and
+    # add a method to ::Rule that lets evaluate whether any rule is of the right kind (i.e. ->is_endpoint)
+    #
+    # Because the checking for ::Chain endpointedness is here, this means that outside of an ::Under, ::Chain behaves like
+    # an ::Always (one that will always trigger next_rule if it's block is ran)
+    #
+    return unless my @matches = grep { defined } map { $_->match($new_path) } $self->rules;
+    pop @matches while @matches && $matches[-1]->rule->isa('Path::Dispatcher::Rule::Chain'); 
+    return @matches;
 }
 
 sub readable_attributes { shift->predicate->readable_attributes }

@@ -53,6 +53,10 @@ sub dispatch_rule {
     my %args = @_;
 
     my @matches = $args{rule}->match($args{path});
+
+    # Support ::Chain here? Probably not. As ::Chain doesn't make sense unless it is within an ::Under
+#    return if $matches[-1]->rule->isa('Path::Dispatcher::Rule::Chain'); 
+    
     $args{dispatch}->add_matches(@matches);
 
     return @matches;
