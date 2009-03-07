@@ -1,6 +1,6 @@
 package Path::Dispatcher::Rule::Chain;
 use Any::Moose;
-extends 'Path::Dispatcher::Rule';
+extends 'Path::Dispatcher::Rule::Always';
 
 sub BUILD {
     my $self = shift;
@@ -12,12 +12,6 @@ sub BUILD {
             die "Path::Dispatcher next rule\n"; # FIXME From Path::Dispatcher::Declarative... maybe this should go in a common place?
         });
     }
-}
-
-sub _match {
-    my $self = shift;
-    my $path = shift;
-    return (1, $path->path);
 }
 
 sub readable_attributes { 'chain' }
