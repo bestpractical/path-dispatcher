@@ -8,22 +8,35 @@ Path::Dispatcher::Cookbook - A cookbook for Path::Dispatcher
 
 =head2 How can I change the path delimiter from a space ' ' to a slash '/'?
 
-In your Dispatcher object, define the C<token_delimiter> subroutine to return a slash '/':
+When importing the L<Path::Dispatcher::Declarative> sugar, specify the
+C<token_delimiter> option for the C<default> group.
 
-    package MyDispatcher;
-    use Path::Dispatcher::Declarative -base;
+    package My::Dispatcher;
+    use Path::Dispatcher::Declarative -base, -default => {
+        token_delimiter => '/',
+    };
 
-    sub token_delimiter { '/' } # Or whatever delimiter you want to use
+Or define a subclass of L<Path::Dispatcher::Declarative> with a
+C<token_delimiter> method:
+
+    package Web::Dispatcher;
+    use base 'Path::Dispatcher::Declarative';
+    
+    use constant token_delimiter => '/';
+    
+    
+    package My::Other::Dispatcher;
+    use Web::Dispatcher -base;
 
 =head2 How can I do rule chaining (like in Catalyst)?
 
-You can use a C<then> rule approximate chaining behavior:
+You can use a C<chain> rule approximate chaining behavior:
 
     package MyDispatcher;
     use Path::Dispatcher::Declarative -base;
 
     under show => sub {
-        then {
+        chain {
             print "Displaying ";
         };
         on inventory => sub {
@@ -43,3 +56,4 @@ You can use a C<then> rule approximate chaining behavior:
     MyDispatcher->run("display score"); # "Displaying score\n ..."
 
 =cut
+
