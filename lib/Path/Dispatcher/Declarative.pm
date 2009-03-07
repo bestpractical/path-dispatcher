@@ -4,6 +4,7 @@ use warnings;
 use Path::Dispatcher;
 use Path::Dispatcher::Builder;
 
+use constant dispatcher_class => 'Path::Dispatcher';
 use constant builder_class => 'Path::Dispatcher::Builder';
 
 use Sub::Exporter;
@@ -44,7 +45,7 @@ sub build_sugar {
 
     my $into = $CALLER;
 
-#    my $dispatcher = Path::Dispatcher->new(
+#    my $dispatcher = $class->dispatcher_class->new(
 #        name => $into,
 #    );
 #    my $builder = $class->builder_class->new(
@@ -58,7 +59,7 @@ sub build_sugar {
     my ($builder, $dispatcher);
     my $lazy_builder = sub {
         return $builder if $builder;
-        $dispatcher = Path::Dispatcher->new(
+        $dispatcher = $class->dispatcher_class->new(
             name => $into,
         );
         $builder = $class->builder_class->new(
