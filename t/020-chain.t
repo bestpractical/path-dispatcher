@@ -1,8 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-#use Test::More tests => 15;
-use Test::More; plan qw/no_plan/;
+use Test::More tests => 40;
 use Path::Dispatcher;
 
 my $predicate = Path::Dispatcher::Rule::Tokens->new(
@@ -10,8 +9,7 @@ my $predicate = Path::Dispatcher::Rule::Tokens->new(
     prefix => 1,
 );
 
-my $chain = Path::Dispatcher::Rule::Chain->new(
-);
+my $chain = Path::Dispatcher::Rule::Chain->new;
 
 my $create = Path::Dispatcher::Rule::Tokens->new(
     tokens => ['create'],

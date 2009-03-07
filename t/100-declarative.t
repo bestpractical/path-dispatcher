@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use Test::More tests => 11;
-#use Test::More plan => qw/no_plan/;
 
 my @calls;
 
