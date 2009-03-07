@@ -23,11 +23,11 @@ has token_delimiter => (
     default     => ' ',
 );
 
-sub _next_rule () {
+sub next_rule () {
     die "Path::Dispatcher next rule\n";
 }
 
-sub _last_rule () {
+sub last_rule () {
     die "Path::Dispatcher abort\n";
 }
 
@@ -72,7 +72,7 @@ sub then {
     my $rule = Path::Dispatcher::Rule::Always->new(
         block => sub {
             $block->(@_);
-            _next_rule;
+            next_rule;
         },
     );
     $self->_add_rule($rule);

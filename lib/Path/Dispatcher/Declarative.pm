@@ -15,9 +15,6 @@ my $exporter = Sub::Exporter::build_exporter({
     },
 });
 
-*_next_rule = \&Path::Dispatcher::Builder::_next_rule;
-*_last_rule = \&Path::Dispatcher::Builder::_last_rule;
-
 sub token_delimiter { ' ' }
 sub case_sensitive_tokens { undef }
 
@@ -84,8 +81,8 @@ sub build_sugar {
         chain           => sub (&) { $lazy_builder->()->chain(@_) },
         under           => sub { $lazy_builder->()->under(@_) },
         redispatch_to   => sub { $lazy_builder->()->redispatch_to(@_) },
-        next_rule       => \&_next_rule,
-        last_rule       => \&_last_rule,
+        next_rule       => sub { $lazy_builder->()->next_rule(@_) },
+        last_rule       => sub { $lazy_builder->()->last_rule(@_) },
     };
 }
 
