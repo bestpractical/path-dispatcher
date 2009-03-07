@@ -24,7 +24,7 @@ sub import {
     my $self = shift;
     my $pkg  = caller;
 
-    my @args = grep { !/^-[bB]ase$/ } @_;
+    my @args = grep { !/^-base$/i } @_;
 
     # just loading the class..
     return if @args == @_;
@@ -44,14 +44,7 @@ sub build_sugar {
 
     my $into = $CALLER;
 
-    for my $option ('token_delimiter', 'case_sensitive_tokens') {
-        next if exists $arg->{$option};
-
-        my $default = $class->$option;
-        next unless defined $default; # use the builder's default
-
-        $arg->{$option} = $class->$option;
-    }
+    $class->populate_defaults($arg);
 
     my $dispatcher = $class->dispatcher_class->new(name => $into);
 
@@ -79,6 +72,21 @@ sub build_sugar {
         run      => sub { shift if caller ne $into; $builder->run(@_) },
     };
 }
+
+sub populate_defaults {
+    my $class = shift;
+    my $arg  = shift;
+
+    for my $option ('token_delimiter', 'case_sensitive_tokens') {
+        next if exists $arg->{$option};
+
+        my $default = $class->$option;
+        next unless defined $default; # use the builder's default
+
+        $arg->{$option} = $class->$option;
+    }
+}
+
 
 1;
 
