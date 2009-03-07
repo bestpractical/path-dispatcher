@@ -29,7 +29,7 @@ sub dispatch {
     my $path = shift;
 
     # Automatically box paths
-    unless (blessed($path) && $path->isa('Path::Dispatcher::Rule')) {
+    unless (blessed($path) && $path->isa('Path::Dispatcher::Path')) {
         $path = $self->path_class->new(
             path => $path,
         );
