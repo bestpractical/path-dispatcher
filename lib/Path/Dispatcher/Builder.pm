@@ -235,6 +235,7 @@ sub _add_rule {
 }
 
 __PACKAGE__->meta->make_immutable;
+no Any::Moose;
 
 1;
 
