@@ -45,8 +45,12 @@ sub build_sugar {
     my $into = $CALLER;
 
     for my $option ('token_delimiter', 'case_sensitive_tokens') {
-        $arg->{$option} = $class->$option
-            if !exists($arg->{$option});
+        next if exists $arg->{$option};
+
+        my $default = $class->$option;
+        next unless defined $default; # use the builder's default
+
+        $arg->{$option} = $class->$option;
     }
 
     my $dispatcher = $class->dispatcher_class->new(name => $into);

@@ -14,7 +14,7 @@ has dispatcher => (
 has case_sensitive_tokens => (
     is          => 'rw',
     isa         => 'Bool',
-    default     => 0,
+    default     => 1,
 );
 
 has token_delimiter => (
