@@ -32,14 +32,6 @@ has set_number_vars => (
     default => sub { ref(shift->result) eq 'ARRAY' },
 );
 
-# If we're a before/after (qualified) rule, then yeah, we want to continue
-# dispatching. If we're an "on" (unqualified) rule, then no, you only get one.
-has ends_dispatch => (
-    is      => 'rw',
-    isa     => 'Bool',
-    default => 1,
-);
-
 sub run {
     my $self = shift;
     my @args = @_;

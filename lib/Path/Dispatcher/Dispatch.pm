@@ -42,8 +42,7 @@ sub run {
 
             push @results, scalar $match->run(@args);
 
-            die "Path::Dispatcher abort\n"
-                if $match->ends_dispatch;
+            die "Path::Dispatcher abort\n";
         };
 
         if ($@) {
@@ -103,7 +102,7 @@ matched.
 
 =head2 run
 
-Executes matches until a match's C<ends_dispatch> returns true.
+Executes the first match.
 
 Each match's L<Path::Dispatcher::Match/run> method is evaluated in scalar
 context. The return value of this method is a list of these scalars (or the

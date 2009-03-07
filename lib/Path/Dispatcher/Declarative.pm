@@ -80,8 +80,6 @@ sub build_sugar {
 
         rewrite         => sub { $lazy_builder->()->rewrite(@_) },
         on              => sub { $lazy_builder->()->on(@_) },
-        before          => sub { $lazy_builder->()->before(@_) },
-        after           => sub { $lazy_builder->()->after(@_) },
         then            => sub (&) { $lazy_builder->()->then(@_) },
         chain           => sub (&) { $lazy_builder->()->chain(@_) },
         under           => sub { $lazy_builder->()->under(@_) },

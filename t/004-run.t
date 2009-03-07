@@ -27,13 +27,9 @@ $result = $dispatcher->run("foobar");
 is($result, "foobar matched");
 
 my $dispatch = $dispatcher->dispatch("foobar");
-for my $match ($dispatch->matches) {
-    $match->ends_dispatch(0);
-}
-
 $result = $dispatch->run("foobar");
 is($result, "foobar matched");
 
 my @results = $dispatch->run("foobar");
-is_deeply(\@results, ["foobar matched", "foo matched"]);
+is_deeply(\@results, ["foobar matched"]);
 

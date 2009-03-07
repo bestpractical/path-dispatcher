@@ -28,12 +28,6 @@ do {
     # this hack is here because "use" expects there to be a file for the module
     BEGIN { MyFramework::Dispatcher->import("-base") }
 
-    before qr/abort/ => sub {
-        push @calls, 'app before abort';
-        last_rule;
-        push @calls, 'app after abort';
-    };
-
     on qr/next rule/ => sub {
         push @calls, 'app before next_rule';
         next_rule;
@@ -51,7 +45,7 @@ do {
 
 MyApp::Dispatcher->run('abort');
 is_deeply([splice @calls], [
-    'app before abort',
+    'framework on abort',
 ]);
 
 MyApp::Dispatcher->run('next rule');

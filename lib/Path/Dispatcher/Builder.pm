@@ -1,6 +1,9 @@
 package Path::Dispatcher::Builder;
 use Any::Moose;
 
+our $OUTERMOST_DISPATCHER;
+our $UNDER_RULE;
+
 has dispatcher => (
     is          => 'ro',
     isa         => 'Path::Dispatcher',
@@ -19,11 +22,6 @@ has token_delimiter => (
     isa         => 'Str|CodeRef',
     default     => ' ',
 );
-
-no Any::Moose; # We're gonna use before/after below
-
-our $OUTERMOST_DISPATCHER;
-our $UNDER_RULE;
 
 sub _next_rule () {
     die "Path::Dispatcher next rule\n";
@@ -66,16 +64,6 @@ sub rewrite {
 sub on {
     my $self = shift;
     $self->_add_rule('on', @_);
-}
-
-sub before {
-    my $self = shift;
-    $self->_add_rule('before_on', @_);
-}
-
-sub after {
-    my $self = shift;
-    $self->_add_rule('after_on', @_);
 }
 
 sub then {
