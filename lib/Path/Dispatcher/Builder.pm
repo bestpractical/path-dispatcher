@@ -1,8 +1,4 @@
 package Path::Dispatcher::Builder;
-
-use strict;
-use warnings;
-
 use Any::Moose;
 
 has dispatcher => (
@@ -10,9 +6,7 @@ has dispatcher => (
     isa         => 'Path::Dispatcher',
     required    => 1,
     lazy        => 1,
-    default     => sub {
-        return Path::Dispatcher->new
-    },
+    default     => sub { return Path::Dispatcher->new },
 );
 
 has case_sensitive_tokens => (
@@ -26,38 +20,6 @@ has token_delimiter => (
     isa         => 'Str|CodeRef',
     default     => ' ',
 );
-
-#sub token_delimiter {
-#    my $self = shift;
-#    my $value = $self->_token_delimiter;
-#    return ref $value eq 'CODE' ? $value->() : $value;
-#}
-## What the magic with coderefs? Because this is based off of ::Declarative, and the caller might not be available at import
-## time (when the sugar is loaded)
-
-#has case_sensitive_tokens => (
-#    reader    => '_case_sensitive_tokens',
-##    is      => 'rw',
-#    isa         => 'Bool|CodeRef',
-#    default     => 0,
-#);
-#sub case_sensitive_tokens {
-#    my $self = shift;
-#    my $value = $self->_case_sensitive_tokens;
-#    return ref $value eq 'CODE' ? $value->() : $value;
-#}
-
-#has token_delimiter => (
-#    reader    => '_token_delimiter',
-##    is      => 'rw',
-#    isa         => 'Str|CodeRef',
-#    default     => ' ',
-#);
-#sub token_delimiter {
-#    my $self = shift;
-#    my $value = $self->_token_delimiter;
-#    return ref $value eq 'CODE' ? $value->() : $value;
-#}
 
 no Any::Moose; # We're gonna use before/after below
 
@@ -285,6 +247,8 @@ sub _add_rule {
         return $rule, @_;
     }
 }
+
 __PACKAGE__->meta->make_immutable;
 
 1;
+
