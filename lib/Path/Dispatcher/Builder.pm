@@ -221,15 +221,17 @@ sub _add_rule {
                           ? "(" . $UNDER_RULE->name . " - rule $rule_name)"
                           : "(anonymous Under - rule $rule_name)";
 
-            $rule->name($full_name);
+            $rule->name($full_name) unless $rule->has_name;
         }
         else {
             $self->dispatcher->add_rule($rule);
-            $rule->name("(" . $self->dispatcher->name . " - rule $rule_name)");
+            $rule->name("(" . $self->dispatcher->name . " - rule $rule_name)")
+                unless $rule->has_name;
         }
     }
     else {
-        $rule->name($rule_name);
+        $rule->name($rule_name)
+            unless $rule->has_name;
         return $rule, @_;
     }
 }
