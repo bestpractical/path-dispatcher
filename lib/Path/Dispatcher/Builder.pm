@@ -4,19 +4,18 @@ use Any::Moose;
 has dispatcher => (
     is          => 'ro',
     isa         => 'Path::Dispatcher',
-    required    => 1,
     lazy        => 1,
     default     => sub { return Path::Dispatcher->new },
 );
 
 has case_sensitive_tokens => (
-    is      => 'rw',
+    is          => 'rw',
     isa         => 'Bool|CodeRef',
     default     => 0,
 );
 
 has token_delimiter => (
-    is      => 'rw',
+    is          => 'rw',
     isa         => 'Str|CodeRef',
     default     => ' ',
 );
