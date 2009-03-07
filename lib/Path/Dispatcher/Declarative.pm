@@ -17,9 +17,6 @@ my $exporter = Sub::Exporter::build_exporter({
     },
 });
 
-sub token_delimiter { ' ' }
-sub case_sensitive_tokens { undef }
-
 sub import {
     my $self = shift;
     my $pkg  = caller;
@@ -79,6 +76,7 @@ sub populate_defaults {
 
     for my $option ('token_delimiter', 'case_sensitive_tokens') {
         next if exists $arg->{$option};
+        next unless $class->can($option);
 
         my $default = $class->$option;
         next unless defined $default; # use the builder's default
