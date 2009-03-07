@@ -4,6 +4,8 @@ use warnings;
 use Path::Dispatcher;
 use Path::Dispatcher::Builder;
 
+use constant builder_class => 'Path::Dispatcher::Builder';
+
 use Sub::Exporter;
 
 our $CALLER; # Sub::Exporter doesn't make this available
@@ -45,7 +47,7 @@ sub build_sugar {
 #    my $dispatcher = Path::Dispatcher->new(
 #        name => $into,
 #    );
-#    my $builder = Path::Dispatcher::Builder->new(
+#    my $builder = $class->builder_class->new(
 #        token_delimiter => sub { $into->token_delimiter },
 #        case_sensitive_tokens => sub { $into->case_sensitive_tokens },
 #        dispatcher => $dispatcher,
@@ -59,7 +61,7 @@ sub build_sugar {
         $dispatcher = Path::Dispatcher->new(
             name => $into,
         );
-        $builder = Path::Dispatcher::Builder->new(
+        $builder = $class->builder_class->new(
             token_delimiter => $into->token_delimiter,
             case_sensitive_tokens => $into->case_sensitive_tokens,
             dispatcher => $dispatcher,
