@@ -51,9 +51,9 @@ You can use a C<chain> rule approximate chaining behavior:
 
     package main;
 
-    MyDispatcher->run("display inventory"); # "Displaying inventory\n ..."
+    MyDispatcher->run("show inventory"); # "Displaying inventory:\n ..."
 
-    MyDispatcher->run("display score"); # "Displaying score\n ..."
+    MyDispatcher->run("show score"); # "Displaying score:\n ..."
 
 =cut
 
