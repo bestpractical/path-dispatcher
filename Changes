@@ -1,5 +1,7 @@
 Revision history for Path-Dispatcher
 
+0.11
+
 0.10 Fri Mar 6 23:40:42 2009
         The way you specify token_delimiter and case_sensitive_tokens has
             changed! You now say:
