@@ -2,8 +2,95 @@ package Path::Dispatcher::Declarative;
 use strict;
 use warnings;
 use Path::Dispatcher;
+use Path::Dispatcher::Builder;
 
 use Sub::Exporter;
+
+our $CALLER; # Sub::Exporter doesn't make this available
+
+my $exporter = Sub::Exporter::build_exporter({
+    into_level => 1,
+    groups => {
+        default => \&build_sugar,
+    },
+});
+
+*_next_rule = \&Path::Dispatcher::Builder::_next_rule;
+*_last_rule = \&Path::Dispatcher::Builder::_last_rule;
+
+sub token_delimiter { ' ' }
+sub case_sensitive_tokens { undef }
+
+sub import {
+    my $self = shift;
+    my $pkg  = caller;
+
+    my @args = grep { !/^-[bB]ase$/ } @_;
+
+    # just loading the class..
+    return if @args == @_;
+
+    do {
+        no strict 'refs';
+        push @{ $pkg . '::ISA' }, $self;
+    };
+
+    local $CALLER = $pkg;
+
+    $exporter->($self, @args);
+}
+
+sub build_sugar {
+    my ($class, $group, $arg) = @_;
+
+    my $into = $CALLER;
+
+#    my $dispatcher = Path::Dispatcher->new(
+#        name => $into,
+#    );
+#    my $builder = Path::Dispatcher::Builder->new(
+#        token_delimiter => sub { $into->token_delimiter },
+#        case_sensitive_tokens => sub { $into->case_sensitive_tokens },
+#        dispatcher => $dispatcher,
+#    );
+
+    # Why the lazy_builder shenanigans? Because token_delimiter/case_sensitive_tokens subroutines
+    # are probably not ready at import time.
+    my ($builder, $dispatcher);
+    my $lazy_builder = sub {
+        return $builder if $builder;
+        $dispatcher = Path::Dispatcher->new(
+            name => $into,
+        );
+        $builder = Path::Dispatcher::Builder->new(
+            token_delimiter => $into->token_delimiter,
+            case_sensitive_tokens => $into->case_sensitive_tokens,
+            dispatcher => $dispatcher,
+        );
+        return $builder;
+    };
+
+    return {
+        dispatcher      => sub { $lazy_builder->()->dispatcher },
+
+        # NOTE on shift if $into: if caller is $into, then this function is being used as sugar
+        # otherwise, it's probably a method call, so discard the invocant
+        dispatch        => sub { shift if caller ne $into; $lazy_builder->()->dispatch(@_) },
+        run             => sub { shift if caller ne $into; $lazy_builder->()->run(@_) },
+
+        rewrite         => sub { $lazy_builder->()->rewrite(@_) },
+        on              => sub { $lazy_builder->()->on(@_) },
+        before          => sub { $lazy_builder->()->before(@_) },
+        after           => sub { $lazy_builder->()->after(@_) },
+        then            => sub (&) { $lazy_builder->()->then(@_) },
+        chain           => sub (&) { $lazy_builder->()->chain(@_) },
+        under           => sub { $lazy_builder->()->under(@_) },
+        redispatch_to   => sub { $lazy_builder->()->redispatch_to(@_) },
+        next_rule       => \&_next_rule,
+        last_rule       => \&_last_rule,
+    };
+}
+__END__
 
 our $CALLER; # Sub::Exporter doesn't make this available
 our $OUTERMOST_DISPATCHER;
