@@ -58,12 +58,12 @@ sub rewrite {
         my $path = ref($to) eq 'CODE' ? $to->() : $to;
         $OUTERMOST_DISPATCHER->run($path, @_);
     };
-    $self->_add_rule('on', $from, $rewrite);
+    $self->_add_rule($from, $rewrite);
 }
 
 sub on {
     my $self = shift;
-    $self->_add_rule('on', @_);
+    $self->_add_rule(@_);
 }
 
 sub then {
@@ -91,7 +91,7 @@ sub under {
     my $self = shift;
     my ($matcher, $rules) = @_;
 
-    my $predicate = $self->_create_rule('on', $matcher);
+    my $predicate = $self->_create_rule($matcher);
     $predicate->prefix(1);
 
     my $under = Path::Dispatcher::Rule::Under->new(
@@ -124,7 +124,7 @@ sub redispatch_to {
 
 my %rule_creators = (
     ARRAY => sub {
-        my ($self, $stage, $tokens, $block) = @_;
+        my ($self, $tokens, $block) = @_;
         my $case_sensitive = $self->case_sensitive_tokens;
 
         Path::Dispatcher::Rule::Tokens->new(
@@ -135,12 +135,12 @@ my %rule_creators = (
         ),
     },
     HASH => sub {
-        my ($self, $stage, $metadata_matchers, $block) = @_;
+        my ($self, $metadata_matchers, $block) = @_;
 
         if (keys %$metadata_matchers == 1) {
             my ($field) = keys %$metadata_matchers;
             my ($value) = values %$metadata_matchers;
-            my $matcher = $self->_create_rule($stage, $value);
+            my $matcher = $self->_create_rule($value);
 
             return Path::Dispatcher::Rule::Metadata->new(
                 field   => $field,
@@ -152,21 +152,21 @@ my %rule_creators = (
         die "Doesn't support multiple metadata rules yet";
     },
     CODE => sub {
-        my ($self, $stage, $matcher, $block) = @_;
+        my ($self, $matcher, $block) = @_;
         Path::Dispatcher::Rule::CodeRef->new(
             matcher => $matcher,
             $block ? (block => $block) : (),
         ),
     },
     Regexp => sub {
-        my ($self, $stage, $regex, $block) = @_;
+        my ($self, $regex, $block) = @_;
         Path::Dispatcher::Rule::Regex->new(
             regex => $regex,
             $block ? (block => $block) : (),
         ),
     },
     empty => sub {
-        my ($self, $stage, $undef, $block) = @_;
+        my ($self, $undef, $block) = @_;
         Path::Dispatcher::Rule::Empty->new(
             $block ? (block => $block) : (),
         ),
@@ -174,7 +174,7 @@ my %rule_creators = (
 );
 
 sub _create_rule {
-    my ($self, $stage, $matcher, $block) = @_;
+    my ($self, $matcher, $block) = @_;
 
     my $rule_creator;
 
@@ -191,19 +191,19 @@ sub _create_rule {
 
     $rule_creator or die "I don't know how to create a rule for type $matcher";
 
-    return $rule_creator->($self, $stage, $matcher, $block);
+    return $rule_creator->($self, $matcher, $block);
 }
 
 sub _add_rule {
     my $self = shift;
     my $rule;
 
-    if (!ref($_[0])) {
-        my ($stage, $matcher, $block) = splice @_, 0, 3;
-        $rule = $self->_create_rule($stage, $matcher, $block);
+    if (blessed($_[0]) && $_[0]->isa('Path::Dispatcher::Rule')) {
+        $rule = shift;
     }
     else {
-        $rule = shift;
+        my ($matcher, $block) = splice @_, 0, 2;
+        $rule = $self->_create_rule($matcher, $block);
     }
 
     # FIXME: broken since move from ::Declarative
