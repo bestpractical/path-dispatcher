@@ -122,55 +122,57 @@ sub redispatch_to {
     $self->_add_rule($redispatch);
 }
 
-my %rule_creators = (
-    ARRAY => sub {
-        my ($self, $tokens, $block) = @_;
+sub rule_creators {
+    return {
+        ARRAY => sub {
+            my ($self, $tokens, $block) = @_;
 
-        Path::Dispatcher::Rule::Tokens->new(
-            tokens => $tokens,
-            delimiter => $self->token_delimiter,
-            case_sensitive => $self->case_sensitive_tokens,
-            $block ? (block => $block) : (),
-        ),
-    },
-    HASH => sub {
-        my ($self, $metadata_matchers, $block) = @_;
+            Path::Dispatcher::Rule::Tokens->new(
+                tokens => $tokens,
+                delimiter => $self->token_delimiter,
+                case_sensitive => $self->case_sensitive_tokens,
+                $block ? (block => $block) : (),
+            ),
+        },
+        HASH => sub {
+            my ($self, $metadata_matchers, $block) = @_;
 
-        if (keys %$metadata_matchers == 1) {
-            my ($field) = keys %$metadata_matchers;
-            my ($value) = values %$metadata_matchers;
-            my $matcher = $self->_create_rule($value);
+            if (keys %$metadata_matchers == 1) {
+                my ($field) = keys %$metadata_matchers;
+                my ($value) = values %$metadata_matchers;
+                my $matcher = $self->_create_rule($value);
 
-            return Path::Dispatcher::Rule::Metadata->new(
-                field   => $field,
+                return Path::Dispatcher::Rule::Metadata->new(
+                    field   => $field,
+                    matcher => $matcher,
+                    $block ? (block => $block) : (),
+                );
+            }
+
+            die "Doesn't support multiple metadata rules yet";
+        },
+        CODE => sub {
+            my ($self, $matcher, $block) = @_;
+            Path::Dispatcher::Rule::CodeRef->new(
                 matcher => $matcher,
                 $block ? (block => $block) : (),
-            );
-        }
-
-        die "Doesn't support multiple metadata rules yet";
-    },
-    CODE => sub {
-        my ($self, $matcher, $block) = @_;
-        Path::Dispatcher::Rule::CodeRef->new(
-            matcher => $matcher,
-            $block ? (block => $block) : (),
-        ),
-    },
-    Regexp => sub {
-        my ($self, $regex, $block) = @_;
-        Path::Dispatcher::Rule::Regex->new(
-            regex => $regex,
-            $block ? (block => $block) : (),
-        ),
-    },
-    empty => sub {
-        my ($self, $undef, $block) = @_;
-        Path::Dispatcher::Rule::Empty->new(
-            $block ? (block => $block) : (),
-        ),
-    },
-);
+            ),
+        },
+        Regexp => sub {
+            my ($self, $regex, $block) = @_;
+            Path::Dispatcher::Rule::Regex->new(
+                regex => $regex,
+                $block ? (block => $block) : (),
+            ),
+        },
+        empty => sub {
+            my ($self, $undef, $block) = @_;
+            Path::Dispatcher::Rule::Empty->new(
+                $block ? (block => $block) : (),
+            ),
+        },
+    };
+}
 
 sub _create_rule {
     my ($self, $matcher, $block) = @_;
@@ -178,14 +180,14 @@ sub _create_rule {
     my $rule_creator;
 
     if ($matcher eq '') {
-        $rule_creator = $rule_creators{empty};
+        $rule_creator = $self->rule_creators->{empty};
     }
     elsif (!ref($matcher)) {
-        $rule_creator = $rule_creators{ARRAY};
+        $rule_creator = $self->rule_creators->{ARRAY};
         $matcher = [$matcher];
     }
     else {
-        $rule_creator = $rule_creators{ ref $matcher };
+        $rule_creator = $self->rule_creators->{ ref $matcher };
     }
 
     $rule_creator or die "I don't know how to create a rule for type $matcher";
