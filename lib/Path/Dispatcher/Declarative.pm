@@ -45,47 +45,35 @@ sub build_sugar {
 
     my $into = $CALLER;
 
-#    my $dispatcher = $class->dispatcher_class->new(
-#        name => $into,
-#    );
-#    my $builder = $class->builder_class->new(
-#        token_delimiter => sub { $into->token_delimiter },
-#        case_sensitive_tokens => sub { $into->case_sensitive_tokens },
-#        dispatcher => $dispatcher,
-#    );
+    for my $option ('token_delimiter', 'case_sensitive_tokens') {
+        $arg->{$option} = $class->$option
+            if !exists($arg->{$option});
+    }
 
-    # Why the lazy_builder shenanigans? Because token_delimiter/case_sensitive_tokens subroutines
-    # are probably not ready at import time.
-    my ($builder, $dispatcher);
-    my $lazy_builder = sub {
-        return $builder if $builder;
-        $dispatcher = $class->dispatcher_class->new(
-            name => $into,
-        );
-        $builder = $class->builder_class->new(
-            token_delimiter => $into->token_delimiter,
-            case_sensitive_tokens => $into->case_sensitive_tokens,
-            dispatcher => $dispatcher,
-        );
-        return $builder;
-    };
+    my $dispatcher = $class->dispatcher_class->new(name => $into);
+
+    my $builder = $class->builder_class->new(
+        dispatcher => $dispatcher,
+        %$arg,
+    );
 
     return {
-        dispatcher      => sub { $lazy_builder->()->dispatcher },
+        dispatcher    => sub { $builder->dispatcher },
+        rewrite       => sub { $builder->rewrite(@_) },
+        on            => sub { $builder->on(@_) },
+        under         => sub { $builder->under(@_) },
+        redispatch_to => sub { $builder->redispatch_to(@_) },
+        next_rule     => sub { $builder->next_rule(@_) },
+        last_rule     => sub { $builder->last_rule(@_) },
 
-        # NOTE on shift if $into: if caller is $into, then this function is being used as sugar
-        # otherwise, it's probably a method call, so discard the invocant
-        dispatch        => sub { shift if caller ne $into; $lazy_builder->()->dispatch(@_) },
-        run             => sub { shift if caller ne $into; $lazy_builder->()->run(@_) },
+        then  => sub (&) { $builder->then(@_) },
+        chain => sub (&) { $builder->chain(@_) },
 
-        rewrite         => sub { $lazy_builder->()->rewrite(@_) },
-        on              => sub { $lazy_builder->()->on(@_) },
-        then            => sub (&) { $lazy_builder->()->then(@_) },
-        chain           => sub (&) { $lazy_builder->()->chain(@_) },
-        under           => sub { $lazy_builder->()->under(@_) },
-        redispatch_to   => sub { $lazy_builder->()->redispatch_to(@_) },
-        next_rule       => sub { $lazy_builder->()->next_rule(@_) },
-        last_rule       => sub { $lazy_builder->()->last_rule(@_) },
+        # NOTE on shift if $into: if caller is $into, then this function is
+        # being used as sugar otherwise, it's probably a method call, so
+        # discard the invocant
+        dispatch => sub { shift if caller ne $into; $builder->dispatch(@_) },
+        run      => sub { shift if caller ne $into; $builder->run(@_) },
     };
 }
 

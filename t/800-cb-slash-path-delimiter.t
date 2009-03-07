@@ -7,9 +7,9 @@ my @result;
 
 do {
     package MyDispatcher;
-    use Path::Dispatcher::Declarative -base;
-
-    sub token_delimiter { '/' }
+    use Path::Dispatcher::Declarative -base, -default => {
+        token_delimiter => '/',
+    };
 
     under show => sub {
         on inventory => sub {

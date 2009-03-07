@@ -7,10 +7,10 @@ my @calls;
 
 do {
     package RESTy::Dispatcher;
-    use Path::Dispatcher::Declarative -base;
-
-    sub token_delimiter { '/' }
-    sub case_sensitive_tokens { 0 }
+    use Path::Dispatcher::Declarative -base, -default => {
+        token_delimiter => '/',
+        case_sensitive_tokens => 0,
+    };
 
     on ['=', 'model', 'Comment'] => sub { push @calls, $3 };
 };
