@@ -70,7 +70,6 @@ sub then {
     my $self = shift;
     my $block = shift;
     my $rule = Path::Dispatcher::Rule::Always->new(
-        stage => 'on',
         block => sub {
             $block->(@_);
             _next_rule;
@@ -83,7 +82,6 @@ sub chain {
     my $self = shift;
     my $block = shift;
     my $rule = Path::Dispatcher::Rule::Chain->new(
-        stage => 'on',
         block => $block,
     );
     $self->_add_rule($rule);

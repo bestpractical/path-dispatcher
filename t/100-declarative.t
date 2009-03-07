@@ -25,15 +25,6 @@ do {
     };
 
     under alpha => sub {
-    #    $Path::Dispatcher::Declarative::UNDER_RULE->add_rule(
-    #        Path::Dispatcher::Rule::Always->new(
-    #            stage => 'on',
-    #            block  => sub {
-    #                print "alpha (chain) ";
-    #                next_rule;
-    #            },
-    #        ),
-    #    );
         then {
             push @calls, "alpha (chain) "; 
         };
