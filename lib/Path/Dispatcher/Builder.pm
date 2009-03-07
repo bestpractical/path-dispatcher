@@ -13,13 +13,13 @@ has dispatcher => (
 
 has case_sensitive_tokens => (
     is          => 'rw',
-    isa         => 'Bool|CodeRef',
+    isa         => 'Bool',
     default     => 0,
 );
 
 has token_delimiter => (
     is          => 'rw',
-    isa         => 'Str|CodeRef',
+    isa         => 'Str',
     default     => ' ',
 );
 
@@ -125,12 +125,11 @@ sub redispatch_to {
 my %rule_creators = (
     ARRAY => sub {
         my ($self, $tokens, $block) = @_;
-        my $case_sensitive = $self->case_sensitive_tokens;
 
         Path::Dispatcher::Rule::Tokens->new(
             tokens => $tokens,
             delimiter => $self->token_delimiter,
-            defined $case_sensitive ? (case_sensitive => $case_sensitive) : (),
+            case_sensitive => $self->case_sensitive_tokens,
             $block ? (block => $block) : (),
         ),
     },

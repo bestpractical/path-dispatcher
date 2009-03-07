@@ -3,11 +3,10 @@ use strict;
 use warnings;
 use Path::Dispatcher;
 use Path::Dispatcher::Builder;
+use Sub::Exporter;
 
 use constant dispatcher_class => 'Path::Dispatcher';
 use constant builder_class => 'Path::Dispatcher::Builder';
-
-use Sub::Exporter;
 
 our $CALLER; # Sub::Exporter doesn't make this available
 
