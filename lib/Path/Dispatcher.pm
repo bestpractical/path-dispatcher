@@ -28,8 +28,8 @@ sub dispatch {
     my $self = shift;
     my $path = shift;
 
-    # Automatically box string paths
-    if (!ref($path)) {
+    # Automatically box paths
+    unless (blessed($path) && $path->isa('Path::Dispatcher::Rule')) {
         $path = $self->path_class->new(
             path => $path,
         );
