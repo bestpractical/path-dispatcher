@@ -154,7 +154,7 @@ Path::Dispatcher::Rule - predicate and codeblock
 
     my $match = $rule->match("quit"); # creates a Path::Dispatcher::Match
 
-    $rule->run; # exits the program
+    $match->run; # exits the program
 
 =head1 DESCRIPTION
 
