@@ -16,7 +16,7 @@ sub add_match {
         or confess "$_ is not a Path::Dispatcher::Match"
             for @_;
 
-    push @{ $self->{matches} }, @_;
+    push @{ $self->{_matches} }, @_;
 }
 
 sub matches     { @{ shift->{_matches} } }
