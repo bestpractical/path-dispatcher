@@ -19,9 +19,9 @@ sub add_match {
     push @{ $self->{matches} }, @_;
 }
 
-sub matches     { @{ shift->{matches} } }
-sub has_match   { scalar @{ shift->{matches} } }
-sub first_match { shift->{matches}[0] }
+sub matches     { @{ shift->{_matches} } }
+sub has_match   { scalar @{ shift->{_matches} } }
+sub first_match { shift->{_matches}[0] }
 
 # aliases
 __PACKAGE__->meta->add_method(add_matches => __PACKAGE__->can('add_match'));
