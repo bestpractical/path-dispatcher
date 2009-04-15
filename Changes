@@ -1,5 +1,7 @@
 Revision history for Path-Dispatcher
 
+0.12
+
 0.11 Wed Apr 15 02:47:50 2009
         Fix some misnamed keys caused by de-AttributeHelper-ing
 
