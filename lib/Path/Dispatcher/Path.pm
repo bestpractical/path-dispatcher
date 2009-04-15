@@ -30,7 +30,7 @@ sub clone_path {
     my $self = shift;
     my $path = shift;
 
-    return $self->meta->clone_instance($self, path => $path, @_);
+    return $self->meta->clone_object($self, path => $path, @_);
 }
 
 sub get_metadata {
