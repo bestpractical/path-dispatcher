@@ -1,6 +1,11 @@
 Revision history for Path-Dispatcher
 
-0.11
+0.11 Wed Apr 15 02:47:50 2009
+        Fix some misnamed keys caused by de-AttributeHelper-ing
+
+        Stop using some deprecated Moose features
+
+        Doc fixes (Sartak and confound)
 
 0.10 Fri Mar 6 23:40:42 2009
         The way you specify token_delimiter and case_sensitive_tokens has
