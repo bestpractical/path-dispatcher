@@ -1,6 +1,10 @@
 Revision history for Path-Dispatcher
 
-0.12
+0.12 Fri Apr 17 03:21:05 2009
+        Fix a bug with undefined capture variables being converted to the
+            empty string and throwing warnings (reported by obra)
+
+        Give Path::Dispatcher::Rule::Dispatch a "rules" method
 
 0.11 Wed Apr 15 02:47:50 2009
         Fix some misnamed keys caused by de-AttributeHelper-ing
