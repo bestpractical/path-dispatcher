@@ -29,7 +29,7 @@ has set_number_vars => (
     is      => 'rw',
     isa     => 'Bool',
     lazy    => 1,
-    default => sub { ref(shift->result) eq 'ARRAY' ? 1 : 0 },
+    default => sub { ref(shift->result) eq 'ARRAY' },
 );
 
 sub run {
