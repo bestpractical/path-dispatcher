@@ -18,6 +18,16 @@ sub add_rule {
     push @{ $self->{_rules} }, @_;
 }
 
+sub unshift_rule {
+    my $self = shift;
+
+    $_->isa('Path::Dispatcher::Rule')
+        or confess "$_ is not a Path::Dispatcher::Rule"
+            for @_;
+
+    unshift @{ $self->{_rules} }, @_;
+}
+
 sub rules { @{ shift->{_rules} } }
 
 no Any::Moose;
