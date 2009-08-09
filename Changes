@@ -1,6 +1,7 @@
 Revision history for Path-Dispatcher
 
-0.13
+0.13 Sun Aug 9 13:38:19 2009
+        Add unshift_rule to classes that do Role::Rules
 
 0.12 Fri Apr 17 03:21:05 2009
         Fix a bug with undefined capture variables being converted to the
