@@ -117,15 +117,16 @@ Path::Dispatcher - flexible and extensible dispatch
 
 =head1 DESCRIPTION
 
-We really like L<Jifty::Dispatcher> and wanted to use it for the command line.
+We really like L<Jifty::Dispatcher> and wanted to use it for L<Prophet>'s
+command line.
 
 The basic operation is that of dispatch. Dispatch takes a path and a list of
 rules, and it returns a list of matches. From there you can "run" the rules
 that matched. These phases are distinct so that, if you need to, you can
 inspect which rules were matched without ever running their codeblocks.
 
-Most consumers would want to use L<Path::Dispatcher::Declarative> which gives
-you some sugar, inspired by L<Jifty::Dispatcher>.
+You want to use L<Path::Dispatcher::Declarative> which gives you some sugar
+inspired by L<Jifty::Dispatcher>.
 
 =head1 ATTRIBUTES
 
