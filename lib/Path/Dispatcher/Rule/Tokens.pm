@@ -30,20 +30,12 @@ sub _match {
 
     for my $expected ($self->tokens) {
         unless (@tokens) {
-            $self->trace(no_tokens => 1, on_token => $expected, path => $path)
-                if $ENV{'PATH_DISPATCHER_TRACE'};
             return;
         }
 
         my $got = shift @tokens;
 
         unless ($self->_match_token($got, $expected)) {
-            $self->trace(
-                no_match  => 1,
-                got_token => $got,
-                on_token  => $expected,
-                path      => $path,
-            ) if $ENV{'PATH_DISPATCHER_TRACE'};
             return;
         }
 
@@ -51,8 +43,6 @@ sub _match {
     }
 
     if (@tokens && !$self->prefix) {
-        $self->trace(tokens_left => \@tokens, path => $path)
-            if $ENV{'PATH_DISPATCHER_TRACE'};
         return;
     }
 
