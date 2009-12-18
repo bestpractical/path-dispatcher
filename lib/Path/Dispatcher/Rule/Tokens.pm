@@ -56,6 +56,22 @@ sub _match {
     return $matched, $leftover;
 }
 
+sub complete {
+    my $self = shift;
+    my $path = shift;
+
+    my ($matched, $got, $expected) = $self->_match_as_far_as_possible($path);
+    return if @$got > 1; # had tokens leftover
+    return if !@$expected; # consumed all tokens
+
+    my $next = shift @$expected;
+    return if ref($next); # we can only deal with strings
+
+    my $part = @$got ? shift @$got : '';
+    return unless substr($next, 0, length($part)) eq $part;
+    return $next;
+}
+
 sub _each_token {
     my $self     = shift;
     my $got      = shift;
