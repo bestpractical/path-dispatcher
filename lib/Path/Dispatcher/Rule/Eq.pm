@@ -25,6 +25,15 @@ sub _prefix_match {
     return (1, substr($path->path, length($self->string)));
 }
 
+sub _complete {
+    my $self = shift;
+    my $path = shift->path;
+    my $completed = $self->string;
+
+    return unless substr($completed, 0, length($path)) eq $path;
+    return $completed;
+}
+
 sub readable_attributes { q{"} . shift->string . q{"} }
 
 __PACKAGE__->meta->make_immutable;
