@@ -60,26 +60,43 @@ sub _match {
     return \@matched, $leftover;
 }
 
+sub _each_token {
+    my $self     = shift;
+    my $got      = shift;
+    my $expected = shift;
+    my $callback = shift;
+
+    if (ref($expected) eq 'ARRAY') {
+        for my $alternative (@$expected) {
+            $self->_each_token($got, $alternative, $callback);
+        }
+    }
+    elsif (!ref($expected) || ref($expected) eq 'Regexp') {
+        $callback->($got, $expected);
+    }
+    else {
+        die "Unexpected token '$expected'"; # the irony is not lost on me :)
+    }
+}
+
 sub _match_token {
     my $self     = shift;
     my $got      = shift;
     my $expected = shift;
 
-    if (!ref($expected)) {
-        ($got, $expected) = (lc $got, lc $expected) if !$self->case_sensitive;
-        return $got eq $expected;
-    }
-    elsif (ref($expected) eq 'ARRAY') {
-        for my $alternative (@$expected) {
-            return 1 if $self->_match_token($got, $alternative);
+    my $matched = 0;
+    $self->_each_token($got, $expected, sub {
+        my ($g, $e) = @_;
+        if (!ref($e)) {
+            ($g, $e) = (lc $g, lc $e) if !$self->case_sensitive;
+            $matched ||= $g eq $e;
         }
-    }
-    elsif (ref($expected) eq 'Regexp') {
-        return $got =~ $expected;
-    }
-    else {
-        die "Unexpected token '$expected'"; # the irony is not lost on me :)
-    }
+        elsif (ref($e) eq 'Regexp') {
+            $matched ||= $g =~ $e;
+        }
+    });
+
+    return $matched;
 }
 
 sub tokenize {
