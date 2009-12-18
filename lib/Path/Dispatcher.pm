@@ -69,6 +69,15 @@ sub run {
     return $dispatch->run(@_);
 }
 
+sub complete {
+    my $self  = shift;
+    my $start = shift;
+
+    my @completions;
+
+    return @completions;
+}
+
 # We don't export anything, so if they request something, then try to error
 # helpfully
 sub import {
