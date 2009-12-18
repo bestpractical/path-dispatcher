@@ -26,9 +26,10 @@ sub _match {
     my $path = shift;
 
     my @tokens = $self->tokenize($path->path);
+    my @expected = $self->tokens;
     my @matched;
 
-    for my $expected ($self->tokens) {
+    while (defined(my $expected = shift @expected)) {
         unless (@tokens) {
             return;
         }
