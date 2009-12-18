@@ -1,7 +1,17 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 16;
+use Path::Dispatcher;
+
+my $complete = Path::Dispatcher::Rule::Eq->new(string => "complete");
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('x'))], []);
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('completexxx'))], []);
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('cxxx'))], []);
+
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('c'))], ['complete']);
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('compl'))], ['complete']);
+is_deeply([$complete->complete(Path::Dispatcher::Path->new('complete'))], ['complete']);
 
 do {
     package MyApp::Dispatcher;
