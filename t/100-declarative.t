@@ -26,7 +26,7 @@ do {
 
     under alpha => sub {
         then {
-            push @calls, "alpha (chain) "; 
+            push @calls, "alpha (chain) ";
         };
         on one => sub {
             push @calls, "one";

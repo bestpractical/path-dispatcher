@@ -100,7 +100,7 @@ Path::Dispatcher::Declarative - sugary dispatcher
     use Path::Dispatcher::Declarative -base;
 
     on score => sub { show_score() };
-    
+
     on ['wield', qr/^\w+$/] => sub { wield_weapon($2) };
 
     rewrite qr/^inv/ => "display inventory";

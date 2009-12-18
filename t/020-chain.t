@@ -108,7 +108,6 @@ do {
         on 'create' => sub { push @result, "ticket create" };
         chain {
             push @result, "(ticket chain just for update)";
-    
         };
         on 'update' => sub { push @result, "ticket update" };
     };
@@ -116,26 +115,22 @@ do {
     under 'blog' => sub {
         chain {
             push @result, "(blog chain)";
-    
         };
         under 'post' => sub {
             chain {
                 push @result, "(after post)";
-        
             };
             on 'create' => sub { push @result, "create blog post" };
             on 'delete' => sub { push @result, "delete blog post" };
         };
         chain {
             push @result, "(before comment)";
-    
         };
         under 'comment' => sub {
             on 'create' => sub { push @result, "create blog comment" };
             on 'delete' => sub { push @result, "delete blog comment" };
             chain {
                 push @result, "(never included)";
-        
             };
         };
     };

@@ -59,7 +59,7 @@ sub run_with_number_vars {
     my $str = join '', map { defined($_) ? $_         : ""             } @_;
 
     # we need to check length because Perl's annoying gotcha of the empty regex
-    # actually being an alias for whatever the previously used regex was 
+    # actually being an alias for whatever the previously used regex was
     # (useful last decade when qr// hadn't been invented)
     # we need to do the match anyway, because we have to clear the number vars
     ($str, $re) = ("x", "x") if length($str) == 0;

@@ -21,10 +21,10 @@ C<token_delimiter> method:
 
     package Web::Dispatcher;
     use base 'Path::Dispatcher::Declarative';
-    
+
     use constant token_delimiter => '/';
-    
-    
+
+
     package My::Other::Dispatcher;
     use Web::Dispatcher -base;
 

@@ -33,7 +33,7 @@ sub match {
     # an ::Always (one that will always trigger next_rule if it's block is ran)
     #
     return unless my @matches = grep { defined } map { $_->match($new_path) } $self->rules;
-    pop @matches while @matches && $matches[-1]->rule->isa('Path::Dispatcher::Rule::Chain'); 
+    pop @matches while @matches && $matches[-1]->rule->isa('Path::Dispatcher::Rule::Chain');
     return @matches;
 }
 
