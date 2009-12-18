@@ -21,34 +21,39 @@ has case_sensitive => (
     default => 1,
 );
 
+sub _match_as_far_as_possible {
+    my $self = shift;
+    my $path = shift;
+
+    my @got      = $self->tokenize($path->path);
+    my @expected = $self->tokens;
+    my @matched;
+
+    while (@got && @expected) {
+        my $expected = $expected[0];
+        my $got      = $got[0];
+
+        last unless $self->_match_token($got, $expected);
+
+        push @matched, $got;
+        shift @expected;
+        shift @got;
+    }
+
+    return (\@matched, \@got, \@expected);
+}
+
 sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @tokens = $self->tokenize($path->path);
-    my @expected = $self->tokens;
-    my @matched;
+    my ($matched, $got, $expected) = $self->_match_as_far_as_possible($path);
 
-    while (defined(my $expected = shift @expected)) {
-        unless (@tokens) {
-            return;
-        }
+    return if @$expected; # didn't provide everything necessary
+    return if @$got && !$self->prefix; # had tokens left over
 
-        my $got = shift @tokens;
-
-        unless ($self->_match_token($got, $expected)) {
-            return;
-        }
-
-        push @matched, $got;
-    }
-
-    if (@tokens && !$self->prefix) {
-        return;
-    }
-
-    my $leftover = $self->untokenize(@tokens);
-    return \@matched, $leftover;
+    my $leftover = $self->untokenize(@$got);
+    return $matched, $leftover;
 }
 
 sub _each_token {
