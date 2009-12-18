@@ -70,12 +70,17 @@ sub run {
 }
 
 sub complete {
-    my $self  = shift;
-    my $start = shift;
+    my $self = shift;
+    my $path = shift;
 
-    my @completions;
+    # Automatically box paths
+    unless (blessed($path) && $path->isa('Path::Dispatcher::Path')) {
+        $path = $self->path_class->new(
+            path => $path,
+        );
+    }
 
-    return @completions;
+    return map { $_->complete($path) } $self->rules;
 }
 
 # We don't export anything, so if they request something, then try to error
