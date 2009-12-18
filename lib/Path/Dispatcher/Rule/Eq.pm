@@ -12,7 +12,12 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    return $path->path eq $self->string unless $self->prefix;
+    return $path->path eq $self->string;
+}
+
+sub _prefix_match {
+    my $self = shift;
+    my $path = shift;
 
     my $truncated = substr($path->path, 0, length($self->string));
     return 0 unless $truncated eq $self->string;

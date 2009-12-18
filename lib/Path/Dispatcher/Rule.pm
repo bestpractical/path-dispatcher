@@ -27,7 +27,14 @@ sub match {
     my $self = shift;
     my $path = shift;
 
-    my ($result, $leftover) = $self->_match($path);
+    my ($result, $leftover);
+
+    if ($self->prefix) {
+        ($result, $leftover) = $self->_prefix_match($path);
+    }
+    else {
+        ($result, $leftover) = $self->_match($path);
+    }
 
     if (!$result) {
         $self->trace(leftover => $leftover, match => undef, path => $path)
@@ -58,6 +65,11 @@ sub match {
     $self->trace(match => $match) if $ENV{'PATH_DISPATCHER_TRACE'};
 
     return $match;
+}
+
+sub _prefix_match {
+    my $self = shift;
+    return $self->_match(@_);
 }
 
 sub run {
