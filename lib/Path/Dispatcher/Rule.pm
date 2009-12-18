@@ -67,6 +67,10 @@ sub match {
     return $match;
 }
 
+sub complete {
+    return (); # no completions
+}
+
 sub _prefix_match {
     my $self = shift;
     return $self->_match(@_);

@@ -25,7 +25,7 @@ sub _prefix_match {
     return (1, substr($path->path, length($self->string)));
 }
 
-sub _complete {
+sub complete {
     my $self = shift;
     my $path = shift->path;
     my $completed = $self->string;
