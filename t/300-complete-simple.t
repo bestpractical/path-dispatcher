@@ -29,10 +29,10 @@ is_deeply([$dispatcher->complete('baq')], [], 'no completions for "baq"');
 
 is_deeply([$dispatcher->complete('f')],   ['foo'], 'one completion for "f"');
 is_deeply([$dispatcher->complete('fo')],  ['foo'], 'one completion for "fo"');
-is_deeply([$dispatcher->complete('foo')], ['foo'], 'one completion for "foo"');
+is_deeply([$dispatcher->complete('foo')], [], '"foo" is already complete');
 
 is_deeply([$dispatcher->complete('b')],  ['bar', 'baz'], 'two completions for "b"');
 is_deeply([$dispatcher->complete('ba')], ['bar', 'baz'], 'two completions for "ba"');
-is_deeply([$dispatcher->complete('bar')], ['bar'], 'one completion for "bar"');
-is_deeply([$dispatcher->complete('baz')], ['baz'], 'one completion for "baz"');
+is_deeply([$dispatcher->complete('bar')], [], '"bar" is already complete');
+is_deeply([$dispatcher->complete('baz')], [], '"baz" is already complete');
 
