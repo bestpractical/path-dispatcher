@@ -58,6 +58,7 @@ sub build_sugar {
         redispatch_to => sub { $builder->redispatch_to(@_) },
         next_rule     => sub { $builder->next_rule(@_) },
         last_rule     => sub { $builder->last_rule(@_) },
+        complete      => sub { $builder->complete(@_) },
 
         then  => sub (&) { $builder->then(@_) },
         chain => sub (&) { $builder->chain(@_) },

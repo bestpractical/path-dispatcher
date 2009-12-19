@@ -49,6 +49,16 @@ sub run {
     $OUTERMOST_DISPATCHER->run(@_);
 }
 
+sub complete {
+    my $self       = shift;
+    my $dispatcher = shift;
+
+    local $OUTERMOST_DISPATCHER = $self->dispatcher
+        if !$OUTERMOST_DISPATCHER;
+
+    $OUTERMOST_DISPATCHER->complete(@_);
+}
+
 sub rewrite {
     my $self = shift;
     my ($from, $to) = @_;
