@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 12;
 
 do {
     package MyApp::Dispatcher;
@@ -22,6 +22,11 @@ do {
         on two => sub { die "do not call blocks!" };
         on three => sub { die "do not call blocks!" };
     };
+
+    under beta => sub {
+        on a => sub { die "do not call blocks!" };
+        on b => sub { die "do not call blocks!" };
+    };
 };
 
 my $dispatcher = MyApp::Dispatcher->dispatcher;
@@ -29,6 +34,13 @@ is_deeply([$dispatcher->complete('x')], [], 'no completions for "x"');
 is_deeply([$dispatcher->complete('a')], ['alpha'], 'one completion for "a"');
 is_deeply([$dispatcher->complete('alpha')], ['one', 'two', 'three'], 'three completions for "alpha"');
 is_deeply([$dispatcher->complete('q')], ['quux'], 'one completion for "quux"');
+
+is_deeply([$dispatcher->complete('bet')], ['beta'], 'one completion for "beta"');
+is_deeply([$dispatcher->complete('beta')], ['beta a', 'beta b'], 'two completions for "beta"');
+is_deeply([$dispatcher->complete('beta ')], ['beta a', 'beta b'], 'two completions for "beta "');
+is_deeply([$dispatcher->complete('beta a')], [], 'no completions for "beta a"');
+is_deeply([$dispatcher->complete('beta b')], [], 'no completions for "beta b"');
+is_deeply([$dispatcher->complete('beta c')], [], 'no completions for "beta c"');
 
 TODO: {
     local $TODO = "cannot complete regex rules (yet!)";
