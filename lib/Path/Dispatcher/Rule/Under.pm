@@ -50,7 +50,14 @@ sub complete {
 
     my $prefix = substr($path->path, 0, length($path->path) - length($new_path->path));
 
-    return map { "$prefix $_" } map { $_->complete($new_path) } $self->rules;
+    my @completions = map { $_->complete($new_path) } $self->rules;
+
+    if ($predicate->can('untokenize')) {
+        return map { $predicate->untokenize($prefix, $_) } @completions;
+    }
+    else {
+        return map { "$prefix$_" } @completions;
+    }
 }
 
 sub readable_attributes { shift->predicate->readable_attributes }
