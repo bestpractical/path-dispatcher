@@ -50,7 +50,7 @@ sub complete {
 
     my $prefix = substr($path->path, 0, length($path->path) - length($new_path->path));
 
-    return map { "$prefix$_" } map { $_->complete($new_path) } $self->rules;
+    return map { "$prefix $_" } map { $_->complete($new_path) } $self->rules;
 }
 
 sub readable_attributes { shift->predicate->readable_attributes }
