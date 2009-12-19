@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More tests => 16;
 
 do {
     package MyApp::Dispatcher;
@@ -30,30 +30,44 @@ do {
 };
 
 my $dispatcher = MyApp::Dispatcher->dispatcher;
-is_deeply([$dispatcher->complete('x')], [], 'no completions for "x"');
 
-is_deeply([$dispatcher->complete('a')], ['alpha'], 'one completion for "a"');
-is_deeply([$dispatcher->complete('alpha')], ['alpha one', 'alpha two', 'alpha three'], 'three completions for "alpha"');
+sub complete_ok {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $path     = shift;
+    my @expected = @_;
 
-is_deeply([$dispatcher->complete('t')], ['token'], 'one completion for "t"');
-is_deeply([$dispatcher->complete('token')], ['token matching'], 'one completion for "token"');
-is_deeply([$dispatcher->complete('token ')], ['token matching'], 'one completion for "token "');
-is_deeply([$dispatcher->complete('token m')], ['token matching'], 'one completion for "token m"');
-is_deeply([$dispatcher->complete('token matchin')], ['token matching'], 'one completion for "token matchin"');
-is_deeply([$dispatcher->complete('token matching')], [], 'no completions for "token matching"');
+    my @got = $dispatcher->complete($path);
 
-is_deeply([$dispatcher->complete('q')], ['quux'], 'one completion for "quux"');
+    my $message = @expected == 0 ? "no completions"
+                : @expected == 1 ? "one completion"
+                :                  @expected . " completions";
+    $message .= " for path '$path'";
 
-is_deeply([$dispatcher->complete('bet')], ['beta'], 'one completion for "beta"');
-is_deeply([$dispatcher->complete('beta')], ['beta a', 'beta b'], 'two completions for "beta"');
-is_deeply([$dispatcher->complete('beta ')], ['beta a', 'beta b'], 'two completions for "beta "');
-is_deeply([$dispatcher->complete('beta a')], [], 'no completions for "beta a"');
-is_deeply([$dispatcher->complete('beta b')], [], 'no completions for "beta b"');
-is_deeply([$dispatcher->complete('beta c')], [], 'no completions for "beta c"');
+    is_deeply(\@got, \@expected, $message);
+}
+
+complete_ok('x');
+
+complete_ok(q => 'quux');
+
+complete_ok(a => 'alpha');
+complete_ok(alpha => 'alpha one', 'alpha two', 'alpha three');
+
+complete_ok(t => 'token');
+complete_ok(token => 'token matching');
+complete_ok('token m' => 'token matching');
+complete_ok('token matchin' => 'token matching');
+complete_ok('token matching');
+
+complete_ok(bet => 'beta');
+complete_ok(beta => 'beta a', 'beta b');
+complete_ok('beta a');
+complete_ok('beta b');
+complete_ok('beta c');
 
 TODO: {
     local $TODO = "cannot complete regex rules (yet!)";
-    is_deeply([$dispatcher->complete('quux')], ['quux-'], 'one completion for "quux"');
-    is_deeply([$dispatcher->complete('b')], ['bar'], 'one completion for "bar"');
+    complete_ok(quux => 'quux-');
+    complete_ok(b => 'bar', 'beta');
 };
 
