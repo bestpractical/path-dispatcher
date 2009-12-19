@@ -37,6 +37,20 @@ sub match {
     return @matches;
 }
 
+sub complete {
+    my $self = shift;
+    my $path = shift;
+
+    my $predicate = $self->predicate;
+
+    my $prefix_match = $predicate->match($path)
+        or return $predicate->complete($path);
+
+    my $new_path = $path->clone_path($prefix_match->leftover);
+
+    return map { $_->complete($new_path) } $self->rules;
+}
+
 sub readable_attributes { shift->predicate->readable_attributes }
 
 __PACKAGE__->meta->make_immutable;
