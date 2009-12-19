@@ -69,7 +69,7 @@ sub complete {
 
     my $part = @$got ? shift @$got : '';
     return unless substr($next, 0, length($part)) eq $part;
-    return $next;
+    return $self->untokenize(@$matched, $next);
 }
 
 sub _each_token {

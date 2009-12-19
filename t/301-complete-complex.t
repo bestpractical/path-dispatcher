@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 17;
 
 do {
     package MyApp::Dispatcher;
@@ -31,8 +31,17 @@ do {
 
 my $dispatcher = MyApp::Dispatcher->dispatcher;
 is_deeply([$dispatcher->complete('x')], [], 'no completions for "x"');
+
 is_deeply([$dispatcher->complete('a')], ['alpha'], 'one completion for "a"');
 is_deeply([$dispatcher->complete('alpha')], ['alpha one', 'alpha two', 'alpha three'], 'three completions for "alpha"');
+
+is_deeply([$dispatcher->complete('t')], ['token'], 'one completion for "t"');
+is_deeply([$dispatcher->complete('token')], ['token matching'], 'one completion for "token"');
+is_deeply([$dispatcher->complete('token ')], ['token matching'], 'one completion for "token "');
+is_deeply([$dispatcher->complete('token m')], ['token matching'], 'one completion for "token m"');
+is_deeply([$dispatcher->complete('token matchin')], ['token matching'], 'one completion for "token matchin"');
+is_deeply([$dispatcher->complete('token matching')], [], 'no completions for "token matching"');
+
 is_deeply([$dispatcher->complete('q')], ['quux'], 'one completion for "quux"');
 
 is_deeply([$dispatcher->complete('bet')], ['beta'], 'one completion for "beta"');
