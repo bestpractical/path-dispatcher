@@ -80,7 +80,8 @@ sub complete {
         );
     }
 
-    return map { $_->complete($path) } $self->rules;
+    my %seen;
+    return grep { !$seen{$_}++ } map { $_->complete($path) } $self->rules;
 }
 
 # We don't export anything, so if they request something, then try to error
