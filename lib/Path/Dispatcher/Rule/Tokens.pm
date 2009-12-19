@@ -65,11 +65,17 @@ sub complete {
     return if !@$expected; # consumed all tokens
 
     my $next = shift @$expected;
-    return if ref($next); # we can only deal with strings
-
     my $part = @$got ? shift @$got : '';
-    return unless substr($next, 0, length($part)) eq $part;
-    return $self->untokenize(@$matched, $next);
+    my @completions;
+
+    for my $completion (ref($next) eq 'ARRAY' ? @$next : $next) {
+        next if ref($completion);
+
+        next unless substr($completion, 0, length($part)) eq $part;
+        push @completions, $self->untokenize(@$matched, $completion);
+    }
+
+    return @completions;
 }
 
 sub _each_token {
