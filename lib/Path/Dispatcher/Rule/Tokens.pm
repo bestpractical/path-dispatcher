@@ -120,7 +120,10 @@ sub tokenize {
 sub untokenize {
     my $self   = shift;
     my @tokens = @_;
-    return join $self->delimiter, @tokens;
+    return join $self->delimiter,
+           grep { length }
+           map { split $self->delimiter, $_ }
+           @tokens;
 }
 
 sub readable_attributes {
