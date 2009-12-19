@@ -32,7 +32,7 @@ do {
 my $dispatcher = MyApp::Dispatcher->dispatcher;
 is_deeply([$dispatcher->complete('x')], [], 'no completions for "x"');
 is_deeply([$dispatcher->complete('a')], ['alpha'], 'one completion for "a"');
-is_deeply([$dispatcher->complete('alpha')], ['one', 'two', 'three'], 'three completions for "alpha"');
+is_deeply([$dispatcher->complete('alpha')], ['alpha one', 'alpha two', 'alpha three'], 'three completions for "alpha"');
 is_deeply([$dispatcher->complete('q')], ['quux'], 'one completion for "quux"');
 
 is_deeply([$dispatcher->complete('bet')], ['beta'], 'one completion for "beta"');
