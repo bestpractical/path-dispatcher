@@ -48,7 +48,9 @@ sub complete {
 
     my $new_path = $path->clone_path($prefix_match->leftover);
 
-    return map { $_->complete($new_path) } $self->rules;
+    my $prefix = substr($path->path, 0, length($path->path) - length($new_path->path));
+
+    return map { "$prefix$_" } map { $_->complete($new_path) } $self->rules;
 }
 
 sub readable_attributes { shift->predicate->readable_attributes }
