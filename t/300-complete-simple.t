@@ -23,16 +23,31 @@ do {
 };
 
 my $dispatcher = MyApp::Dispatcher->dispatcher;
-is_deeply([$dispatcher->complete('x')], [], 'no completions for "x"');
-is_deeply([$dispatcher->complete('foooo')], [], 'no completions for "foooo"');
-is_deeply([$dispatcher->complete('baq')], [], 'no completions for "baq"');
+sub complete_ok {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    my $path     = shift;
+    my @expected = @_;
 
-is_deeply([$dispatcher->complete('f')],   ['foo'], 'one completion for "f"');
-is_deeply([$dispatcher->complete('fo')],  ['foo'], 'one completion for "fo"');
-is_deeply([$dispatcher->complete('foo')], [], '"foo" is already complete');
+    my @got = $dispatcher->complete($path);
 
-is_deeply([$dispatcher->complete('b')],  ['bar', 'baz'], 'two completions for "b"');
-is_deeply([$dispatcher->complete('ba')], ['bar', 'baz'], 'two completions for "ba"');
-is_deeply([$dispatcher->complete('bar')], [], '"bar" is already complete');
-is_deeply([$dispatcher->complete('baz')], [], '"baz" is already complete');
+    my $message = @expected == 0 ? "no completions"
+                : @expected == 1 ? "one completion"
+                :                  @expected . " completions";
+    $message .= " for path '$path'";
+
+    is_deeply(\@got, \@expected, $message);
+}
+
+complete_ok('x');
+complete_ok('foooo');
+complete_ok('baq');
+
+complete_ok(f  => 'foo');
+complete_ok(fo => 'foo');
+complete_ok('foo');
+
+complete_ok('b'  => 'bar', 'baz');
+complete_ok('ba' => 'bar', 'baz');
+complete_ok('bar');
+complete_ok('baz');
 
