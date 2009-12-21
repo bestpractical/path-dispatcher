@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 20;
 
 do {
     package MyApp::Dispatcher;
@@ -32,6 +32,10 @@ sub complete_ok {
 
 complete_ok('z');
 complete_ok('gate z');
+complete_ok('zig ');
+complete_ok('zig f');
+complete_ok('zig fo');
+complete_ok('zig foo');
 
 complete_ok(g   => 'gate');
 complete_ok(ga  => 'gate');
