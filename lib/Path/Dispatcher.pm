@@ -198,6 +198,8 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
 
 =item L<Path::Router>
 
+=item L<http://github.com/bestpractical/path-dispatcher-debugger> - Not quite ready for release
+
 =back
 
 =head1 COPYRIGHT & LICENSE
