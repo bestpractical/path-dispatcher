@@ -174,6 +174,20 @@ dispatch.
 The args are passed down directly into each rule codeblock. No other args are
 given to the codeblock.
 
+=head2 complete path -> strings
+
+Given a path, consult each rule for possible completions for the path. This is
+intended for tab completion. You can use it with L<Term::ReadLine> like so:
+
+    $term->Attribs->{completion_function} = sub {
+        my ($last_word, $line, $start) = @_;
+        my @matches = map { s/^.* //; $_ } $dispatcher->complete($line);
+        return @matches;
+    };
+
+This API is experimental and subject to change. In particular I think I want to
+return an object that resembles L<Path::Dispatcher::Dispatch>.
+
 =head1 AUTHOR
 
 Shawn M Moore, C<< <sartak at bestpractical.com> >>
