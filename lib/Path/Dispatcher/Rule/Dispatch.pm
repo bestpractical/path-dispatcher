@@ -6,7 +6,7 @@ has dispatcher => (
     is       => 'rw',
     isa      => 'Path::Dispatcher',
     required => 1,
-    handles  => ['rules'],
+    handles  => ['rules', 'complete'],
 );
 
 sub match {
