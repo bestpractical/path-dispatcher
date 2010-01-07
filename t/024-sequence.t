@@ -64,12 +64,13 @@ $dispatcher->add_rule(
                         prefix => 1,
                     ),
                 ],
+                prefix => 1,
             ),
             Path::Dispatcher::Rule::Eq->new(
                 string => 'Man',
             ),
         ],
-        block  => sub { push @calls, [$1, $2, $3] },
+        block => sub { push @calls, [$1, $2, $3] },
     ),
 );
 
@@ -86,13 +87,17 @@ $dispatcher->add_rule(
     Path::Dispatcher::Rule::Sequence->new(
         rules => [
             Path::Dispatcher::Rule::Alternation->new(
+                prefix => 1,
                 rules => [
                     Path::Dispatcher::Rule::Alternation->new(
+                        prefix => 1,
                         rules => [
                             Path::Dispatcher::Rule::Alternation->new(
+                                prefix => 1,
                                 rules => [
                                     Path::Dispatcher::Rule::Regex->new(
                                         regex => qr/Deep/,
+                                        prefix => 1,
                                     ),
                                 ],
                             ),

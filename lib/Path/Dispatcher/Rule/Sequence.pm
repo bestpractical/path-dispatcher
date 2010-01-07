@@ -11,6 +11,20 @@ has delimiter => (
     default => ' ',
 );
 
+sub BUILD {
+    my $self = shift;
+    my @rules = $self->rules;
+
+    # the last rule only needs to be prefix if this entire sequence is prefix
+    if (!$self->prefix) {
+        pop @rules;
+    }
+
+    for (@rules) {
+        $_->prefix or confess "$_ is not prefix. Better diagnostics forthcoming.";
+    }
+}
+
 sub _match {
     my $self = shift;
     my $path = shift;
