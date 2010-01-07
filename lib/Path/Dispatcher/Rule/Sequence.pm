@@ -56,7 +56,8 @@ sub complete {
     my $rule = shift @$rules;
     my $token = @$tokens ? shift @$tokens : '';
 
-    return $rule->complete($path->clone_path($token));
+    return map { $self->untokenize(@$matched, $_) }
+           $rule->complete($path->clone_path($token));
 }
 
 sub tokenize {
