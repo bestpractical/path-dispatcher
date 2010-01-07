@@ -48,7 +48,7 @@ $dispatcher->run('foo barbaz');
 is_deeply([splice @calls], [ ['foo', 'barbaz', undef] ], "ran the second [str, regex] rule");
 
 $dispatcher->run('foo bar baz');
-is_deeply([splice @calls], [], "no matches");
+is_deeply([splice @calls], [ ['foo', 'bar baz', undef] ], "no matches");
 
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::Sequence->new(
