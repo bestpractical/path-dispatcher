@@ -56,7 +56,7 @@ sub complete {
     my $rule = shift @$rules;
     my $token = @$tokens ? shift @$tokens : '';
 
-    return $rule->complete($token);
+    return $rule->complete($path->clone_path($token));
 }
 
 sub tokenize {
