@@ -8,7 +8,10 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    for my $rule ($self->rules) {
+    my @rules = $self->rules;
+    return 0 if @rules == 0;
+
+    for my $rule (@rules) {
         return 1 if $rule->match($path);
     }
 
