@@ -145,6 +145,7 @@ require Path::Dispatcher::Rule::Chain;
 require Path::Dispatcher::Rule::CodeRef;
 require Path::Dispatcher::Rule::Dispatch;
 require Path::Dispatcher::Rule::Empty;
+require Path::Dispatcher::Rule::Enum;
 require Path::Dispatcher::Rule::Eq;
 require Path::Dispatcher::Rule::Intersection;
 require Path::Dispatcher::Rule::Metadata;

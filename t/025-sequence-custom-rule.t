@@ -8,35 +8,12 @@ my @calls;
 
 do {
     package MyApp::Dispatcher::Rule::Language;
-    use Moose;
-    extends 'Path::Dispatcher::Rule';
+    use Any::Moose;
+    extends 'Path::Dispatcher::Rule::Enum';
 
-    my @langs = qw/ruby perl php python/;
-
-    sub _match {
-        my $self = shift;
-        my $path = shift;
-
-        for my $lang (@langs) {
-            return $lang if $path->path eq $lang;
-        }
-
-        return;
-    }
-
-    sub complete {
-        my $self = shift;
-        my $path = shift->path;
-
-        my @completions;
-
-        for my $lang (@langs) {
-            my $partial = substr($lang, 0, length($path));
-            push @completions, $lang if $partial eq $path;
-        }
-
-        return @completions;
-    }
+    has '+enum' => (
+        default => sub { [qw/ruby perl php python/] },
+    );
 };
 
 my $dispatcher = Path::Dispatcher->new(
