@@ -1,6 +1,5 @@
 package Path::Dispatcher::Rule::Sequence;
 use Any::Moose;
-use Any::Moose '::Util::TypeConstraints';
 
 extends 'Path::Dispatcher::Rule';
 with 'Path::Dispatcher::Role::Rules';
@@ -11,47 +10,68 @@ has delimiter => (
     default => ' ',
 );
 
-sub BUILD {
+sub _match_as_far_as_possible {
     my $self = shift;
-    my @rules = $self->rules;
+    my $path = shift;
 
-    # the last rule only needs to be prefix if this entire sequence is prefix
-    if (!$self->prefix) {
-        pop @rules;
+    my @tokens = $self->tokenize($path->path);
+    my @rules  = $self->rules;
+    my @matched;
+
+    while (@tokens && @rules) {
+        my $rule  = $rules[0];
+        my $token = $tokens[0];
+
+        last unless $rule->match($path->clone_path($token));
+
+        push @matched, $token;
+        shift @rules;
+        shift @tokens;
     }
 
-    for (@rules) {
-        $_->prefix or confess "$_ is not prefix. Better diagnostics forthcoming.";
-    }
+    return (\@matched, \@tokens, \@rules);
 }
 
 sub _match {
     my $self = shift;
     my $path = shift;
 
-    my @rules = $self->rules;
-    my $delimiter = $self->delimiter;
-    my @matches;
-    my $leftover = $path->path; # start with everything leftover
+    my ($matched, $tokens, $rules) = $self->_match_as_far_as_possible($path);
 
-    for my $rule (@rules) {
-        my $match = $rule->match($path);
-        return if !$match;
+    return if @$rules; # didn't provide everything necessary
+    return if @$tokens && !$self->prefix; # had tokens left over
 
-        $leftover = $match->leftover;
+    my $leftover = $self->untokenize(@$tokens);
+    return $matched, $leftover;
+}
 
-        push @matches, substr($path, 0, length($path) - length($leftover));
+sub complete {
+    my $self = shift;
+    my $path = shift;
 
-        $leftover =~ s/^\Q$delimiter\E+//;
-        return \@matches if length($leftover) == 0;
+    my ($matched, $tokens, $rules) = $self->_match_as_far_as_possible($path);
+    return if @$tokens > 1; # had tokens leftover
+    return if !@$rules; # consumed all rules
 
-        $path = $path->clone_path($leftover);
-    }
+    my $rule = shift @$rules;
+    my $token = @$tokens ? shift @$tokens : '';
 
-    # leftover text
-    return \@matches, $leftover if $self->prefix;
+    return $rule->complete($token);
+}
 
-    return;
+sub tokenize {
+    my $self = shift;
+    my $path = shift;
+    return grep { length } split $self->delimiter, $path;
+}
+
+sub untokenize {
+    my $self   = shift;
+    my @tokens = @_;
+    return join $self->delimiter,
+           grep { length }
+           map { split $self->delimiter, $_ }
+           @tokens;
 }
 
 1;

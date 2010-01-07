@@ -12,11 +12,9 @@ $dispatcher->add_rule(
         rules => [
             Path::Dispatcher::Rule::Eq->new(
                 string => 'foo',
-                prefix => 1,
             ),
             Path::Dispatcher::Rule::Eq->new(
                 string => 'bar',
-                prefix => 1,
             ),
         ],
         block  => sub { push @calls, [$1, $2, $3] },
@@ -31,7 +29,6 @@ $dispatcher->add_rule(
         rules => [
             Path::Dispatcher::Rule::Eq->new(
                 string => 'foo',
-                prefix => 1,
             ),
             Path::Dispatcher::Rule::Regex->new(
                 regex => qr/bar/,
@@ -48,7 +45,7 @@ $dispatcher->run('foo barbaz');
 is_deeply([splice @calls], [ ['foo', 'barbaz', undef] ], "ran the second [str, regex] rule");
 
 $dispatcher->run('foo bar baz');
-is_deeply([splice @calls], [ ['foo', 'bar baz', undef] ], "no matches");
+is_deeply([splice @calls], [ ], "no matches");
 
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::Sequence->new(
@@ -57,14 +54,11 @@ $dispatcher->add_rule(
                 rules => [
                     Path::Dispatcher::Rule::Eq->new(
                         string => 'Bat',
-                        prefix => 1,
                     ),
                     Path::Dispatcher::Rule::Eq->new(
                         string => 'Super',
-                        prefix => 1,
                     ),
                 ],
-                prefix => 1,
             ),
             Path::Dispatcher::Rule::Eq->new(
                 string => 'Man',
@@ -87,17 +81,13 @@ $dispatcher->add_rule(
     Path::Dispatcher::Rule::Sequence->new(
         rules => [
             Path::Dispatcher::Rule::Alternation->new(
-                prefix => 1,
                 rules => [
                     Path::Dispatcher::Rule::Alternation->new(
-                        prefix => 1,
                         rules => [
                             Path::Dispatcher::Rule::Alternation->new(
-                                prefix => 1,
                                 rules => [
                                     Path::Dispatcher::Rule::Regex->new(
                                         regex => qr/Deep/,
-                                        prefix => 1,
                                     ),
                                 ],
                             ),
@@ -124,12 +114,10 @@ my $rule = Path::Dispatcher::Rule::Sequence->new(
         Path::Dispatcher::Rule::Eq->new(
             string         => 'path',
             case_sensitive => 0,
-            prefix         => 1,
         ),
         Path::Dispatcher::Rule::Eq->new(
             string         => 'dispatcher',
             case_sensitive => 0,
-            prefix         => 1,
         ),
     ],
     prefix    => 1,
