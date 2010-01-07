@@ -139,6 +139,7 @@ __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
 # don't require others to load our subclasses explicitly
+require Path::Dispatcher::Rule::Alternation;
 require Path::Dispatcher::Rule::Always;
 require Path::Dispatcher::Rule::Chain;
 require Path::Dispatcher::Rule::CodeRef;
