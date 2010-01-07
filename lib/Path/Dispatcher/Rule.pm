@@ -149,6 +149,7 @@ require Path::Dispatcher::Rule::Eq;
 require Path::Dispatcher::Rule::Intersection;
 require Path::Dispatcher::Rule::Metadata;
 require Path::Dispatcher::Rule::Regex;
+require Path::Dispatcher::Rule::Sequence;
 require Path::Dispatcher::Rule::Tokens;
 require Path::Dispatcher::Rule::Under;
 
