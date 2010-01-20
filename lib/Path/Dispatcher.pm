@@ -27,14 +27,7 @@ has name => (
 
 sub dispatch {
     my $self = shift;
-    my $path = shift;
-
-    # Automatically box paths
-    unless (blessed($path) && $path->isa('Path::Dispatcher::Path')) {
-        $path = $self->path_class->new(
-            path => $path,
-        );
-    }
+    my $path = $self->_autobox_path(shift);
 
     my $dispatch = $self->dispatch_class->new;
 
@@ -71,17 +64,23 @@ sub run {
 
 sub complete {
     my $self = shift;
+    my $path = $self->_autobox_path(shift);
+
+    my %seen;
+    return grep { !$seen{$_}++ } map { $_->complete($path) } $self->rules;
+}
+
+sub _autobox_path {
+    my $self = shift;
     my $path = shift;
 
-    # Automatically box paths
     unless (blessed($path) && $path->isa('Path::Dispatcher::Path')) {
         $path = $self->path_class->new(
             path => $path,
         );
     }
 
-    my %seen;
-    return grep { !$seen{$_}++ } map { $_->complete($path) } $self->rules;
+    return $path;
 }
 
 # We don't export anything, so if they request something, then try to error
