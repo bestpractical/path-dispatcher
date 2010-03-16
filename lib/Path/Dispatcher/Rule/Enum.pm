@@ -55,14 +55,18 @@ sub complete {
     my $path = shift->path;
     my @completions;
 
+    # by convention, complete does include the path itself if it
+    # is a complete match
+    my @enum = grep { length($path) < length($_) } @{ $self->enum };
+
     if ($self->case_sensitive) {
-        for my $value (@{ $self->enum }) {
+        for my $value (@enum) {
             my $partial = substr($value, 0, length($path));
             push @completions, $value if $partial eq $path;
         }
     }
     else {
-        for my $value (@{ $self->enum }) {
+        for my $value (@enum) {
             my $partial = substr($value, 0, length($path));
             push @completions, $value if lc($partial) eq lc($path);
         }
