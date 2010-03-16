@@ -47,6 +47,10 @@ sub complete {
     my $path = shift->path;
     my $completed = $self->string;
 
+    # by convention, complete does include the path itself if it
+    # is a complete match
+    return if length($path) >= length($completed);
+
     my $partial = substr($completed, 0, length($path));
     if ($self->case_sensitive) {
         return unless $partial eq $path;
