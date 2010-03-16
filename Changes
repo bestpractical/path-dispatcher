@@ -1,6 +1,22 @@
 Revision history for Path-Dispatcher
 
 0.15
+        ** Factored Path-Dispatcher-Declarative into its own distribution
+        ** Be sure to update your dependency information!
+
+        Implement ->complete for Rule::Dispatch
+
+        Add Path::Dispatcher::Rule::Alternation
+
+        Implement case insensitivity fory Rule::Eq
+
+        Add Path::Dispatcher::Rule::Sequence - like Rule::Tokens but
+            better!
+
+        Add Path::Dispatcher::Rule::Enum
+
+        Path autoboxing has been factored out into a private method for
+            more overridability
 
 0.14 Thu Dec 31 13:18:19 2009
         Add Path::Dispatcher->complete for tab-completion
