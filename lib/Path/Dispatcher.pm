@@ -217,7 +217,7 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008-2009 Best Practical Solutions.
+Copyright 2008-2010 Best Practical Solutions.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
