@@ -56,6 +56,7 @@ sub build_sugar {
         on            => sub { $builder->on(@_) },
         under         => sub { $builder->under(@_) },
         redispatch_to => sub { $builder->redispatch_to(@_) },
+        enum          => sub { $builder->enum(@_) },
         next_rule     => sub { $builder->next_rule(@_) },
         last_rule     => sub { $builder->last_rule(@_) },
         complete      => sub { $builder->complete(@_) },

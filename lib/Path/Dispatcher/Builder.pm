@@ -76,6 +76,13 @@ sub on {
     $self->_add_rule(@_);
 }
 
+sub enum {
+    my $self = shift;
+    Path::Dispatcher::Rule::Enum->new(
+        enum => [@_],
+    );
+}
+
 sub then {
     my $self = shift;
     my $block = shift;
