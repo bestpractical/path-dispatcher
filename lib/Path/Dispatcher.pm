@@ -113,7 +113,7 @@ Path::Dispatcher - flexible and extensible dispatch
     $dispatcher->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr{^/(foo)/},
-            block => sub { warn $1; }, # foo
+            block => sub { warn $1; },
         )
     );
 
