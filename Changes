@@ -1,6 +1,6 @@
 Revision history for Path-Dispatcher
 
-0.15
+0.15 Tue Mar 16 09:40:40 2009
         ** Factored Path-Dispatcher-Declarative into its own distribution
         ** Be sure to update your dependency information!
 
@@ -17,6 +17,8 @@ Revision history for Path-Dispatcher
 
         Path autoboxing has been factored out into a private method for
             more overridability
+
+        A few documentation improvements as usual :)
 
 0.14 Thu Dec 31 13:18:19 2009
         Add Path::Dispatcher->complete for tab-completion

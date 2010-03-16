@@ -53,8 +53,10 @@ Path::Dispatcher::Rule::CodeRef - predicate is any subroutine
 
 Rules of this class can match arbitrarily complex values. This should be used
 only when there is no other recourse, because there's no way we can inspect
-how things match. Create a custom subclass of L<Path::Dispatcher::Rule> if
-necessary!
+how things match.
+
+You're much better off creating a custom subclass of L<Path::Dispatcher::Rule>
+if at all possible.
 
 =head1 ATTRIBUTES
 
