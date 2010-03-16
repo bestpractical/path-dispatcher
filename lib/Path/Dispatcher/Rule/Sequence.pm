@@ -75,5 +75,8 @@ sub untokenize {
            @tokens;
 }
 
+__PACKAGE__->meta->make_immutable;
+no Any::Moose;
+
 1;
 
