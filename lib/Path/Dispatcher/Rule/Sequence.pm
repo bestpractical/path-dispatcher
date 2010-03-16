@@ -80,3 +80,27 @@ no Any::Moose;
 
 1;
 
+__END__
+
+=head1 NAME
+
+Path::Dispatcher::Rule::Sequence - a sequence of rules
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+This is basically a more robust and flexible version of
+L<Path::Dispatcher::Rule::Tokens>.
+
+Instead of a mish-mash of strings, regexes, and array references,
+a Sequence rule has just a list of other rules.
+
+=head1 ATTRIBUTES
+
+=head2 rules
+
+=head2 delimiter
+
+=cut
+
