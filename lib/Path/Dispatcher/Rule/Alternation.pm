@@ -18,6 +18,12 @@ sub _match {
     return 0;
 }
 
+sub complete {
+    my $self = shift;
+
+    return map { $_->complete(@_) } $self->rules;
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
