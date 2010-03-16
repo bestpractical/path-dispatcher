@@ -75,7 +75,7 @@ Path::Dispatcher::Rule::Eq - predicate is a string equality
 
     my $rule = Path::Dispatcher::Rule::Eq->new(
         string => 'comment',
-        block  => sub { display_comment($2) },
+        block  => sub { display_comment($1) },
     );
 
 =head1 DESCRIPTION
