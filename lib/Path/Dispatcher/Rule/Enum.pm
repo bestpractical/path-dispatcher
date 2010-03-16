@@ -86,22 +86,25 @@ __END__
 
 =head1 NAME
 
-Path::Dispatcher::Rule::Eq - predicate is a string equality
+Path::Dispatcher::Rule::Enum - one of a list of strings must match
 
 =head1 SYNOPSIS
 
-    my $rule = Path::Dispatcher::Rule::Eq->new(
-        string => 'comment',
-        block  => sub { display_comment($2) },
+    my $rule = Path::Dispatcher::Rule::Enum->new(
+        enum  => [qw(perl ruby python php)],
+        block => sub { warn "$1 rules!" },
     );
 
 =head1 DESCRIPTION
 
-Rules of this class simply check whether the string is equal to the path.
+Rules of this class check whether the path matches any of its
+L</enum> strings.
 
 =head1 ATTRIBUTES
 
-=head2 string
+=head2 enum
+
+=head2 case_sensitive
 
 =cut
 
