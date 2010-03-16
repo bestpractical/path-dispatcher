@@ -2,13 +2,13 @@ Revision history for Path-Dispatcher
 
 0.15 Tue Mar 16 09:40:40 2009
         ** Factored Path-Dispatcher-Declarative into its own distribution
-        ** Be sure to update your dependency information!
+        ** Be sure to update your dependency lists!
 
         Implement ->complete for Rule::Dispatch
 
         Add Path::Dispatcher::Rule::Alternation
 
-        Implement case insensitivity fory Rule::Eq
+        Implement case insensitivity for Rule::Eq
 
         Add Path::Dispatcher::Rule::Sequence - like Rule::Tokens but
             better!
