@@ -55,5 +55,37 @@ You can use a C<chain> rule approximate chaining behavior:
 
     MyDispatcher->run("show score"); # "Displaying score:\n ..."
 
+=head2 How can I configure tab completion for shells?
+
+First add a dispatcher rule for generating completions based on the path. Here
+we name it _gencomp, so that if the user types "app _gencomp hel" it will print
+out the various completions of "hel".
+
+    on qr/^_gencomp\s*(.*)/ => sub {
+        my $self = shift;
+        my $path = $1;
+        $path = "" if !defined($path);
+        print "$_\n" for dispatcher->complete($path);
+    };
+
+Then tell your shell about how to use _gencomp. For zsh it might look
+like this (replace "app" with your binary name):
+
+    /usr/share/zsh/site-functions/_app:
+        #compdef app
+        typeset -a app_completions
+        app_completions=($($words[1] _gencomp $words[2,-1]))
+        compadd $app_completions
+
+For bash it might look like this:
+
+    /etc/bash_completion.d/app.bash:
+        function _app_()
+        {
+            COMPREPLY=($($1 _gencomp ${COMP_WORDS[COMP_CWORD]}))
+        }
+
+        complete -F _app_ app
+
 =cut
 
