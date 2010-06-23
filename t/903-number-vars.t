@@ -1,13 +1,14 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 use Path::Dispatcher;
 
 my @vars;
 
 "abc" =~ /(.)(.)(.)/;
+is_deeply([$1, $2, $3, $4], ["a", "b", "c", undef]);
 
 my $dispatcher = Path::Dispatcher->new(
     rules => [
