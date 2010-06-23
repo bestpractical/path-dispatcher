@@ -52,6 +52,9 @@ sub run_with_number_vars {
     my $self = shift;
     my $code = shift;
 
+    # clear $1, $2, $3 so they don't pollute the number vars for the block
+    "x" =~ /x/;
+
     # populate $1, $2, etc for the duration of $code
     # it'd be nice if we could use "local" but it seems to break tests
     my $i = 0;
