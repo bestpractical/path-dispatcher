@@ -201,6 +201,8 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
 
 =over 4
 
+=item L<http://sartak.org/talks/yapc-na-2010/path-dispatcher/>
+
 =item L<Jifty::Dispatcher>
 
 =item L<Catalyst::Dispatcher>
