@@ -1,5 +1,11 @@
 Revision history for Path-Dispatcher
 
+0.16
+        Use glob assignment for populating capture variables instead of a
+            regular expression, thanks to chromatic
+
+        Add documentation for shell tab completion
+
 0.15 Tue Mar 16 09:40:40 2009
         ** Factored Path-Dispatcher-Declarative into its own distribution
         ** Be sure to update your dependency lists!
