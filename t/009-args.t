@@ -10,7 +10,7 @@ my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/foo/,
-        block => sub { push @calls, [@_] },
+        block => sub { my $match = shift; push @calls, [@_] },
     ),
 );
 
