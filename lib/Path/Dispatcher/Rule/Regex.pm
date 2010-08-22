@@ -16,11 +16,10 @@ sub _match {
 
     # if $' is in the program at all, then it slows down every single regex
     # we only want to include it if we have to
-    if ($self->prefix) {
-        return \@matches, eval q{$'};
+    return {
+        positional_captures => \@matches,
+        ($self->prefix ? (leftover => eval q{$'}) : ()),
     }
-
-    return \@matches;
 }
 
 sub readable_attributes { shift->regex }

@@ -20,14 +20,16 @@ sub _match {
 
     if ($self->case_sensitive) {
         for my $value (@{ $self->enum }) {
-            return 1 if $path->path eq $value;
+            return {} if $path->path eq $value;
         }
     }
     else {
         for my $value (@{ $self->enum }) {
-            return 1 if lc($path->path) eq lc($value);
+            return {} if lc($path->path) eq lc($value);
         }
     }
+
+    return;
 }
 
 sub _prefix_match {
@@ -38,16 +40,24 @@ sub _prefix_match {
 
     if ($self->case_sensitive) {
         for my $value (@{ $self->enum }) {
-            return (1, substr($path->path, length($self->string)))
-                if $truncated eq $value;
+            next unless $truncated eq $value;
+
+            return {
+                leftover => substr($path->path, length($self->string)),
+            };
         }
     }
     else {
         for my $value (@{ $self->enum }) {
-            return (1, substr($path->path, length($self->string)))
-                if lc($truncated) eq lc($value);
+            next unless lc($truncated) eq lc($value);
+
+            return {
+                leftover => substr($path->path, length($self->string)),
+            };
         }
     }
+
+    return;
 }
 
 sub complete {

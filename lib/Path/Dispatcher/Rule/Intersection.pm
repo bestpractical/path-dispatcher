@@ -9,13 +9,13 @@ sub _match {
     my $path = shift;
 
     my @rules = $self->rules;
-    return 0 if @rules == 0;
+    return if @rules == 0;
 
     for my $rule (@rules) {
-        return 0 unless $rule->match($path);
+        return unless $rule->match($path);
     }
 
-    return 1;
+    return {};
 }
 
 __PACKAGE__->meta->make_immutable;

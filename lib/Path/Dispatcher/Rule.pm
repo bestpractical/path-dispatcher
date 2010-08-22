@@ -27,38 +27,21 @@ sub match {
     my $self = shift;
     my $path = shift;
 
-    my ($positional_captures, $leftover);
+    my $result;
 
     if ($self->prefix) {
-        ($positional_captures, $leftover) = $self->_prefix_match($path);
+        $result = $self->_prefix_match($path);
     }
     else {
-        ($positional_captures, $leftover) = $self->_match($path);
+        $result = $self->_match($path);
     }
 
-    if (!$positional_captures) {
-        $self->trace(leftover => $leftover, match => undef, path => $path)
-            if $ENV{'PATH_DISPATCHER_TRACE'};
-        return;
-    }
-
-    $leftover = '' if !defined($leftover);
-    $positional_captures = [] if !defined($positional_captures);
-
-    if (ref($positional_captures) ne 'ARRAY') {
-        die "Invalid result '$_', the positional captures must be an array reference";
-    }
-
-    for (@$positional_captures) {
-        die "Invalid result '$_', results must be plain strings"
-            if ref($_);
-    }
+    return if !$result;
 
     my $match = $self->match_class->new(
         path     => $path,
         rule     => $self,
-        positional_captures => $positional_captures,
-        leftover => $leftover,
+        %$result,
     );
 
     $self->trace(match => $match) if $ENV{'PATH_DISPATCHER_TRACE'};

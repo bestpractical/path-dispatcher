@@ -19,11 +19,13 @@ sub _match {
     my $path = shift;
 
     if ($self->case_sensitive) {
-        return $path->path eq $self->string;
+        return unless $path->path eq $self->string;
     }
     else {
-        return lc($path->path) eq lc($self->string);
+        return unless lc($path->path) eq lc($self->string);
     }
+
+    return {};
 }
 
 sub _prefix_match {
@@ -33,13 +35,15 @@ sub _prefix_match {
     my $truncated = substr($path->path, 0, length($self->string));
 
     if ($self->case_sensitive) {
-        return 0 unless $truncated eq $self->string;
+        return unless $truncated eq $self->string;
     }
     else {
-        return 0 unless lc($truncated) eq lc($self->string);
+        return unless lc($truncated) eq lc($self->string);
     }
 
-    return (1, substr($path->path, length($self->string)));
+    return {
+        leftover => substr($path->path, length($self->string)),
+    };
 }
 
 sub complete {

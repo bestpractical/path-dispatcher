@@ -53,7 +53,13 @@ sub _match {
     return if @$got && !$self->prefix; # had tokens left over
 
     my $leftover = $self->untokenize(@$got);
-    return $matched, $leftover;
+
+    return if !$matched;
+
+    return {
+        positional_captures => $matched,
+        leftover            => $leftover,
+    };
 }
 
 sub complete {

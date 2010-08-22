@@ -21,9 +21,11 @@ sub _match {
 
     # wow, offensive.. but powerful
     my $metadata_path = $path->clone_path($got);
-    return 0 unless $self->matcher->match($metadata_path);
+    return unless $self->matcher->match($metadata_path);
 
-    return 1, $path->path;
+    return {
+        leftover => $path->path,
+    };
 }
 
 sub readable_attributes {

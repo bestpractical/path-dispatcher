@@ -9,13 +9,13 @@ sub _match {
     my $path = shift;
 
     my @rules = $self->rules;
-    return 0 if @rules == 0;
+    return if @rules == 0;
 
     for my $rule (@rules) {
-        return 1 if $rule->match($path);
+        return {} if $rule->match($path);
     }
 
-    return 0;
+    return;
 }
 
 sub complete {

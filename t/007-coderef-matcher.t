@@ -9,8 +9,8 @@ my (@matches, @calls);
 my $dispatcher = Path::Dispatcher->new;
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::CodeRef->new(
-        matcher => sub { push @matches, $_; length > 5 },
-        block   => sub { push @calls, [@_] },
+        matcher => sub { push @matches, $_; length > 5 ? {} : 0 },
+        block   => sub { my $match = shift; push @calls, [@_] },
     ),
 );
 
