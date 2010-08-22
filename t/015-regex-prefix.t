@@ -19,6 +19,6 @@ my $match = $rule->match(Path::Dispatcher::Path->new('foobar:baz'));
 
 ok($match, "matched foobar:baz");
 
-is_deeply($match->result, ["foo", "bar"], "match returns just the results");
+is_deeply($match->positional_captures, ["foo", "bar"], "match returns just the results");
 is($match->leftover, ':baz', "leftovers");
 

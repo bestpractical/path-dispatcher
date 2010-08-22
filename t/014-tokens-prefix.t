@@ -17,6 +17,6 @@ ok($rule->match(Path::Dispatcher::Path->new('foo bar')), "prefix matches the ful
 
 my $match = $rule->match(Path::Dispatcher::Path->new('foo bar baz'));
 ok($match, "prefix matches a prefix of the path");
-is_deeply($match->result, ["foo", "bar"]);
+is_deeply($match->positional_captures, ["foo", "bar"]);
 is($match->leftover, "baz");
 
