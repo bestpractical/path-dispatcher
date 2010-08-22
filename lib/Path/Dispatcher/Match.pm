@@ -34,6 +34,13 @@ sub run {
     return $self->rule->run($self, @_);
 }
 
+sub pos {
+    my $self = shift;
+    my $index = shift;
+
+    return $self->positional_captures->[$index];
+}
+
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
