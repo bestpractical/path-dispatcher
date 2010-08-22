@@ -27,16 +27,16 @@ sub match {
     my $self = shift;
     my $path = shift;
 
-    my ($result, $leftover);
+    my ($positional_captures, $leftover);
 
     if ($self->prefix) {
-        ($result, $leftover) = $self->_prefix_match($path);
+        ($positional_captures, $leftover) = $self->_prefix_match($path);
     }
     else {
-        ($result, $leftover) = $self->_match($path);
+        ($positional_captures, $leftover) = $self->_match($path);
     }
 
-    if (!$result) {
+    if (!$positional_captures) {
         $self->trace(leftover => $leftover, match => undef, path => $path)
             if $ENV{'PATH_DISPATCHER_TRACE'};
         return;
@@ -48,17 +48,19 @@ sub match {
     # later we will stick them into a regular expression to populate $1 etc
     # which will blow up later!
 
-    if (ref($result) eq 'ARRAY') {
-        for (@$result) {
-            die "Invalid result '$_', results must be plain strings"
-                if ref($_);
-        }
+    if (ref($positional_captures) ne 'ARRAY') {
+        die "Invalid result '$_', the positional captures must be an array reference";
+    }
+
+    for (@$positional_captures) {
+        die "Invalid result '$_', results must be plain strings"
+            if ref($_);
     }
 
     my $match = $self->match_class->new(
         path     => $path,
         rule     => $self,
-        positional_captures => $result,
+        positional_captures => $positional_captures,
         leftover => $leftover,
     );
 
