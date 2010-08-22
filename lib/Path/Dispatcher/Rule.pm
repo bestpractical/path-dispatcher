@@ -43,10 +43,7 @@ sub match {
     }
 
     $leftover = '' if !defined($leftover);
-
-    # make sure that the returned values are PLAIN STRINGS
-    # later we will stick them into a regular expression to populate $1 etc
-    # which will blow up later!
+    $positional_captures = [] if !defined($positional_captures);
 
     if (ref($positional_captures) ne 'ARRAY') {
         die "Invalid result '$_', the positional captures must be an array reference";
