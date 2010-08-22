@@ -38,6 +38,10 @@ sub pos {
     my $self = shift;
     my $index = shift;
 
+    return undef if $index == 0;
+
+    $index-- if $index > 0;
+
     return $self->positional_captures->[$index];
 }
 
@@ -107,7 +111,7 @@ Executes the rule's codeblock with the same arguments.
 
 =head2 pos($i)
 
-Returns the C<$i>th positional capture.
+Returns the C<$i>th positional capture, 1-indexed.
 
 =cut
 
