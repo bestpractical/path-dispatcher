@@ -21,41 +21,11 @@ has rule => (
     required => 1,
 );
 
-has result => (
-    is => 'rw',
-);
-
 sub run {
     my $self = shift;
-    my @args = @_;
 
     local $_ = $self->path;
-
-    my @number_vars;
-    if (ref($self->result) eq 'ARRAY') {
-        @number_vars = @{ $self->result };
-    }
-
-    return $self->run_with_number_vars(
-        sub { $self->rule->run(@args) },
-        @number_vars,
-    );
-}
-
-sub run_with_number_vars {
-    my $self = shift;
-    my $code = shift;
-
-    # clear $1, $2, $3 so they don't pollute the number vars for the block
-    "x" =~ /x/;
-
-    # populate $1, $2, etc for the duration of $code
-    # it'd be nice if we could use "local" but it seems to break tests
-    my $i = 0;
-    no strict 'refs';
-    *{ ++$i } = \$_ for @_;
-
-    $code->();
+    return $self->rule->run($self, @_);
 }
 
 __PACKAGE__->meta->make_immutable;
