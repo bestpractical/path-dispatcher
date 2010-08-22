@@ -21,6 +21,12 @@ has rule => (
     required => 1,
 );
 
+has positional_captures => (
+    is      => 'rw',
+    isa     => 'ArrayRef[Str]',
+    default => sub { [] },
+);
+
 sub run {
     my $self = shift;
 

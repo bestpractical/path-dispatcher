@@ -58,7 +58,7 @@ sub match {
     my $match = $self->match_class->new(
         path     => $path,
         rule     => $self,
-        result   => $result,
+        positional_captures => $result,
         leftover => $leftover,
     );
 
