@@ -12,12 +12,13 @@ sub _match {
     my $self = shift;
     my $path = shift;
 
-    return unless my @matches = $path->path =~ $self->regex;
+    return unless my @positional = $path->path =~ $self->regex;
 
-    # if $' is in the program at all, then it slows down every single regex
-    # we only want to include it if we have to
+    my %named = $] > 5.010 ? eval q{%+} : ();
+
     return {
-        positional_captures => \@matches,
+        positional_captures => \@positional,
+        named_captures      => \%named,
         ($self->prefix ? (leftover => eval q{$'}) : ()),
     }
 }

@@ -27,6 +27,12 @@ has positional_captures => (
     default => sub { [] },
 );
 
+has named_captures => (
+    is      => 'rw',
+    isa     => 'HashRef[Str|Undef]',
+    default => sub { {} },
+);
+
 sub run {
     my $self = shift;
 
