@@ -23,22 +23,22 @@ my $dispatcher = Path::Dispatcher->new(
                 Path::Dispatcher::Rule::Eq->new(string => 'use'),
                 MyApp::Dispatcher::Rule::Language->new,
             ],
-            block => sub { push @calls, [$1, $2, $3] },
+            block => sub { push @calls, shift->positional_captures },
         ),
     ],
 );
 
 $dispatcher->run("use perl");
-is_deeply([splice @calls], [["use", "perl", undef]]);
+is_deeply([splice @calls], [["use", "perl"]]);
 
 $dispatcher->run("use python");
-is_deeply([splice @calls], [["use", "python", undef]]);
+is_deeply([splice @calls], [["use", "python"]]);
 
 $dispatcher->run("use php");
-is_deeply([splice @calls], [["use", "php", undef]]);
+is_deeply([splice @calls], [["use", "php"]]);
 
 $dispatcher->run("use ruby");
-is_deeply([splice @calls], [["use", "ruby", undef]]);
+is_deeply([splice @calls], [["use", "ruby"]]);
 
 $dispatcher->run("use c++");
 is_deeply([splice @calls], []);
@@ -63,7 +63,7 @@ $dispatcher = Path::Dispatcher->new(
                 MyApp::Dispatcher::Rule::Language->new,
                 Path::Dispatcher::Rule::Eq->new(string => 'please'),
             ],
-            block => sub { push @calls, [$1, $2, $3, $4] },
+            block => sub { push @calls, shift->positional_captures },
         ),
     ],
 );
@@ -72,25 +72,25 @@ $dispatcher->run("use perl");
 is_deeply([splice @calls], []);
 
 $dispatcher->run("use perl please");
-is_deeply([splice @calls], [["use", "perl", "please", undef]]);
+is_deeply([splice @calls], [["use", "perl", "please"]]);
 
 $dispatcher->run("use python");
 is_deeply([splice @calls], []);
 
 $dispatcher->run("use python please");
-is_deeply([splice @calls], [["use", "python", "please", undef]]);
+is_deeply([splice @calls], [["use", "python", "please"]]);
 
 $dispatcher->run("use php");
 is_deeply([splice @calls], []);
 
 $dispatcher->run("use php please");
-is_deeply([splice @calls], [["use", "php", "please", undef]]);
+is_deeply([splice @calls], [["use", "php", "please"]]);
 
 $dispatcher->run("use ruby");
 is_deeply([splice @calls], []);
 
 $dispatcher->run("use ruby please");
-is_deeply([splice @calls], [["use", "ruby", "please", undef]]);
+is_deeply([splice @calls], [["use", "ruby", "please"]]);
 
 $dispatcher->run("use c++");
 is_deeply([splice @calls], []);
