@@ -15,5 +15,5 @@ my $dispatcher = Path::Dispatcher->new(
 
 throws_ok {
     $dispatcher->dispatch('foo');
-} qr/Invalid result 'HASH\(\w+\)', results must be plain strings/;
+} qr/Results returned from _match must be a hashref/;
 

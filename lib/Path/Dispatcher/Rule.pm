@@ -38,6 +38,10 @@ sub match {
 
     return if !$result;
 
+    if (ref($result) ne 'HASH') {
+        die "Results returned from _match must be a hashref";
+    }
+
     my $match = $self->match_class->new(
         path     => $path,
         rule     => $self,
