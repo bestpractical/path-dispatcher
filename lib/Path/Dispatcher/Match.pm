@@ -23,7 +23,7 @@ has rule => (
 
 has positional_captures => (
     is      => 'rw',
-    isa     => 'ArrayRef[Str]',
+    isa     => 'ArrayRef[Str|Undef]',
     default => sub { [] },
 );
 
