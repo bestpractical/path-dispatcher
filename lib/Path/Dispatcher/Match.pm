@@ -31,9 +31,14 @@ sub run {
 
     local $_ = $self->path;
 
+    my @number_vars;
+    if (ref($self->result) eq 'ARRAY') {
+        @number_vars = @{ $self->result };
+    }
+
     return $self->run_with_number_vars(
         sub { $self->rule->run(@args) },
-        @{ $self->result },
+        @number_vars,
     );
 }
 
