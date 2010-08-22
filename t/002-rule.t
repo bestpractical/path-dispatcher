@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 4;
 use Path::Dispatcher::Rule;
 
 my @calls;
@@ -17,21 +17,12 @@ my $rule = Path::Dispatcher::Rule::Regex->new(
 );
 
 isa_ok($rule->match(Path::Dispatcher::Path->new('foobar')), 'Path::Dispatcher::Match');
-is_deeply($rule->match(Path::Dispatcher::Path->new('foobar'))->result, ['fo', 'ob']);
+is_deeply($rule->match(Path::Dispatcher::Path->new('foobar'))->positional_captures, ['fo', 'ob']);
 is_deeply([splice @calls], [], "block not called on match");
 
 $rule->run;
 is_deeply([splice @calls], [{
     vars => [undef, undef, undef],
-    args => [],
-}], "block called on ->run");
-
-# make sure ->run grabs $1
-"bah" =~ /^(\w+)/;
-
-$rule->run;
-is_deeply([splice @calls], [{
-    vars => ["bah", undef, undef],
     args => [],
 }], "block called on ->run");
 
