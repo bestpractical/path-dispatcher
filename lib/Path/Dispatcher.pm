@@ -180,12 +180,6 @@ return an object that resembles L<Path::Dispatcher::Dispatch>.
 
 Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-path-dispatcher at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Path-Dispatcher>.
-
 =head1 SEE ALSO
 
 =over 4
