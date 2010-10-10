@@ -40,7 +40,7 @@ sub run {
             $match->rule->trace(running => 1, match => $match)
                 if $ENV{PATH_DISPATCHER_TRACE};
 
-            push @results, scalar $match->run(@args);
+            push @results, $match->run(@args);
 
             die "Path::Dispatcher abort\n";
         };

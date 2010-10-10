@@ -37,7 +37,7 @@ sub run {
     my $self = shift;
 
     local $_ = $self->path;
-    return $self->rule->run($self, @_);
+    return scalar $self->rule->run($self, @_);
 }
 
 sub pos {
