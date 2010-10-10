@@ -83,17 +83,6 @@ sub _autobox_path {
     return $path;
 }
 
-# We don't export anything, so if they request something, then try to error
-# helpfully
-sub import {
-    my $self    = shift;
-    my $package = caller;
-
-    if (@_) {
-        Carp::croak "'use Path::Dispatcher (@_)' called by $package. Did you mean to use Path::Dispatcher::Declarative?";
-    }
-}
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
