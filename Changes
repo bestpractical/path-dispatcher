@@ -18,6 +18,8 @@ Revision history for Path-Dispatcher
 
         Add documentation for shell tab completion
 
+        Plenty other updated documentation
+
 0.15 Tue Mar 16 09:40:40 2010
         ** Factored Path-Dispatcher-Declarative into its own distribution
         ** Be sure to update your dependency lists!
