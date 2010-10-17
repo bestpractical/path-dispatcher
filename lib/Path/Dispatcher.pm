@@ -32,7 +32,7 @@ sub dispatch {
     my $dispatch = $self->dispatch_class->new;
 
     for my $rule ($self->rules) {
-        $self->dispatch_rule(
+        $self->_dispatch_rule(
             rule     => $rule,
             dispatch => $dispatch,
             path     => $path,
@@ -42,7 +42,7 @@ sub dispatch {
     return $dispatch;
 }
 
-sub dispatch_rule {
+sub _dispatch_rule {
     my $self = shift;
     my %args = @_;
 
