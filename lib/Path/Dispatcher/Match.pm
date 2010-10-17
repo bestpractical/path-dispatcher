@@ -41,7 +41,7 @@ sub run {
 }
 
 sub pos {
-    my $self = shift;
+    my $self  = shift;
     my $index = shift;
 
     return undef if $index == 0;
@@ -49,6 +49,12 @@ sub pos {
     $index-- if $index > 0;
 
     return $self->positional_captures->[$index];
+}
+
+sub named {
+    my $self = shift;
+    my $key  = shift;
+    return $self->named_captures->{$key};
 }
 
 __PACKAGE__->meta->make_immutable;
