@@ -35,7 +35,7 @@ sub run {
     my @results;
 
     while (my $match = shift @matches) {
-        my $xcpt;
+        my $exception;
 
         try {
             local $SIG{__DIE__} = 'DEFAULT';
@@ -45,13 +45,13 @@ sub run {
             die "Path::Dispatcher abort\n";
         }
         catch {
-            $xcpt = $_;
+            $exception = $_;
         };
 
-        last if $xcpt =~ /^Path::Dispatcher abort\n/;
-        next if $xcpt =~ /^Path::Dispatcher next rule\n/;
+        last if $exception =~ /^Path::Dispatcher abort\n/;
+        next if $exception =~ /^Path::Dispatcher next rule\n/;
 
-        die $xcpt;
+        die $exception;
     }
 
     return @results if wantarray;
