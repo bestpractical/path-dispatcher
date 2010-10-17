@@ -169,6 +169,8 @@ Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
 =item L<http://sartak.org/talks/yapc-na-2010/path-dispatcher/>
 
+=item L<http://sartak.org/talks/yapc-asia-2010/evolution-of-path-dispatcher/>
+
 =item L<Jifty::Dispatcher>
 
 =item L<Catalyst::Dispatcher>
