@@ -154,7 +154,7 @@ Path::Dispatcher::Rule::Tokens - predicate is a list of tokens
     my $rule = Path::Dispatcher::Rule::Tokens->new(
         tokens    => [ "comment", "show", qr/^\d+$/ ],
         delimiter => '/',
-        block     => sub { display_comment($3) },
+        block     => sub { display_comment(shift->pos(3)) },
     );
 
     $rule->match("/comment/show/25");
@@ -176,9 +176,9 @@ first matches "ticket". Then, the next token must be "show" or "display". The
 final token must be a number or a pound sign followed by three word characters.
 
 The results are the tokens in the original string, as they were matched. If you
-have three tokens, then C<$1> will be the string's first token, C<$2> its
-second, and C<$3> its third. So matching "ticket display #AAA" would have
-"ticket" in C<$1>, "display" in C<$2>, and "#AAA" in C<$3>.
+have three tokens, then C<< match->pos(1) >> will be the string's first token
+("ticket"), C<< match->pos(2) >> its second ("display"), and C<< match->pos(3)
+>> its third ("#AAA").
 
 Capture groups inside a regex token are completely ignored.
 

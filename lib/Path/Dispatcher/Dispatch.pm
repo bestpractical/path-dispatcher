@@ -71,7 +71,7 @@ Path::Dispatcher::Dispatch - a list of matches
         rules => [
             Path::Dispatcher::Rule::Tokens->new(
                 tokens => [ 'attack', qr/^\w+$/ ],
-                block  => sub { attack($2) },
+                block  => sub { attack(shift->pos(2)) },
             ),
         ],
     );

@@ -38,7 +38,7 @@ Path::Dispatcher::Rule::Regex - predicate is a regular expression
 
     my $rule = Path::Dispatcher::Rule::Regex->new(
         regex => qr{^/comment(s?)/(\d+)$},
-        block => sub { display_comment($2) },
+        block => sub { display_comment(shift->pos(2)) },
     );
 
 =head1 DESCRIPTION
@@ -51,9 +51,8 @@ Rules of this class use a regular expression to match against the path.
 
 The regular expression to match against the path. It works just as you'd expect!
 
-The results are the capture variables (C<$1>, C<$2>, etc) and when the
-resulting L<Path::Dispatcher::Match> is executed, the codeblock will see these
-values. C<$`>, C<$&>, and C<$'> are not (yet) restored.
+The capture variables (C<$1>, C<$2>, etc) will be available in the match
+object as C<< ->pos(1) >> etc. C<$`>, C<$&>, and C<$'> are not restored.
 
 =cut
 

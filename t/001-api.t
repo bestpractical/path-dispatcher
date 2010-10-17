@@ -53,5 +53,5 @@ is_deeply([splice @calls], [ ['bar'] ], "invoked the rule block on 'run'");
 
 isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
 $dispatch->run;
-is_deeply([splice @calls], [ ['bar'] ], "invoked the rule block on 'run', makes sure \$1 etc are still correctly set");
+is_deeply([splice @calls], [ ['bar'] ], "invoked the rule block on 'run', makes sure ->pos etc are still correctly set");
 

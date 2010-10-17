@@ -62,10 +62,9 @@ we name it _gencomp, so that if the user types "app _gencomp hel" it will print
 out the various completions of "hel".
 
     on qr/^_gencomp\s*(.*)/ => sub {
-        my $self = shift;
-        my $path = $1;
-        $path = "" if !defined($path);
-        print "$_\n" for dispatcher->complete($path);
+        my $prefix = shift->pos(1);
+        $prefix = "" if !defined($prefix);
+        print "$_\n" for dispatcher->complete($prefix);
     };
 
 Then tell your shell about how to use _gencomp. For zsh it might look

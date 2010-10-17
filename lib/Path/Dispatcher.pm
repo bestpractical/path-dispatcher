@@ -90,7 +90,7 @@ Path::Dispatcher - flexible and extensible dispatch
     $dispatcher->add_rule(
         Path::Dispatcher::Rule::Regex->new(
             regex => qr{^/(foo)/},
-            block => sub { warn $1; },
+            block => sub { warn shift->pos(1); },
         )
     );
 
@@ -98,7 +98,7 @@ Path::Dispatcher - flexible and extensible dispatch
         Path::Dispatcher::Rule::Tokens->new(
             tokens    => ['ticket', 'delete', qr/^\d+$/],
             delimiter => '/',
-            block     => sub { delete_ticket($3) },
+            block     => sub { delete_ticket(shift->pos(3)) },
         )
     );
 

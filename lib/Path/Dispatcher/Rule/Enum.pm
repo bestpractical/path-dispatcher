@@ -100,7 +100,7 @@ Path::Dispatcher::Rule::Enum - one of a list of strings must match
 
     my $rule = Path::Dispatcher::Rule::Enum->new(
         enum  => [qw(perl ruby python php)],
-        block => sub { warn "$1 rules!" },
+        block => sub { warn "I love " . shift->pos(1) },
     );
 
 =head1 DESCRIPTION
