@@ -1,7 +1,11 @@
 Revision history for Path-Dispatcher
 
-0.17
+1.00 Sun Oct 17 2010
+        Bump to 1.0 to indicate back compat breakage
+
         Add match->named($key) for pulling out a named capture
+
+        Use Try::Tiny to avoid swallowing exceptions (rafl)
 
 0.16 Sun Oct 17 2010
         ** BACKWARDS INCOMPATIBLE CHANGE: Pass the match object into rule
