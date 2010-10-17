@@ -85,8 +85,6 @@ sub complete {
     return @completions;
 }
 
-sub readable_attributes { q{"} . shift->string . q{"} }
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

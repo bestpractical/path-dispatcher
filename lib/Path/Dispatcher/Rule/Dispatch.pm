@@ -17,8 +17,6 @@ sub match {
     return $dispatch->matches;
 }
 
-sub readable_attributes { shift->dispatcher->name }
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

@@ -14,8 +14,6 @@ sub BUILD {
     }
 }
 
-sub readable_attributes { 'chain' }
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

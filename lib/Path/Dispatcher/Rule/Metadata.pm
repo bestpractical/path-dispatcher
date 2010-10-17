@@ -28,13 +28,6 @@ sub _match {
     };
 }
 
-sub readable_attributes {
-    my $self = shift;
-    return sprintf "{ '%s': %s }",
-        $self->field,
-        $self->matcher->readable_attributes;
-}
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

@@ -13,18 +13,6 @@ use constant path_class     => 'Path::Dispatcher::Path';
 
 with 'Path::Dispatcher::Role::Rules';
 
-has name => (
-    is      => 'ro',
-    isa     => 'Str',
-    default => do {
-        my $i = 0;
-        sub {
-            my $self = shift;
-            join '-', blessed($self), ++$i;
-        },
-    },
-);
-
 sub dispatch {
     my $self = shift;
     my $path = $self->_autobox_path(shift);
@@ -136,11 +124,6 @@ inspired by L<Jifty::Dispatcher>.
 =head2 rules
 
 A list of L<Path::Dispatcher::Rule> objects.
-
-=head2 name
-
-A human-readable name; this will be used in the debugging hooks. In
-L<Path::Dispatcher::Declarative>, this is the package name of the dispatcher.
 
 =head1 METHODS
 

@@ -66,8 +66,6 @@ sub complete {
     return $completed;
 }
 
-sub readable_attributes { q{"} . shift->string . q{"} }
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

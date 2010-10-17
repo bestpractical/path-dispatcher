@@ -13,6 +13,9 @@ Revision history for Path-Dispatcher
 
         Make _dispatcher_rule private
 
+        Remove trace/readable_attribute/name support. This wants to be
+            implemented in a different, better, more comprehensive way.
+
         Add documentation for shell tab completion
 
 0.15 Tue Mar 16 09:40:40 2010

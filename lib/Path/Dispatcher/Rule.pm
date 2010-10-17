@@ -17,12 +17,6 @@ has prefix => (
     default => 0,
 );
 
-has name => (
-    is        => 'ro',
-    isa       => 'Str',
-    predicate => 'has_name',
-);
-
 sub match {
     my $self = shift;
     my $path = shift;
@@ -48,8 +42,6 @@ sub match {
         %$result,
     );
 
-    $self->trace(match => $match) if $ENV{'PATH_DISPATCHER_TRACE'};
-
     return $match;
 }
 
@@ -68,57 +60,6 @@ sub run {
     die "No codeblock to run" if !$self->has_block;
 
     $self->block->(@_);
-}
-
-sub readable_attributes { }
-
-sub trace {
-    my $self  = shift;
-    my %args  = @_;
-
-    my $level = $ENV{'PATH_DISPATCHER_TRACE'};
-
-    return if exists($args{level})
-           && $level < $args{level};
-
-    my $match = $args{match};
-    my $path  = $match ? $match->path : $args{path};
-
-    # name
-    my $trace = '';
-    if ($self->has_name) {
-        $trace .= $self->name;
-    }
-    else {
-        $trace .= "$self";
-    }
-
-    # attributes such as tokens or regex
-    if ($level >= 2) {
-        my $attr = $self->readable_attributes;
-        $trace .= " $attr" if defined($attr) && length($attr);
-    }
-
-    # what just happened
-    if ($args{running}) {
-        $trace .= " running codeblock with path ($path)";
-        if ($level >= 10) {
-            require B::Deparse;
-            $trace .= ": " . B::Deparse->new->coderef2text($match->rule->block);
-        }
-    }
-    elsif ($match) {
-        $trace .= " matched against ($path)";
-        $trace .= " with (" . $match->leftover . ") left over"
-            if length($match->leftover);
-    }
-    else {
-        $trace .= " did not match against ($path)";
-    }
-
-    $trace .= ".\n";
-
-    warn $trace;
 }
 
 __PACKAGE__->meta->make_immutable;

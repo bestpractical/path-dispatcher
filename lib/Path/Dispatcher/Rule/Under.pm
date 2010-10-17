@@ -60,8 +60,6 @@ sub complete {
     }
 }
 
-sub readable_attributes { shift->predicate->readable_attributes }
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 

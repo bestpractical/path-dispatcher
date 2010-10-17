@@ -138,52 +138,6 @@ sub untokenize {
            @tokens;
 }
 
-sub readable_attributes {
-    my $self = shift;
-
-    my $deserialize;
-    $deserialize = sub {
-        my $ret = '';
-        for (my $i = 0; $i < @_; ++$i) {
-            local $_ = $_[$i];
-
-            if (ref($_) eq 'ARRAY') {
-                $ret .= $deserialize->(@$_);
-            }
-            else {
-                $ret .= $_;
-            }
-
-            $ret .= ',' if $i + 1 < @_;
-        }
-
-        return "[" . $ret . "]";
-    };
-
-    return $deserialize->($self->tokens);
-}
-
-sub trace {
-    my $self = shift;
-    my %args = @_;
-
-    $self->SUPER::trace(@_);
-
-    return if $ENV{'PATH_DISPATCHER_TRACE'} < 3;
-
-    if ($args{no_tokens}) {
-        warn "... We ran out of tokens when trying to match ($args{on_token}).\n";
-    }
-    elsif ($args{no_match}) {
-        my ($got, $expected) = @args{'got_token', 'on_token'};
-        warn "... Did not match ($got) against expected ($expected).\n";
-    }
-    elsif ($args{tokens_left}) {
-        my @tokens = @{ $args{tokens_left} };
-        warn "... We ran out of path tokens, expecting (@tokens).\n";
-    }
-};
-
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
 
