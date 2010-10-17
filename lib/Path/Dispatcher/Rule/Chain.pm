@@ -2,17 +2,19 @@ package Path::Dispatcher::Rule::Chain;
 use Any::Moose;
 extends 'Path::Dispatcher::Rule::Always';
 
-sub BUILD {
-    my $self = shift;
+override block => sub {
+    my $self  = shift;
+    my $block = super;
 
-    if ($self->has_block) {
-        my $block = $self->block;
-        $self->block(sub {
+    if (!@_) {
+        return sub {
             $block->(@_);
             die "Path::Dispatcher next rule\n"; # FIXME From Path::Dispatcher::Declarative... maybe this should go in a common place?
-        });
+        };
     }
-}
+
+    return $block;
+};
 
 __PACKAGE__->meta->make_immutable;
 no Any::Moose;
