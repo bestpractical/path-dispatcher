@@ -4,11 +4,9 @@ use warnings;
 use Test::More tests => 5;
 use Path::Dispatcher;
 
-my @calls;
-
 my $rule = Path::Dispatcher::Rule::Tokens->new(
     tokens => ['foo', 'bar'],
-    block  => sub { push @calls, [$1, $2, $3] },
+    block  => sub { },
     prefix => 1,
 );
 
