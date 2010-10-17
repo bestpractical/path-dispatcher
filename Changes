@@ -1,6 +1,6 @@
 Revision history for Path-Dispatcher
 
-0.16
+0.16 Sun Oct 17 2010
         ** BACKWARDS INCOMPATIBLE CHANGE: Pass the match object into rule
         **    blocks rather than assigning $1, $2, $3. Use ->pos(1), (2), (3),
         **    etc. instead. This cleans up the code a lot and makes
