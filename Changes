@@ -1,8 +1,17 @@
 Revision history for Path-Dispatcher
 
 0.16
-        Use glob assignment for populating capture variables instead of a
-            regular expression, thanks to chromatic
+        ** BACKWARDS INCOMPATIBLE CHANGE: Pass the match object into rule
+        **    blocks rather than assigning $1, $2, $3. Use ->pos(1), (2), (3),
+        **    etc. instead. This cleans up the code a lot and makes
+        **    Path-Dispatcher more flexible.
+
+        Add support for named captures
+
+        Make all attributes read-only. If you need something to be read-write,
+            I am open to such a change. Just let me know!
+
+        Make _dispatcher_rule private
 
         Add documentation for shell tab completion
 
