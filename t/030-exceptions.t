@@ -14,9 +14,8 @@ my $not_true = bless {}, 'Moo';
 
 my $dispatcher = Path::Dispatcher->new(
     rules => [
-        Path::Dispatcher::Rule::CodeRef->new(
-            matcher => sub { 1 },
-            block   => sub { die $not_true; "foobar matched" },
+        Path::Dispatcher::Rule::Always->new(
+            block => sub { die $not_true; "foobar matched" },
         ),
     ],
 );
