@@ -37,8 +37,8 @@ sub match {
     }
 
     my $match = $self->match_class->new(
-        path     => $path,
-        rule     => $self,
+        path => $path,
+        rule => $self,
         %$result,
     );
 
