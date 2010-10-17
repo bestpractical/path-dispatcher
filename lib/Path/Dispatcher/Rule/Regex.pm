@@ -8,13 +8,15 @@ has regex => (
     required => 1,
 );
 
+my $named_captures = $] > 5.010 ? eval 'sub { %+ }' : sub { };
+
 sub _match {
     my $self = shift;
     my $path = shift;
 
     return unless my @positional = $path->path =~ $self->regex;
 
-    my %named = $] > 5.010 ? eval q{%+} : ();
+    my %named = $named_captures->();
 
     return {
         positional_captures => \@positional,
