@@ -69,23 +69,23 @@ out the various completions of "hel".
     };
 
 Then tell your shell about how to use _gencomp. For zsh it might look
-like this (replace "app" with your binary name):
+like this (replace "APP" with your binary name):
 
-    /usr/share/zsh/site-functions/_app:
-        #compdef app
-        typeset -a app_completions
-        app_completions=($($words[1] _gencomp $words[2,-1]))
-        compadd $app_completions
+    /usr/share/zsh/site-functions/_APP:
+        #compdef APP
+        typeset -a APP_completions
+        APP_completions=($($words[1] _gencomp $words[2,-1]))
+        compadd $APP_completions
 
 For bash it might look like this:
 
-    /etc/bash_completion.d/app.bash:
-        function _app_()
+    /etc/bash_completion.d/APP.bash:
+        function _APP_()
         {
             COMPREPLY=($($1 _gencomp ${COMP_WORDS[COMP_CWORD]}))
         }
 
-        complete -F _app_ app
+        complete -F _APP_ APP
 
 =cut
 
