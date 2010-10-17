@@ -1,5 +1,8 @@
 Revision history for Path-Dispatcher
 
+0.17
+        Add match->named($key) for pulling out a named capture
+
 0.16 Sun Oct 17 2010
         ** BACKWARDS INCOMPATIBLE CHANGE: Pass the match object into rule
         **    blocks rather than assigning $1, $2, $3. Use ->pos(1), (2), (3),

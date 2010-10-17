@@ -88,7 +88,7 @@ Path::Dispatcher::Match - the result of a successful rule match
     $match->pos(1)              # "attack"
     $match->pos(2)              # "dragon"
 
-    $match->run                 # causes the player to attack the dragon
+    $match->run                 # attack("dragon")
 
 =head1 DESCRIPTION
 
