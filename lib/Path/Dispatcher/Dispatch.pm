@@ -4,7 +4,7 @@ use Any::Moose;
 use Path::Dispatcher::Match;
 
 has _matches => (
-    is        => 'rw',
+    is        => 'ro',
     isa       => 'ArrayRef',
     default   => sub { [] },
 );

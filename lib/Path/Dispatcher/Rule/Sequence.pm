@@ -5,7 +5,7 @@ extends 'Path::Dispatcher::Rule';
 with 'Path::Dispatcher::Role::Rules';
 
 has delimiter => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Str',
     default => ' ',
 );

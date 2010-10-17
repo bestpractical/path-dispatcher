@@ -3,20 +3,20 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has tokens => (
-    is         => 'rw',
+    is         => 'ro',
     isa        => 'ArrayRef',
     auto_deref => 1,
     required   => 1,
 );
 
 has delimiter => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Str',
     default => ' ',
 );
 
 has case_sensitive => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Bool',
     default => 1,
 );

@@ -14,7 +14,7 @@ use constant path_class     => 'Path::Dispatcher::Path';
 with 'Path::Dispatcher::Role::Rules';
 
 has name => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Str',
     default => do {
         my $i = 0;

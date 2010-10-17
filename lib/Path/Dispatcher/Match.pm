@@ -5,30 +5,30 @@ use Path::Dispatcher::Path;
 use Path::Dispatcher::Rule;
 
 has path => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Path::Dispatcher::Path',
     required => 1,
 );
 
 has leftover => (
-    is  => 'rw',
+    is  => 'ro',
     isa => 'Str',
 );
 
 has rule => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Path::Dispatcher::Rule',
     required => 1,
 );
 
 has positional_captures => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'ArrayRef[Str|Undef]',
     default => sub { [] },
 );
 
 has named_captures => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'HashRef[Str|Undef]',
     default => sub { {} },
 );

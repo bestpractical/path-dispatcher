@@ -3,7 +3,7 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has dispatcher => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Path::Dispatcher',
     required => 1,
     handles  => ['rules', 'complete'],

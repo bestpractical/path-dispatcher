@@ -3,13 +3,13 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has field => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
 has matcher => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Path::Dispatcher::Rule',
     required => 1,
 );

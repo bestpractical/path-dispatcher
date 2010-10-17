@@ -3,13 +3,13 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has enum => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'ArrayRef[Str]',
     required => 1,
 );
 
 has case_sensitive => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Bool',
     default => 1,
 );

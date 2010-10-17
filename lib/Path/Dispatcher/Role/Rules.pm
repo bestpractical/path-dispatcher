@@ -2,7 +2,7 @@ package Path::Dispatcher::Role::Rules;
 use Any::Moose '::Role';
 
 has _rules => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'ArrayRef',
     init_arg => 'rules',
     default  => sub { [] },

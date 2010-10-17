@@ -3,7 +3,7 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has regex => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'RegexpRef',
     required => 1,
 );

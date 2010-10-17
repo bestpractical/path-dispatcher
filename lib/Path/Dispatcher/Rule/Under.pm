@@ -11,7 +11,7 @@ subtype 'Path::Dispatcher::PrefixRule'
      => message { "This rule ($_) does not match just prefixes!" };
 
 has predicate => (
-    is  => 'rw',
+    is  => 'ro',
     isa => 'Path::Dispatcher::PrefixRule',
 );
 

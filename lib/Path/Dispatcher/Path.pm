@@ -4,13 +4,13 @@ use Any::Moose;
 use overload q{""} => sub { shift->path };
 
 has path => (
-    is        => 'rw',
+    is        => 'ro',
     isa       => 'Str',
     predicate => 'has_path',
 );
 
 has metadata => (
-    is        => 'rw',
+    is        => 'ro',
     isa       => 'HashRef',
     predicate => 'has_metadata',
 );

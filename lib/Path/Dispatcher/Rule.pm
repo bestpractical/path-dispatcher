@@ -6,19 +6,19 @@ use Path::Dispatcher::Match;
 use constant match_class => "Path::Dispatcher::Match";
 
 has block => (
-    is        => 'rw',
+    is        => 'ro',
     isa       => 'CodeRef',
     predicate => 'has_block',
 );
 
 has prefix => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Bool',
     default => 0,
 );
 
 has name => (
-    is        => 'rw',
+    is        => 'ro',
     isa       => 'Str',
     predicate => 'has_name',
 );

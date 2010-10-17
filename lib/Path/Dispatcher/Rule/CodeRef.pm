@@ -3,7 +3,7 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has matcher => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'CodeRef',
     required => 1,
 );

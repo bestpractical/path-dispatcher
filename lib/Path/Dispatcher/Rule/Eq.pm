@@ -3,13 +3,13 @@ use Any::Moose;
 extends 'Path::Dispatcher::Rule';
 
 has string => (
-    is       => 'rw',
+    is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
 has case_sensitive => (
-    is      => 'rw',
+    is      => 'ro',
     isa     => 'Bool',
     default => 1,
 );
