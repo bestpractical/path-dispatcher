@@ -42,6 +42,8 @@ sub run {
 
             push @results, $match->run(@args);
 
+            # we always stop after the first match UNLESS they explicitly
+            # ask to continue on to the next rule
             die "Path::Dispatcher abort\n";
         }
         catch {
