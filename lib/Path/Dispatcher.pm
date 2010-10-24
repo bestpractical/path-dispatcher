@@ -210,11 +210,11 @@ Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
 =item L<Catalyst::Dispatcher>
 
-=item L<HTTPx::Dispatcher>
-
 =item L<Mojolicious::Dispatcher>
 
 =item L<Path::Router>
+
+=item L<Router::Simple>
 
 =item L<http://github.com/bestpractical/path-dispatcher-debugger> - Not quite ready for release
 
