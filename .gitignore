@@ -1,5 +1,6 @@
 META.yml
 Makefile
+Makefile.old
 blib/
 inc/
 *.sw[po]
