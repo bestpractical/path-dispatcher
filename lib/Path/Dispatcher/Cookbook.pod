@@ -19,14 +19,14 @@ C<token_delimiter> option for the C<default> group.
 Or define a subclass of L<Path::Dispatcher::Declarative> with a
 C<token_delimiter> method:
 
-    package Web::Dispatcher;
+    package Web::Dispatcher::Maker;
     use base 'Path::Dispatcher::Declarative';
 
     use constant token_delimiter => '/';
 
 
-    package My::Other::Dispatcher;
-    use Web::Dispatcher -base;
+    package My::Dispatcher;
+    use Web::Dispatcher::Maker -base;
 
 =head2 How can I do rule chaining (like in Catalyst)?
 
