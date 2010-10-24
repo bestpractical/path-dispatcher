@@ -1,5 +1,11 @@
 Revision history for Path-Dispatcher
 
+1.01 Sun Oct 24 2010
+        Skip t/026-named-captures.t if you don't have 5.10
+
+        Give matches a ->parent for inspecting an Under prefix rule's
+            captures etc
+
 1.00 Sun Oct 17 2010
         Bump to 1.0 to indicate back compat breakage
 
