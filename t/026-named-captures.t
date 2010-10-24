@@ -3,8 +3,8 @@ use strict;
 use warnings;
 use Test::More;
 BEGIN {
-    if ($] <= 5.010) {
-        plan skip_all => 'This test requires Perl 5.10';
+    if ($] <= 5.010001) {
+        plan skip_all => 'This test requires Perl 5.10.1';
     }
 }
 use Path::Dispatcher;

@@ -1,7 +1,7 @@
 Revision history for Path-Dispatcher
 
 1.01 Sun Oct 24 2010
-        Skip t/026-named-captures.t if you don't have 5.10
+        Skip t/026-named-captures.t if you don't have 5.10.1
 
         Give matches a ->parent for inspecting an Under prefix rule's
             captures etc
