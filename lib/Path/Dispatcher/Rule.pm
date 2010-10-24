@@ -20,6 +20,7 @@ has prefix => (
 sub match {
     my $self = shift;
     my $path = shift;
+    my %args = @_;
 
     my $result;
 
@@ -39,6 +40,7 @@ sub match {
     my $match = $self->match_class->new(
         path => $path,
         rule => $self,
+        %{ $args{extra_constructor_args} || {} },
         %$result,
     );
 
