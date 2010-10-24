@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More;
 use Path::Dispatcher;
 
 my $dispatcher = Path::Dispatcher->new(
@@ -32,4 +32,6 @@ is($result, "foobar matched");
 
 my @results = $dispatch->run("foobar");
 is_deeply(\@results, ["foobar matched"]);
+
+done_testing;
 

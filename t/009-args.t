@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -26,4 +26,6 @@ $dispatch->run(24);
 is_deeply([splice @calls], [
     [24],
 ]);
+
+done_testing;
 

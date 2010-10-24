@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More;
 use Test::Exception;
 use Path::Dispatcher;
 
@@ -54,4 +54,6 @@ throws_ok {
 } qr/Not a CODE reference/;
 
 is_deeply([splice @calls], ['bar: before'], "regular dies pass through");
+
+done_testing;
 

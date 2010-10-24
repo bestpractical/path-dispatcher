@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -55,3 +55,4 @@ isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
 $dispatch->run;
 is_deeply([splice @calls], [ ['bar'] ], "invoked the rule block on 'run', makes sure ->pos etc are still correctly set");
 
+done_testing;

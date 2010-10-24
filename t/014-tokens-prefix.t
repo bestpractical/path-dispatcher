@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More;
 use Path::Dispatcher;
 
 my $rule = Path::Dispatcher::Rule::Tokens->new(
@@ -17,4 +17,6 @@ my $match = $rule->match(Path::Dispatcher::Path->new('foo bar baz'));
 ok($match, "prefix matches a prefix of the path");
 is_deeply($match->positional_captures, ["foo", "bar"]);
 is($match->leftover, "baz");
+
+done_testing;
 

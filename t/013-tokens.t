@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -71,4 +71,6 @@ my $rule = Path::Dispatcher::Rule::Tokens->new(
 
 my $match = $rule->match(Path::Dispatcher::Path->new('Path::Dispatcher::Rule::Tokens'));
 is($match->leftover, 'Rule::Tokens');
+
+done_testing;
 

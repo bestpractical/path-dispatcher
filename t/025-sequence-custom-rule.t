@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 47;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -122,3 +122,5 @@ is_deeply([$dispatcher->complete("use perl pl")], ["use perl please"]);
 is_deeply([$dispatcher->complete("use perl pleas")], ["use perl please"]);
 is_deeply([$dispatcher->complete("use perl please")], []);
 is_deeply([$dispatcher->complete("use perl plx")], []);
+
+done_testing;

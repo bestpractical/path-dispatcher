@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -21,4 +21,6 @@ ok($match, "matched foobar:baz");
 
 is_deeply($match->positional_captures, ["foo", "bar"], "match returns just the results");
 is($match->leftover, ':baz', "leftovers");
+
+done_testing;
 

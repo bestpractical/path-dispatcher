@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More;
 use Path::Dispatcher;
 
 my $dispatcher = Path::Dispatcher->new(
@@ -39,4 +39,6 @@ is_deeply(\@results, ["creating a ticket"], "matched path and metadata");
 ));
 
 is_deeply(\@results, [], "didn't match metadata");
+
+done_testing;
 

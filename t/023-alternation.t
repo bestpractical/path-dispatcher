@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 13;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -55,4 +55,6 @@ $dispatcher = Path::Dispatcher->new(
 
 $dispatcher->run("foo");
 is_deeply([splice @calls], [], "no subrules means no match");
+
+done_testing;
 

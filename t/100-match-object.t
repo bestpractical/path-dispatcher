@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More;
 use Path::Dispatcher;
 
 my $match;
@@ -28,4 +28,6 @@ is_deeply($match->pos(0), undef);
 is_deeply($match->pos(5), undef);
 
 is_deeply($match->pos(-1), "cute");
+
+done_testing;
 

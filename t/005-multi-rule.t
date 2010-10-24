@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -18,4 +18,6 @@ for my $number (qw/first second/) {
 
 $dispatcher->run('foo');
 is_deeply(\@calls, ['first']);
+
+done_testing;
 

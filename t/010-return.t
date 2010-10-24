@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More;
 use Path::Dispatcher;
 
 # we currently have no defined return strategy :/
@@ -30,4 +30,6 @@ is_deeply([$dispatcher->run('foo', 42)], ["foo"]);
 
 $dispatch = $dispatcher->dispatch('foo');
 is_deeply([$dispatch->run(24)], ["foo"]);
+
+done_testing;
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -22,4 +22,6 @@ is($dispatch->matches, 0, "no matches");
 
 $dispatch->run;
 is_deeply([splice @calls], [], "no calls to the rule block");
+
+done_testing;
 

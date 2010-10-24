@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More;
 use Path::Dispatcher;
 
 my @calls;
@@ -33,3 +33,5 @@ $dispatcher->run(Path::Dispatcher::Path->new(
 ));
 
 is_deeply([splice @calls], [], "metadata didn't match");
+
+done_testing;

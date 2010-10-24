@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 1;
+use Test::More;
 use Test::Exception;
 use Path::Dispatcher;
 
@@ -16,4 +16,6 @@ my $dispatcher = Path::Dispatcher->new(
 throws_ok {
     $dispatcher->dispatch('foo');
 } qr/Results returned from _match must be a hashref/;
+
+done_testing;
 

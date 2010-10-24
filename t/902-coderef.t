@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More;
 use Test::Exception;
 use Path::Dispatcher::Rule::Tokens;
 
@@ -19,4 +19,6 @@ ok($match, "matched the tokens");
 throws_ok {
     $match->run;
 } qr/^No codeblock to run/;
+
+done_testing;
 

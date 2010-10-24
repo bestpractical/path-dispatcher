@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 3;
+use Test::More;
 use Path::Dispatcher;
 
 my (@matches, @calls);
@@ -21,4 +21,6 @@ is_deeply([splice @calls], [ [] ]);
 
 $dispatcher->run('other');
 is($matches[0]->path, 'other');
+
+done_testing;
 

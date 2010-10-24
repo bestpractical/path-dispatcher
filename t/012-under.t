@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use Test::More tests => 15;
+use Test::More;
 use Path::Dispatcher;
 
 my $predicate = Path::Dispatcher::Rule::Tokens->new(
@@ -85,3 +85,6 @@ eval {
     );
 };
 like($@, qr/Attribute \(predicate\) does not pass the type constraint /, "predicate MUST match just a prefix");
+
+done_testing;
+
