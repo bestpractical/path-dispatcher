@@ -206,6 +206,8 @@ Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
 =item L<http://sartak.org/talks/yapc-asia-2010/evolution-of-path-dispatcher/>
 
+=item L<http://github.com/miyagawa/plack-dispatching-samples>
+
 =item L<Jifty::Dispatcher>
 
 =item L<Catalyst::Dispatcher>
