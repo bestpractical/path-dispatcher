@@ -2,6 +2,11 @@
 use strict;
 use warnings;
 use Test::More;
+BEGIN {
+    if ($] <= 5.010) {
+        plan skip_all => 'This test requires Perl 5.10';
+    }
+}
 use Path::Dispatcher;
 
 my $dispatcher = Path::Dispatcher->new(
