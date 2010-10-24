@@ -32,7 +32,14 @@ sub match {
     # Because the checking for ::Chain endpointedness is here, this means that outside of an ::Under, ::Chain behaves like
     # an ::Always (one that will always trigger next_rule if it's block is ran)
     #
-    return unless my @matches = grep { defined } map { $_->match($new_path) } $self->rules;
+    my @matches = map {
+        $_->match(
+            $new_path,
+            extra_constructor_args => {
+                parent => $prefix_match,
+            },
+        )
+    } $self->rules;
     pop @matches while @matches && $matches[-1]->rule->isa('Path::Dispatcher::Rule::Chain');
     return @matches;
 }
