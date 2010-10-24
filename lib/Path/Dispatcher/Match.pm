@@ -33,6 +33,12 @@ has named_captures => (
     default => sub { {} },
 );
 
+has parent => (
+    is        => 'ro',
+    isa       => 'Path::Dispatcher::Match',
+    predicate => 'has_parent',
+);
+
 sub run {
     my $self = shift;
 
