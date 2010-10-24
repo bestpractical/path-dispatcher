@@ -116,6 +116,10 @@ rules, and it returns a list of matches. From there you can "run" the rules
 that matched. These phases are distinct so that, if you need to, you can
 inspect which rules were matched without ever running their codeblocks.
 
+Tab completion support is also available (see in particular
+L<Path::Dispatcher::Cookbook/How can I configure tab completion for shells?>)
+for the dispatchers you write.
+
 Each rule may take a variety of different forms (which I think justifies the
 "flexible" adjective in the module's description). Some of the rule types are:
 
@@ -131,11 +135,14 @@ Match one of a set of strings.
 
 =item L<Path::Dispatcher::Rule::CodeRef>
 
-Execute a coderef to determine whether the path matches the rule.
+Execute a coderef to determine whether the path matches the rule. So you can
+do anything you like. Though writing a domain-specific rule (see below) will
+enable better introspection and encoding intent.
 
 =item L<Path::Dispatcher::Rule::Dispatch>
 
-Use another L<Path::Dispatcher> to match the path.
+Use another L<Path::Dispatcher> to match the path. This facilitates both
+extending dispatchers (a bit like subclassing) and delegating to plugins.
 
 =back
 
