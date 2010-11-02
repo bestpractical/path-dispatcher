@@ -22,7 +22,10 @@ sub match {
     my $prefix_match = $self->predicate->match($path)
         or return;
 
-    my $new_path = $path->clone_path($prefix_match->leftover);
+    my $leftover = $prefix_match->leftover;
+    $leftover = '' if !defined($leftover);
+
+    my $new_path = $path->clone_path($leftover);
 
     # Pop off @matches until we have a last rule that is not ::Chain
     #
