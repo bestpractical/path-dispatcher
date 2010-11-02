@@ -43,7 +43,7 @@ sub _match {
 
     my $leftover = $self->untokenize(@$tokens);
     return {
-        leftover            => $self->untokenize(@$tokens),
+        leftover            => $leftover,
         positional_captures => $matched,
     };
 }
