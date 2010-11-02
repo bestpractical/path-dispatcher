@@ -1,5 +1,8 @@
 Revision history for Path-Dispatcher
 
+1.02 Tue Nov 2 2010
+        Various improvements to the handling of $match->leftover with undef
+
 1.01 Sun Oct 24 2010
         Skip t/026-named-captures.t if you don't have 5.10.1
 
