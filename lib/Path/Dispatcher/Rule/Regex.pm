@@ -18,10 +18,18 @@ sub _match {
 
     my %named = $named_captures->();
 
+    my %extra;
+
+    # only provide leftover if we need it. $' is slow, and it may be undef
+    if ($self->prefix) {
+        $extra{leftover} = eval q{$'};
+        delete $extra{leftover} if !defined($extra{leftover});
+    }
+
     return {
         positional_captures => \@positional,
         named_captures      => \%named,
-        ($self->prefix ? (leftover => eval q{$'}) : ()),
+        %extra,
     }
 }
 
