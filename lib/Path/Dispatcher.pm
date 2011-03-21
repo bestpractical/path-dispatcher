@@ -224,7 +224,7 @@ Shawn M Moore, C<< <sartak at bestpractical.com> >>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2008-2010 Best Practical Solutions.
+Copyright 2008-2011 Best Practical Solutions.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
