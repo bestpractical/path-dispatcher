@@ -4,6 +4,12 @@ use Try::Tiny;
 
 use Path::Dispatcher::Match;
 
+has path => (
+    is       => 'ro',
+    isa      => 'Path::Dispatcher::Path',
+    required => 1,
+);
+
 has _matches => (
     is        => 'ro',
     isa       => 'ArrayRef',

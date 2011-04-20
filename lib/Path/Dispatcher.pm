@@ -17,7 +17,9 @@ sub dispatch {
     my $self = shift;
     my $path = $self->_autobox_path(shift);
 
-    my $dispatch = $self->dispatch_class->new;
+    my $dispatch = $self->dispatch_class->new(
+        path => $path,
+    );
 
     for my $rule ($self->rules) {
         $self->_dispatch_rule(
