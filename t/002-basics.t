@@ -87,8 +87,5 @@ is($response, "Bought Social Networks", "hope it wasn't MySpace");
 $response = $dispatcher->run("list");
 is($response, "Cart: bananas, Social Networks", "big spendah!");
 
-# We'll investigate what happens when a dispatch goes wrong in the next
-# episode, titled Path::Mispatcher.
-
 done_testing;
 

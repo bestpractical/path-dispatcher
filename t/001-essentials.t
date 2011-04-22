@@ -36,7 +36,8 @@ ok($dispatch->has_matches, 'matched Hello!');
 
 # If dispatch doesn't match anything, you will still get a Dispatch object, but
 # it will have no matches. You can use this to fall back to "command not found"
-# or 404 logic.
+# or 404 logic, or if you're really on the ball, something like git's "Did you
+# mean this?" command suggestion.
 $dispatch = $dispatcher->dispatch('Hola!');
 ok(!$dispatch->has_matches, 'did not match Hola!');
 
