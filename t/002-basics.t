@@ -26,28 +26,26 @@ $dispatcher->add_rule(
 );
 
 # This "buy (item)" rule introduces some new concepts. It uses a new rule type,
-# Regex, which of course just does a regular expression match. In the
-# codeblock, we are pulling out "shift->pos(1)" which is the $1 created by
-# the regex match. This value represents the new item to be bought. The argument
-# we are shifting off is a Path::Dispatcher::Match object, which contains
-# information about this rule's match against the path. We are using it to grab
-# the first positional (as opposed to named) capture. We then again create some
-# output for the user.
+# Regex, which of course just does a regular expression match. Path::Dispatcher
+# passes a Path::Dispatcher::Match object to codeblocks. This object contains
+# information about that rule's match against the path. We are pulling out
+# ->pos(1) from the match, which is the $1 created by the regex. This value
+# represents the new purchase. We then again create some output for the user.
 $dispatcher->add_rule(
     Path::Dispatcher::Rule::Regex->new(
         regex => qr/^buy (.+)$/,
         block => sub {
-            my $item = shift->pos(1);
-            push @cart, $item;
-            return "Bought $item";
+            my $purchase = shift->pos(1);
+            push @cart, $purchase;
+            return "Bought $purchase";
         },
     ),
 );
 
 # ->run is just like ->dispatch, except it will also invoke the matched rule's
 # codeblock and pass along its return value. In basic Path::Dispatcher usage
-# like this, you don't need to care that Path::Dispatcher has separate dispatch
-# and execute cycles.
+# like this test file, you don't need to care that Path::Dispatcher has
+# separate dispatch and execute cycles.
 my $response = $dispatcher->run("list");
 is($response, "Your cart is empty.");
 
@@ -57,16 +55,15 @@ is($response, "Bought bananas");
 $response = $dispatcher->run("list");
 is($response, "Cart: bananas", "mmm potassium");
 
-
 # ... but if you prefer, you certainly can break up the dispatch and run
-# cycles. This lets you inspect the rule that matched before executing its
+# cycles. This lets you inspect the rule that matched before you execute its
 # codeblock.
 my $dispatch = $dispatcher->dispatch("buy Social Networks");
 isa_ok($dispatch, 'Path::Dispatcher::Dispatch');
 ok($dispatch->has_match, 'got a match');
 
-# The match object is the same that the codeblock received. It remembers
-# captures for you, which is kind of nice.
+# The match object is the same that the codeblock received. It of course still
+# remembers those captures for you.
 my $match = $dispatch->first_match;
 isa_ok($match, 'Path::Dispatcher::Match');
 is($match->pos(1), 'Social Networks');
@@ -77,12 +74,12 @@ my $rule = $match->rule;
 isa_ok($rule, 'Path::Dispatcher::Rule::Regex');
 is($rule->regex, qr/^buy (.+)$/);
 
-# Note that at this point, even though we've dispatched "buy Social Networks",
-# we still have not run its codeblock!
+# At this point, even though we've dispatched "buy Social Networks" and got a
+# match, we still have not run its codeblock!
 $response = $dispatcher->run("list");
 is($response, "Cart: bananas", "still only bananas");
 
-# But now we can run the dispatch, which invokes the codeblock of the rule that
+# We can run the dispatch, which invokes the codeblock of the rule that
 # matched, to finally commit to buying Friendster.
 $response = $dispatch->run;
 is($response, "Bought Social Networks", "hope it wasn't MySpace");
@@ -90,8 +87,8 @@ is($response, "Bought Social Networks", "hope it wasn't MySpace");
 $response = $dispatcher->run("list");
 is($response, "Cart: bananas, Social Networks", "big spendah!");
 
-# Next time we'll investigate what happens when a dispatch goes wrong! You'll
-# get some mispatches in your travels.
+# We'll investigate what happens when a dispatch goes wrong in the next
+# episode, titled Path::Mispatcher.
 
 done_testing;
 
